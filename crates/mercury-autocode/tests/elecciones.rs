@@ -113,3 +113,15 @@ fn consulta_1967_cinta_5_canales() {
     ].to_vec();
     assert_eq!(io.output[1], esperado);
 }
+
+#[test]
+fn mapa_provincial_en_elecciones_autocode() {
+    let img = compilar(PROGRAMA).unwrap();
+    let mut m = Machine::new(Default::default());
+    img.cargar(&mut m);
+    let cordoba = include_str!("../../../examples/elecciones/cordoba_1962.txt");
+    let esperado = cordoba.strip_suffix('n').unwrap().replace("\r\n", "\n");
+    let mut io = BufferIo::with_tape(&tape::encode(&format!("-1 0 0 {cordoba}")).unwrap());
+    assert_eq!(m.run(&mut io, 5_000_000), Some(Stop::Stop99));
+    assert_eq!(tape::decode(&io.output[1]), esperado);
+}

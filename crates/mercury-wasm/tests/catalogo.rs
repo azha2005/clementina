@@ -265,10 +265,9 @@ fn catalogo_valido_y_programas_verificados() {
 
         let mut wm = WasmMachine::new();
         wm.set_switches(f, 0, 0, 8);
-        if let Some(mp) = p.get("mapas_provinciales") {
-            let mp = mp.obj();
-            let src = fs::read_to_string(repo.join(mp.get("archivo").unwrap().str())).unwrap();
-            let atlas = fs::read_to_string(repo.join(mp.get("archivo_catalogo").unwrap().str())).unwrap();
+        if id == "elecciones" {
+            let src = fs::read_to_string(repo.join(p.get("archivo").unwrap().str())).unwrap();
+            let atlas = fs::read_to_string(repo.join(p.get("archivo_catalogo").unwrap().str())).unwrap();
             let mut parser = JsonParser { b: atlas.as_bytes(), i: 0 };
             let atlas = parser.parse();
             assert_eq!(atlas.obj().keys().map(String::as_str).collect::<Vec<_>>(), ["1958", "1962", "1965"]);
@@ -279,9 +278,9 @@ fn catalogo_valido_y_programas_verificados() {
                     let datos = datos.str();
                     let mapa = datos.strip_suffix('n').expect("marca de fin de mapa");
                     assert!(mapa.contains("VOTO PROVINCIAL"), "{anio} {provincia}");
-                    wm.load_written(&src).unwrap();
-                    wm.set_tape_text(datos).unwrap();
-                    assert_eq!(wm.step_batch(1_000_000, 0), STOP_99, "{anio} {provincia}");
+                    wm.load_autocode(&src).unwrap();
+                    wm.set_tape_text(&format!("-1 0 0 {datos}")).unwrap();
+                    assert_eq!(wm.step_batch(5_000_000, 0), STOP_99, "{anio} {provincia}");
                     assert_eq!(tape::decode(&wm.io.output), mapa, "{anio} {provincia}");
                 }
             }

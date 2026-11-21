@@ -231,27 +231,19 @@
       "nombre": "Elecciones argentinas",
       "grupo": "Mercury Autocode",
       "descripcion": "Consultá los resultados de presidente de 1958 y diputados nacionales de 1962 y 1965, o perforá los mapas provinciales por departamento.",
-      "fuente": "Atlas de 257arg (examples/elecciones/LEEME.md).",
+      "fuente": "Atlas de 257arg (examples/elecciones/LEEME.md) y Cantón (1968), t. II.",
       "carga": "autocode",
       "archivo": "examples/elecciones/elecciones.mer",
       "archivo_datos": "examples/elecciones/cinta.txt",
-      "archivo_catalogo": "examples/elecciones/catalogo.txt",
+      "archivo_catalogo": "examples/elecciones/mapas_provinciales.json",
       "codigo_salida": "ferranti",
       "llaves_defecto": { "F": 0, "J": 0, "D": 0 },
       "velocidad_defecto": 0,
       "parametro_facil": { "tipo": "elecciones" },
       "datos_defecto": "0 0 0\n",
       "pasos_1961": [
-        "Elegí la consulta antes de poner la cinta. Los tres números de la consulta van detrás del programa y delante de los datos electorales."
+        "Elegí la consulta o el mapa provincial antes de poner la cinta. La consulta va delante de los datos electorales."
       ],
-      "mapas_provinciales": {
-        "archivo": "examples/elecciones/perforar_mapa.mer",
-        "archivo_catalogo": "examples/elecciones/mapas_provinciales.json",
-        "fuente": "Cantón (1968), t. II y geometría departamental de 1960 de 257arg. Trazos con el método de Alex Harri.",
-        "pasos_1961": [
-          "Elegí la elección y el distrito antes de poner la cinta. El programa copia la tabla, el mapa y el índice al teleimpresor."
-        ]
-      },
       "esperado": {
         "parada": 1,
         "salida_archivo": "examples/elecciones/salidas/catalogo.txt"

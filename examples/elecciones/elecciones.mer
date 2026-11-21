@@ -460,7 +460,13 @@ variables 1
 read(i)
 read(q)
 read(r)
-jump 97, i != 1967
+jump 96, i != -1
+95) 600(k)
+jump 94, k = 29
+630(k)
+jump 95
+94) end
+96) jump 97, i != 1967
 across 1/3
 97) a = 0
 

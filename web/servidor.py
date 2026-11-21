@@ -67,18 +67,12 @@ def ruta_wasm():
 def archivos_permitidos():
     """Devuelve el conjunto de rutas relativas declaradas en `web/catalogo.json`."""
     cat = json.loads((WEB_DIR / "catalogo.json").read_text(encoding="utf-8"))
-    rutas = {
+    return {
         Path(p[campo]).as_posix()
         for p in cat.get("programas", [])
         for campo in ("archivo", "archivo_datos", "archivo_catalogo")
         if p.get(campo)
     }
-    for p in cat.get("programas", []):
-        mp = p.get("mapas_provinciales") or {}
-        for campo in ("archivo", "archivo_catalogo"):
-            if mp.get(campo):
-                rutas.add(Path(mp[campo]).as_posix())
-    return rutas
 
 
 def cargar_tiny_modulo(tiny_mod=None):

@@ -1269,30 +1269,12 @@ function usaTamborParaMusica(p) {
 }
 
 function esModoMapaProvincial(p = programa) {
-  return p?.id === 'elecciones' && eleccionesTab === 'provincial' && !!p.mapas_provinciales;
-}
-
-function fuenteProgramaActual(p = programa) {
-  if (!esModoMapaProvincial(p)) return p;
-  const mp = p.mapas_provinciales;
-  return {
-    ...p,
-    carga: 'escrito',
-    archivo: mp.archivo,
-    archivo_datos: null,
-    archivo_catalogo: mp.archivo_catalogo,
-    fuente: mp.fuente,
-    papel_mapa: true,
-    parametro_facil: { tipo: 'mapas_provinciales' },
-    datos_defecto: '',
-    pasos_1961: mp.pasos_1961,
-  };
+  return p?.id === 'elecciones' && eleccionesTab === 'provincial';
 }
 
 function tieneCintaDePrograma(p) {
-  const cfg = fuenteProgramaActual(p);
   return esAutocodeLocal(p) ||
-    ['escrito', 'escrito_tambor', 'autocode', 'input_routine', 'tele_input', 'midi'].includes(cfg?.carga);
+    ['escrito', 'escrito_tambor', 'autocode', 'input_routine', 'tele_input', 'midi'].includes(p?.carga);
 }
 
 function esParadaDeCarga(snap) {
@@ -1308,30 +1290,27 @@ function unirFilas(primero, segundo) {
 }
 
 async function prepararCintaDePrograma(p) {
-  const cfg = fuenteProgramaActual(p);
-  const tab = p?.id === 'elecciones' ? eleccionesTab : null;
   const local = esAutocodeLocal(p);
   const fuenteLocal = local ? programaLocal.fuenteAutocode : undefined;
-  if (cfg.carga !== 'midi' && cintaProgramaMontada?.programa === p &&
-      cintaProgramaMontada?.tab === tab &&
+  if (p.carga !== 'midi' && cintaProgramaMontada?.programa === p &&
       (!local || cintaProgramaMontada.fuenteLocal === fuenteLocal)) return cintaProgramaMontada;
-  if (cfg.carga === 'input_routine') {
-    const filas = codificarFerranti(cfg.cinta_programa);
+  if (p.carga === 'input_routine') {
+    const filas = codificarFerranti(p.cinta_programa);
     if (!filas) throw new Error('La cinta de programa tiene caracteres inválidos.');
     // Los Quickies del catálogo entran en 2.00 con el avance de línea de E pendiente.
     return {
-      programa: p, tab, filas: Uint8Array.from(filas),
+      programa: p, filas: Uint8Array.from(filas),
       entrada: { direccion: 128, filas: filas.length - 1 },
     };
   }
-  if (cfg.carga === 'tele_input') {
-    const { info, bin } = await getTiny(cfg.variante_tiny);
+  if (p.carga === 'tele_input') {
+    const { info, bin } = await getTiny(p.variante_tiny);
     // La última orden de las cintas de TINY es el salto 29, a, b del tele-input.
     const [orden, a, b] = bin.subarray(-3);
     const entrada = orden === 29 ? { direccion: 32 * a + b, filas: bin.length } : null;
-    return { programa: p, tab, filas: bin, info, teleInput: true, entrada };
+    return { programa: p, filas: bin, info, teleInput: true, entrada };
   }
-  if (cfg.carga === 'midi') {
+  if (p.carga === 'midi') {
     const datos = await midiEntrada();
     if (programa !== p) throw new Error('Cambió el programa seleccionado.');
     const len = writeScratchPar(datos.midi, datos.guion);
@@ -1350,40 +1329,39 @@ async function prepararCintaDePrograma(p) {
         r.notas_omitidas ? r.notas_omitidas + ' notas fuera del registro de HOOT' : '',
       ].filter(Boolean).join(' · ');
     }
-    return { programa: p, tab, filas: resultado.slice(corte + 1), teleInput: true, pausa: true, vuelta: wasm.wasm_get_cinta_vuelta() };
+    return { programa: p, filas: resultado.slice(corte + 1), teleInput: true, pausa: true, vuelta: wasm.wasm_get_cinta_vuelta() };
   }
 
-  const autocode = local || cfg.carga === 'autocode';
+  const autocode = local || p.carga === 'autocode';
   let codigo, datosTambor, datosAdicionales;
   if (local) {
     if (!fuenteLocal.trim()) throw new Error('Escribí o abrí un programa de Autocode.');
     codigo = te.encode(fuenteLocal);
     if (codigo.length > 2 * 1024 * 1024) throw new Error('El código supera 2 MiB.');
-  } else if (cfg.carga === 'escrito_tambor') {
+  } else if (p.carga === 'escrito_tambor') {
     [codigo, datosTambor] = await Promise.all([
-      leerArchivoMIDI(cfg.archivos.mer), leerArchivoMIDI(cfg.archivos.tambor),
+      leerArchivoMIDI(p.archivos.mer), leerArchivoMIDI(p.archivos.tambor),
     ]);
   } else {
     let src;
     [src, datosAdicionales] = await Promise.all([
-      getFuente(cfg.archivo),
-      cfg.archivo_datos ? getFuente(cfg.archivo_datos) : '',
+      getFuente(p.archivo),
+      p.archivo_datos ? getFuente(p.archivo_datos) : '',
     ]);
-    codigo = te.encode((cfg.prefijo_autocode || '') + src);
+    codigo = te.encode((p.prefijo_autocode || '') + src);
   }
   if (programa !== p) throw new Error('Cambió el programa seleccionado.');
   const preparacion = autocode ? wasm.wasm_preparar_cinta_autocode : wasm.wasm_preparar_cinta_programa;
   if (!preparacion(writeScratchPar(codigo, datosTambor || new Uint8Array(0)))) throw new Error(readErr());
   const filas = new Uint8Array(mem.buffer, wasm.wasm_result_ptr(), wasm.wasm_result_len()).slice();
-  return { programa: p, tab, filas, teleInput: true, pausa: true, vuelta: wasm.wasm_get_cinta_vuelta(),
+  return { programa: p, filas, teleInput: true, pausa: true, vuelta: wasm.wasm_get_cinta_vuelta(),
     header: autocode ? readAutocodeHeader() : '', datos: autocode ? readAutocodeData() : '',
     datosAdicionales, fuenteLocal };
 }
 
 function montarCintaDePrograma(cinta, incluirDatos = false, consulta) {
-  const cfg = fuenteProgramaActual(cinta.programa);
-  const datos = cinta.datosAdicionales
-    ? (consulta ?? cfg.datos_defecto) + cinta.datosAdicionales
+  const datos = cinta.datosAdicionales && !esModoMapaProvincial(cinta.programa)
+    ? (consulta ?? cinta.programa.datos_defecto) + cinta.datosAdicionales
     : consulta ?? cinta.datos;
   const extra = cintaArchivoMontada?.filas || (incluirDatos && datos ? codificarFerranti(datos) : undefined);
   if (extra === null) throw new Error('Los datos del programa contienen caracteres ajenos al código Ferranti.');
@@ -2004,7 +1982,6 @@ function construirConsultaElecciones(cont, p) {
   const cambiarTab = nueva => {
     if (eleccionesTab === nueva) return;
     eleccionesTab = nueva;
-    cintaProgramaMontada = null;
     if (nueva !== 'provincial') {
       const u = new URL(location.href);
       u.searchParams.delete('anio');
@@ -2033,9 +2010,7 @@ function construirConsultaElecciones(cont, p) {
       <option value="5">Mapa de ganadores</option>
     </select>
     <label for="eleccionesAnio">Elección</label>
-    <select id="eleccionesAnio" class="campo" required disabled>
-      <option value="">Cargando catálogo…</option>
-    </select>
+    <select id="eleccionesAnio" class="campo" required disabled></select>
     <div id="eleccionesCampoDistrito" class="campo-grupo" hidden>
       <label for="eleccionesDistrito">Número de distrito</label>
       <input id="eleccionesDistrito" class="campo num" type="number" min="1" max="511" step="1" required disabled
@@ -2051,20 +2026,18 @@ function construirConsultaElecciones(cont, p) {
   };
   vista.onchange = sincronizar;
   anio.onchange = sincronizar;
-  getFuente(p.archivo_catalogo).then(texto => {
-    const candidatas = [];
-    for (const linea of texto.split('\n')) {
-      const fila = linea.trim().match(/^(\d+)\s+\S+\s+(.+)$/);
-      if (fila) candidatas.push(new Option(fila[2], Number(fila[1])));
-    }
-    if (!candidatas.length) throw new Error('El catálogo de la cinta está vacío.');
-    candidatas.push(new Option('1967', 1967));
-    anio.replaceChildren(...candidatas);
-    sincronizar();
-  }).catch(e => {
-    anio.options[0].textContent = 'Catálogo no disponible';
-    anio.setCustomValidity(e.message);
-  });
+  const ANIOS_NACIONALES = {
+    '1958': { id: 18, label: '1958 PRESIDENTE' },
+    '1962': { id: 19, label: '1962 DIPUTADOS NACIONALES' },
+    '1965': { id: 20, label: '1965 DIPUTADOS NACIONALES' },
+  };
+  const claves = atlasProvinciales ? Object.keys(atlasProvinciales) : Object.keys(ANIOS_NACIONALES);
+  const candidatas = claves
+    .filter(a => Object.hasOwn(ANIOS_NACIONALES, a))
+    .map(a => new Option(ANIOS_NACIONALES[a].label, ANIOS_NACIONALES[a].id));
+  candidatas.push(new Option('1967', 1967));
+  anio.replaceChildren(...candidatas);
+  sincronizar();
 }
 
 function leerConsultaElecciones() {
@@ -2116,19 +2089,20 @@ function construirMapaProvincial(cont) {
 }
 
 function leerDatosSeleccionados(p) {
-  switch (fuenteProgramaActual(p).parametro_facil?.tipo) {
+  if (esModoMapaProvincial(p)) {
+    const mapa = atlasProvinciales?.[$('mapaAnio')?.value]?.provincias[$('mapaProvincia')?.value];
+    return mapa ? `-1 0 0 ${mapa}` : null;
+  }
+  switch (p.parametro_facil?.tipo) {
     case 'elecciones': return leerConsultaElecciones();
-    case 'mapas_provinciales':
-      return atlasProvinciales?.[$('mapaAnio')?.value]?.provincias[$('mapaProvincia')?.value] ?? null;
     default: return undefined;
   }
 }
 
 function construirPanelFacil(p) {
-  const cfg = fuenteProgramaActual(p);
   $('facilTitulo').textContent = p.nombre;
   $('facilDesc').textContent = p.descripcion;
-  $('facilFuente').textContent = `Fuente: ${cfg.fuente}`;
+  $('facilFuente').textContent = `Fuente: ${p.fuente}`;
   const cont = $('facilCampos');
   cont.innerHTML = '';
   $('presets').innerHTML = '';
@@ -2137,7 +2111,7 @@ function construirPanelFacil(p) {
   $('runBtn').textContent = p.parametro_facil?.tipo === 'nim' ? 'Empezar partido de Nim' : 'Correr en Clementina';
   const botonCarga = $('cargaRapidaBtn');
   botonCarga.hidden = !tieneCintaDePrograma(p);
-  botonCarga.textContent = cfg.papel_mapa || p.parametro_facil?.tipo === 'elecciones'
+  botonCarga.textContent = p.papel_mapa || p.parametro_facil?.tipo === 'elecciones'
     ? 'Acelerar consulta · volver a ×1'
     : 'Acelerar carga · arrancar a ×1';
 
@@ -2148,7 +2122,7 @@ function construirPanelFacil(p) {
     construirControlesMIDI(cont);
   } else if (param?.tipo === 'elecciones' && modo === 'facil') {
     construirConsultaElecciones(cont, p);
-  } else if (cfg.papel_mapa && modo === 'facil') {
+  } else if (p.papel_mapa && modo === 'facil') {
     construirMapaProvincial(cont);
   } else if (param && param.tipo === 'llaves_f') {
     cont.innerHTML = `<label for="inF">${param.etiqueta}</label>
@@ -2202,18 +2176,17 @@ function construirPanelFacil(p) {
 }
 
 function construirPanel1961(p) {
-  const cfg = fuenteProgramaActual(p);
-  $('hojaFuente').textContent = cfg.fuente;
+  $('hojaFuente').textContent = p.fuente;
   const prep = $('controlesPrep1961');
   prep.innerHTML = '';
 
   const esConsultaElectoral = p.parametro_facil?.tipo === 'elecciones';
-  const necCinta = cfg.carga === 'input_routine' || cfg.carga === 'tele_input' ||
-    (cfg.carga === 'autocode' && !!cfg.datos_defecto && !esConsultaElectoral);
+  const necCinta = p.carga === 'input_routine' || p.carga === 'tele_input' ||
+    (p.carga === 'autocode' && !!p.datos_defecto && !esConsultaElectoral);
   if (esConsultaElectoral && modo === '1961') construirConsultaElecciones(prep, p);
-  if (cfg.papel_mapa && !esConsultaElectoral && modo === '1961') construirMapaProvincial(prep);
-  if (cfg.carga === 'midi' && modo === '1961') construirControlesMIDI(prep);
-  if (tieneCintaDePrograma(p) && cfg.carga !== 'personal') {
+  if (p.papel_mapa && !esConsultaElectoral && modo === '1961') construirMapaProvincial(prep);
+  if (p.carga === 'midi' && modo === '1961') construirControlesMIDI(prep);
+  if (tieneCintaDePrograma(p) && p.carga !== 'personal') {
     const montar = document.createElement('button');
     montar.type = 'button';
     montar.id = 'btnCintaPrograma1961';
@@ -2310,15 +2283,15 @@ function construirPanel1961(p) {
     inp.addEventListener('input', dibujarCintaPrep);
   }
 
-  const generada = tieneCintaDePrograma(p) && cfg.carga !== 'input_routine' && cfg.carga !== 'tele_input';
+  const generada = tieneCintaDePrograma(p) && p.carga !== 'input_routine' && p.carga !== 'tele_input';
   mostrarPasos1961(generada ? [
     'Poné la cinta del programa. Subí la llave INPUT (F) 2 y activá WRITE CURRENT.',
     'Pasá a AUTO y CONTINUOUS y pulsá INITIAL TRANSFER para leer la cinta.',
     usaTamborParaMusica(p) || p.id === 'clementine'
       ? 'En la parada de carga, activá HOOT, elegí ×1 y pulsá PREPULSE.'
       : 'En la parada de carga, ajustá las llaves INPUT para el programa y pulsá PREPULSE.',
-    ...(cfg.pasos_1961 || []),
-  ] : cfg.pasos_1961 || []);
+    ...(p.pasos_1961 || []),
+  ] : p.pasos_1961 || []);
   if (p.carga === 'personal' && modo === '1961') {
     construirControlesProgramaLocal(prep);
     prep.appendChild($('btnCargar1961'));
@@ -2464,7 +2437,7 @@ async function correrFacil(rapida = false) {
       cargaRapida = {
         velocidadAnterior: playSpeed,
         entrada: cintaProgramaMontada.entrada,
-        hastaParada: !!fuenteProgramaActual(elegido).papel_mapa || param?.tipo === 'elecciones',
+        hastaParada: !!elegido.papel_mapa || param?.tipo === 'elecciones',
       };
       setPlaySpeed(0);
     }
@@ -2650,7 +2623,7 @@ function distribuirPapeles() {
     papeles.append($('repeticion'));
   } else {
     $('lector').after($('repeticion'));
-    if (fuenteProgramaActual()?.papel_mapa || programa?.parametro_facil?.tipo === 'elecciones') {
+    if (programa?.papel_mapa || programa?.parametro_facil?.tipo === 'elecciones') {
       $('repeticion').after($('teleimpresor'));
     }
     else papeles.append($('teleimpresor'));
@@ -3048,9 +3021,8 @@ function drawDrum(snap) {
       cat = tinyInfoActual.cats[s] || 'free';
       g.globalAlpha = hasData ? 1 : 0.2;
     } else if (hasData) {
-      const cfg = fuenteProgramaActual();
-      const fullIr = cfg && (cfg.carga === 'escrito' || cfg.carga === 'input_routine');
-      const partitura = cfg?.carga === 'midi' || cfg?.carga === 'escrito_tambor';
+      const fullIr = programa && (programa.carga === 'escrito' || programa.carga === 'input_routine');
+      const partitura = programa?.carga === 'midi' || programa?.carga === 'escrito_tambor';
       cat = !partitura && s < (fullIr ? 62 : 2) ? 'ir' : 'code';
       g.globalAlpha = 1;
     } else {
@@ -3111,8 +3083,7 @@ function limpiarVista() {
   $('tapetot').textContent = '';
   $('punchCount').textContent = '0 filas';
   $('outCodeLbl').textContent = `Cinta de salida (${programa?.codigo_salida || 'ferranti'})`;
-  const cfg = fuenteProgramaActual();
-  const mapaProv = !!cfg?.papel_mapa;
+  const mapaProv = !!programa?.papel_mapa || esModoMapaProvincial();
   const elecciones = programa?.parametro_facil?.tipo === 'elecciones' && !mapaProv;
   $('paper').classList.toggle('elecciones', elecciones);
   $('paper').classList.toggle('mapa-departamental', mapaProv);
@@ -3226,7 +3197,7 @@ function renderSnapshot(snap) {
 
   const fullText = (autocodeHeader && !esLong ? autocodeHeader + '\n' : '') + decoded;
   const papel = $('paper');
-  const mapaProv = !!fuenteProgramaActual()?.papel_mapa;
+  const mapaProv = !!programa?.papel_mapa || esModoMapaProvincial();
   papel.classList.toggle('mapa-ancho', mapaProv && $('mapaProvincia')?.value === 'Buenos Aires');
   if (fullText) {
     const posicion = papel.scrollTop;
@@ -3399,9 +3370,9 @@ async function arrancar() {
     const catResp = await fetch(`${ORIGIN}/catalogo.json`);
     const catJson = await catResp.json();
     let lista = catJson.programas || [];
-    const progMapas = lista.find(p => p.papel_mapa || p.mapas_provinciales);
-    const archivoMapas = progMapas?.mapas_provinciales?.archivo_catalogo || progMapas?.archivo_catalogo;
-    if (archivoMapas) {
+    const progMapas = lista.find(p => p.id === 'elecciones' || p.papel_mapa);
+    const archivoMapas = progMapas?.archivo_catalogo;
+    if (archivoMapas && archivoMapas.endsWith('.json')) {
       try { atlasProvinciales = JSON.parse(await getFuente(archivoMapas)); }
       catch (e) { console.error(e); }
     }
