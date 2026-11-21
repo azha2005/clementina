@@ -301,7 +301,10 @@ li[data-estado="mal"] .estado-paso { color: var(--color-error); }
 .pie { border-top: var(--rule-hair) solid var(--color-rule); padding-block: var(--space-md) var(--space-xl); font-size: var(--text-sm); color: var(--color-muted); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: var(--space-sm) var(--gap-columns); }
 .pie strong { color: var(--color-ink-2); font-weight: 600; }
 
-@media (max-width: 40rem) { :root { --gutter: 16px; --gap-columns: 16px; } .estado { margin-left: 0; align-items: flex-start; text-align: left; } }
+@media (max-width: 40rem) { :root { --gutter: 16px; --gap-columns: 16px; } .estado { margin-left: 0; align-items: flex-start; text-align: left; }
+  #lector .fila > .campo-grupo { width: 100%; }
+  #lector .fila > .campo-grupo .campo { flex: 1 1 auto; min-width: 0; width: 100%; }
+  .modos { width: 100%; } .modos button { flex: 1; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; } }
 
 /* relieve (PENDIENTES §4): luz cenital, profundidad por sombras con
@@ -3724,7 +3727,19 @@ async function arrancar() {
   }
 }
 
+// En pantallas angostas el pupitre (900 px) se achica entero hasta entrar,
+// en lugar de cortarse con una barra horizontal.
+function ajustarPupitre() {
+  const pupitre = $('pupitre');
+  const lugar = pupitre.parentElement.clientWidth;
+  pupitre.style.zoom = '';
+  const natural = pupitre.scrollWidth;
+  if (lugar > 0 && natural > lugar + 1) pupitre.style.zoom = String(lugar / natural);
+}
+ajustarPupitre();
+
 addEventListener('resize', () => {
+  ajustarPupitre();
   if (ultimoSnapshot) renderSnapshot(ultimoSnapshot);
   else pintarVacio();
   dibujarCintaPrep();
