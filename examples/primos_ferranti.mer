@@ -1,0 +1,117 @@
+(CALCULANDO PRIMOS EN CODIGO FERRANTI, el de Clementina.
+ Version de examples/primos.mer que perfora con el codigo del Apendice VI de
+ CS 225 A en lugar de ITA2. Diferencias: no existen los dos puntos, y el
+ espacio solo existe en el registro de cifras, asi que entre CALCULANDO y
+ PRIMOS se cambia a cifras y se vuelve a letras.
+ Registros: B1 = n candidato, B2 = d divisor, B4 B5 B6 = cifras, S = resto.
+ Temporales: H10 = n, H11 = d, H12 = N, H13 = unidades.)
+
+610 12         ; H12 = N  (llaves F)
+
+620 30         ; CR
+620 13         ; LF
+620 27         ; letras
+620 3          ; C
+620 1          ; A
+620 12         ; L
+620 3          ; C
+620 21         ; U
+620 12         ; L
+620 1          ; A
+620 14         ; N
+620 4          ; D
+620 15         ; O
+620 0          ; cifras
+620 14         ; espacio
+620 27         ; letras
+620 16         ; P
+620 18         ; R
+620 9          ; I
+620 13         ; M
+620 15         ; O
+620 19         ; S
+620 0          ; cifras  (el codigo Ferranti no tiene dos puntos)
+620 30         ; CR
+620 13         ; LF
+
+101 2          ; n = 2
+011 10   (1    ; H10 = n
+200 10         ; S = n
+270 12         ; St = n - N
+290 v8         ; si n >= N, terminar
+
+102 2          ; d = 2
+012 11   (2    ; H11 = d
+200 11         ; S = d
+270 10         ; St = d - n
+290 v5         ; si d >= n, n es primo
+
+200 10         ; S = n
+270 11   (3    ; St = S - d
+290 v4         ; si S >= d, restar
+590 v6
+230 11   (4    ; S = S - d
+590 v3
+320 0    (6    ; St = S (resto)
+280 v7         ; resto no nulo: probar el divisor siguiente
+590 v9         ; divisible: n compuesto
+122 1    (7    ; d = d + 1
+590 v2
+
+200 10   (5    ; n es primo: separar las cifras
+104 0          ; centenas
+370 100  (10
+290 v11
+590 v12
+330 100  (11
+124 1
+590 v10
+105 0    (12   ; decenas
+370 10   (13
+290 v14
+590 v15
+330 10   (14
+125 1
+590 v13
+210 13   (15   ; unidades: H13 = S
+006 13         ; B6 = H13
+174 0          ; Bt = B4
+080 v16        ; si hay centenas, imprimir las tres cifras
+175 0          ; Bt = B5
+080 v17        ; si hay decenas, imprimir dos
+590 v18
+634 v20  (16   ; centenas
+635 v20  (17   ; decenas
+636 v20  (18   ; unidades
+620 15         ; ,
+620 14         ; espacio
+
+121 1    (9    ; n = n + 1
+590 v1
+
+620 30   (8    ; CR
+620 13         ; LF
+620 11         ; -
+620 14         ; espacio
+620 27         ; letras
+620 6          ; F
+620 9          ; I
+620 14         ; N
+620 0          ; cifras
+620 14         ; espacio
+620 11         ; -
+620 30         ; CR
+620 13         ; LF
+990 0
+
+(Cifras 0 a 9 en codigo Ferranti, registro de cifras, Apendice VI.)
+=16      (20
+=1
+=2
+=19
+=4
+=21
+=22
+=7
+=8
+=25

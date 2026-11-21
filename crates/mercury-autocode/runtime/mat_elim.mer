@@ -1,0 +1,241 @@
+(DETERMINANTE Y DIVISION MATRICIAL, FUNCIONES 25 Y 28.
+ 506: matriz de coeficientes, 508: orden; 505 y 509: base y ancho del
+ segundo miembro. El determinante vuelve en 505. Reconstruccion:
+ Gauss-Jordan con pivoteo parcial sobre los coeficientes en el tambor.)
+
+@8.0
+670 491
+680 13
+670 492
+680 14
+102 v1
+590 832
+400 31.58  (1
+410 v60             ; columna del pivote
+200 99+
+370 25
+280 v10
+400 14.58
+410 1010            ; determinante, sólo en la funcion 25
+
+400 v60    (10
+410 v61
+410 v62             ; fila del mejor pivote
+520 1016
+440 1012
+440 v60
+410 v63
+400 31.58
+410 v64
+400 v63    (11
+102 v12
+590 833
+490 v13    (12
+520 31.60
+450 v64    (13
+490 v14
+590 v15
+440 v64    (14
+410 v64
+400 v61
+410 v62
+400 v63    (15
+440 1016
+410 v63
+400 v61
+440 14.58
+410 v61
+450 1016
+701 256
+080 v11
+
+400 v64
+701 256
+080 v18
+200 99+
+370 25
+280 v17
+400 31.58
+410 1010
+590 835
+590 v17    (17      ; sistema singular
+
+400 v62    (18
+410 v70
+450 v60
+701 256
+080 v19
+590 v25
+400 v60    (19
+410 v71
+300 0
+210 v92
+102 v20
+590 v80             ; intercambiar filas enteras
+200 99+    (20
+370 25
+280 v25
+400 1010
+520 31.60
+410 1010
+
+400 v60    (25
+520 1016
+440 1012
+440 v60
+102 v26
+590 833
+410 v69    (26
+200 99+
+370 25
+280 v27
+400 1010
+520 v69
+410 1010
+400 v60    (27
+410 v70
+410 v71
+300 1
+210 v92
+102 v30
+590 v80             ; dividir la fila pivote por su pivote
+
+400 31.58  (30
+410 v70
+400 v60             ; v71 queda como fila pivote
+410 v71
+400 v70    (31
+450 v60
+701 256
+080 v32
+590 v34
+400 v70    (32
+520 1016
+440 1012
+440 v60
+102 v33
+590 833
+410 v65    (33
+701 256
+080 v35
+590 v34
+300 2      (35
+210 v92
+102 v34
+590 v80             ; eliminar en una fila distinta de la pivote
+400 v70    (34
+440 14.58
+410 v70
+450 1016
+701 256
+080 v31
+400 v60
+440 14.58
+410 v60
+450 1016
+701 256
+080 v10
+590 835
+
+; Aplicar la misma operacion a filas v70, v71 de B y del segundo miembro.
+012 v90    (80
+400 v70
+520 1016
+440 1012
+410 v72
+400 v71
+520 1016
+440 1012
+410 v73
+400 1016
+410 v74
+102 v81
+590 v40
+200 99+    (81
+370 25
+280 v82
+590 v83
+400 v70    (82
+520 1018
+440 1010
+410 v72
+400 v71
+520 1018
+440 1010
+410 v73
+400 1018
+410 v74
+102 v83
+590 v40
+002 v90    (83
+592 0
+
+; Operar sobre los segmentos que empiezan en v72 y v73, con largo v74.
+012 v91    (40
+400 v72    (41
+102 v42
+590 833
+410 v75    (42
+200 v92
+280 v43
+400 v73
+102 v44
+590 833
+410 14.60  (44
+400 v72
+102 v45
+590 834
+400 v75    (45
+410 14.60
+400 v73
+102 v50
+590 834
+330 1      (43
+280 v46
+400 v75
+101 382
+102 v49
+590 4
+400 v73    (46
+102 v47
+590 833
+530 v65    (47
+440 v75
+410 14.60  (49
+400 v72
+102 v50
+590 834
+400 v72    (50
+440 14.58
+410 v72
+400 v73
+440 14.58
+410 v73
+400 v74
+450 14.58
+410 v74
+701 256
+080 v41
+002 v91
+592 0
+
++0         (60      ; pivote: columna y fila de destino
++0         (61      ; fila en busqueda
++0         (62      ; fila de mejor modulo
++0         (63      ; cursor en busqueda
++0         (64      ; mayor modulo
++0         (65      ; multiplicador de la eliminacion
++0         (70      ; fila modificada
++0         (71      ; fila de referencia
++0         (72      ; cursor en fila modificada
++0         (73      ; cursor en fila de referencia
++0         (74      ; elementos por recorrer
++0         (75      ; valor original
+=0         (90      ; vuelta de operacion sobre dos matrices
+=0
+=0         (91      ; vuelta de operacion sobre un par de filas
+=0
+=0         (92      ; 0 intercambio, 1 division, 2 eliminacion
+
+@11.60
++0         (69      ; pivote para la division (largo 382)

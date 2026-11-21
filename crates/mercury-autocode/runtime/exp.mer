@@ -1,0 +1,78 @@
+(EXP: exp. Entrada en la etiqueta 1 con x en A; deja e^x en A y vuelve
+ por B2. Usa el sac y los largos 32 a 36 y 42.
+ n = entero mas cercano a x log2 e; r = x - n ln2, con ln2 partido en dos
+ para que n por la primera parte sea exacto: r queda entre -0.35 y 0.35.
+ e^r por un polinomio de grado 7, error relativo 6 10^-11, y se suma n al
+ exponente. Si el resultado no cabe en la maquina se provoca el desborde,
+ que detiene la maquina; si es demasiado chico da cero.
+ Reconstruccion; el original no se conserva.)
+
+012 3      (1       ; guardar B2
+410 32              ; x
+707 0
+330 9
+290 v8              ; |x| >= 256
+500 v90             ; x log2 e
+420 v91
+780 28
+410 42
+200 42+
+210 3+              ; n
+440 56
+410 34              ; n como numero
+520 v92             ; n C1 sin redondeo: exacto
+410 36
+400 32
+450 36
+410 36              ; x - n C1
+400 34
+500 v93
+520 31.60
+440 36
+410 36              ; r = x - n C1 - n C2
+400 v80             ; polinomio
+500 36
+420 v81
+500 36
+420 v82
+500 36
+420 v83
+500 36
+420 v84
+500 36
+420 v85
+500 36
+420 v86
+500 36
+420 v87
+707 0               ; exponente + n
+220 3+
+290 v6
+370 -256
+290 v7
+400 31.58           ; demasiado chico: cero
+590 v9
+370 256    (6
+290 v10             ; demasiado grande: desborde
+717 0      (7
+002 3      (9
+592 0
+490 v10    (8
+400 31.58           ; x <= -256: cero
+590 v9
+500 v95    (10      ; provocar el desborde del exponente
+500 v95
+
++1.4426950408889634   (90  ; log2 e
++0.5                  (91
++0.693145751953125    (92  ; C1: ln 2 con 19 cifras binarias
++1.4286068202862268,-6 (93 ; C2 = ln 2 - C1
++0.00019915868926771355 (80
++0.0013948580787791832  (81
++0.00833326609271606    (82
++0.04166621827483144    (83
++0.16666666891084733    (84
++0.5000000107749409     (85
++0.9999999999797768     (86
++0.999999999959547      (87
++1,75                 (95  ; cerca de 2^250

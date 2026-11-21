@@ -1,0 +1,54 @@
+1962 DIPUTADOS NACIONALES
+CANTON (1968), DEPTOS. DE 1960
+
+  1  BUENOS AIRES
+       38.22    23.88    14.35  
+  2  CAPITAL FEDERAL
+       29.03    26.72     2.31  
+  3  CATAMARCA
+       SIN DATO
+  4  CHACO
+       32.40    30.97     1.43  
+  5  CHUBUT
+       33.20    28.39     4.80  
+  6  CORRIENTES
+       37.15    31.43     5.72  
+  7  CORDOBA
+       34.65    33.11     1.54  
+  8  ENTRE RIOS
+       35.52    30.29     5.23  
+  9  FORMOSA
+       SIN DATO
+ 10  JUJUY
+       51.08    35.39    15.69  
+ 11  LA PAMPA
+       38.42    36.11     2.31  
+ 12  LA RIOJA
+       SIN DATO
+ 13  MENDOZA
+       24.99    21.04     3.95  
+ 14  MISIONES
+       SIN DATO
+ 15  NEUQUEN
+       49.95    29.00    20.95  
+ 16  RIO NEGRO
+       40.11    28.64    11.47  
+ 17  SALTA
+       32.08    24.19     7.89  
+ 18  SAN JUAN
+       34.07    26.93     7.14  
+ 19  SAN LUIS
+       SIN DATO
+ 20  SANTA CRUZ
+       SIN DATO
+ 21  SANTA FE
+       30.27    24.68     5.59  
+ 22  SANTIAGO DEL ESTERO
+       35.75    29.35     6.40  
+ 23  TIERRA DEL FUEGO
+       SIN DATO
+ 24  TUCUMAN
+       47.83    28.80    19.03  
+
+MENOR DIFERENCIA   4     1.43  
+

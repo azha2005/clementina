@@ -1,0 +1,14 @@
+[package]
+name = "mercury-cli"
+description = "Consola de texto del emulador de Clementina (Ferranti Mercury)"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[[bin]]
+name = "clementina"
+path = "src/main.rs"
+
+[dependencies]
+mercury-core = { path = "../mercury-core" }
+mercury-autocode = { path = "../mercury-autocode" }

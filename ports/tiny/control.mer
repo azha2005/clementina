@@ -1,0 +1,207 @@
+; TINY 2.1 de WollyMonjac. Lee Ferranti y dirige los bancos de cálculo.
+; Estado: 50 retorno, 50+ cursor, 51 posición, 51+ token, 52 modo,
+; 52+ caracteres emitidos, 53 registro de cinta, 53+ banco, 54 sector.
+400 31.58
+410 18
+400 31.60
+410 2
+400 31.62
+410 56
+300 0
+210 51
+210 52
+210 52+
+210 53
+210 53+
+104 0
+cartel:
+204 12.46
+370 31
+280 $perforar_cartel
+590 $leer
+perforar_cartel:
+627 0
+124 1
+590 $cartel
+
+leer:
+600 54+
+200 54+
+370 31
+280 $ver_cifras
+590 $leer
+ver_cifras:
+370 0
+280 $ver_letras
+210 53
+590 $leer
+ver_letras:
+370 27
+280 $ver_fin
+300 32
+210 53
+590 $leer
+ver_fin:
+220 53
+370 13
+280 $leido
+300 1
+210 51+
+210 52
+590 $ejecutar
+leido:
+210 54+
+003 54+
+203 13.0
+370 0
+280 $poner_token
+ ; El CR es una fila separada y antecede al LF.
+200 54+
+370 30
+280 $caracter_invalido
+590 $leer
+poner_token:
+210 51+
+200 51
+370 {prefijo_maximo}
+280 $ejecutar
+990 2
+caracter_invalido:
+990 3
+
+ejecutar:
+300 0
+210 50+
+300 {guion}
+210 54
+nueva_pagina:
+677 0
+680 14
+tarea:
+003 50+
+203 14.0
+370 0
+280 $banco
+203 14.0+
+370 1
+280 $prefijo
+590 $salida
+prefijo:
+200 52
+370 0
+280 $otra_tarea
+200 51
+320 1
+210 51
+590 $leer
+banco:
+230 53+
+280 $cambiar
+590 $parametros
+cambiar:
+203 14.0
+210 53+
+370 {matriz}
+280 $ver_f1
+590 $matriz
+ver_f1:
+370 {f1}
+280 $completo
+matriz:
+677 0
+680 2
+320 1
+677 0
+680 3
+320 1
+677 0
+680 4
+{pagina_matriz}
+590 $parametros
+completo:
+677 0
+680 1
+320 1
+677 0
+680 2
+320 1
+677 0
+680 3
+320 1
+677 0
+680 4
+320 1
+677 0
+680 5
+320 1
+677 0
+680 6
+parametros:
+203 14.1
+210 60
+203 14.1+
+210 60+
+203 14.2
+210 61
+203 14.2+
+210 61+
+203 14.3
+210 62
+203 14.3+
+210 62+
+106 $otra_tarea
+016 50
+203 14.0+
+597 0
+otra_tarea:
+200 50+
+320 8
+210 50+
+370 128
+280 $tarea
+300 0
+210 50+
+200 54
+320 1
+210 54
+590 $nueva_pagina
+
+salida:
+200 51+
+330 2
+290 $emitir
+590 $fin
+emitir:
+003 51+
+203 13.32
+330 32
+290 $letra
+620 0
+ ; Imprime cambio antes del símbolo también para las cifras.
+590 $cifra
+letra:
+620 27
+627 0
+590 $emitido
+cifra:
+ ; El valor se recupera porque el cambio de registro precede al carácter.
+203 13.32
+627 0
+emitido:
+200 52+
+320 1
+210 52+
+370 {salida}
+280 $mas_contexto
+590 $fin
+mas_contexto:
+200 51
+320 1
+210 51
+370 {contexto_tope}
+280 $ejecutar
+fin:
+620 0
+620 30
+620 13
+990 0

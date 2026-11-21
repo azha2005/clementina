@@ -1,0 +1,70 @@
+; Sector 2 del Input Routine. Página 0 normal, llaves de mano y arranque.
+; Transcripción del manuscrito, PDF págs. 14–15.
+; Los paréntesis sobre valores que la rutina modifica se indican en comentarios.
+; Duda: 21 parece 101 1.48, pero verificar página 14. En 61 el signo se lee como distinto de 1.2, es anotación o forma simbólica, no necesariamente literal ensamblable.
+
+0    +0
+2    -1
+4    670 479
+5    690 0
+6    670 478
+7    680 0
+8    597 0
+9    670 479
+10   690 0
+11   670 5
+12   680 0
+13   210 61+
+14   206 40+
+15   677 0
+16   176 4
+17   080 61
+18   670 3
+19   680 1
+20   005 61+
+21   101 1.48
+22   300 0
+23   102 -2
+24   104 600
+25   610 26+
+26   103 0           ; Manuscrito: 103 (0).
+27   184 24
+28   080 25
+29   610 30+
+30   103 0           ; Manuscrito: 103 (0).
+31   080 33
+32   590 29
+33   210 35+             ; planta el número acumulado en el operando de la línea 35
+34   327 0
+35   327 0           ; Manuscrito: 327 (0).
+36   327 -1
+37   143 0
+38   187 37
+39   172 0
+40   182 24
+41   370 0
+42   591 0
+43   =9
+43+  =6
+44   =6
+44+  =6
+45   176 9
+46   080 13
+47   677 0
+48   680 1
+49   670 3
+50   590 62
+51   670 0
+52   101 1.6
+53   105 -111
+54   200 1.4
+55   680 0
+56   =0
+56+  =0
+57   101 45
+58   176 2
+59   090 22
+60   670 12
+61   300 33          ; (≠1.2): dirección larga de 1.2, ver PDF p. 34
+62   680 0
+63   590 57

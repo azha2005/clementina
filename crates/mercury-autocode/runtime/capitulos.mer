@@ -1,0 +1,71 @@
+(CAMBIO DE CAPITULO: across, down y up. Va en la pagina 1, que el
+ Apendice 1 de Garcia Camarero reserva para transferencias especiales.
+ Cada capitulo traducido ocupa 13 sectores del tambor a partir de
+ 464 - 16c; across los copia a las paginas 2 a 14, repone pi y salta.
+ down guarda el capitulo actual y la vuelta en una pila de dos niveles
+ y up la desapila; 118..127 actualizan nivel en v90+. Reconstruccion.)
+
+; ACROSS, etiqueta 1: S = primer sector del capitulo, B1 = direccion destino.
+210 v90    (1       ; capitulo actual
+103 2               ; B3 = pagina
+677 0      (2       ; T = S
+683 0               ; pagina B3 <- sector T
+320 1
+123 1
+173 15
+080 v2
+400 v97
+410 31.56           ; pi = 3.14159...
+591 0
+
+; DOWN, etiqueta 3: S y B1 como en across, B2 = vuelta.
+210 v96    (3
+200 v92             ; nivel 1 -> nivel 2
+210 v94
+200 v93
+210 v95
+200 v90             ; nivel 1 = capitulo actual y vuelta
+210 v92
+012 v93
+590 118
+
+; UP, etiqueta 4.
+001 v93    (4       ; B1 = vuelta del nivel 1
+200 v92
+210 v96
+200 v94             ; nivel 2 -> nivel 1
+210 v92
+200 v95
+210 v93
+590 123
+
++3.14159265359 (97
+; Cada celda en un registro medio propio: las mitades derechas (+) quedan para
+; nivel de down y celdas de control de overlays.
+@96
+=0         (90      ; 192: primer sector actual | 193: nivel de down
+=0
+=0         (92      ; 194: nivel 1 sector      | 195: OVL_SEC
+=0
+=0         (93      ; 196: nivel 1 vuelta      | 197: OVL_NPAGES
+=0
+=0         (94      ; 198: nivel 2 sector      | 199: OVL_OP
+=0
+=0         (95      ; 200: nivel 2 vuelta      | 201: OVL_AUX_SHORT
+=0
+=0         (96      ; 202: auxiliar            | 203: RMP_IDX
+=0
+
+; Actualizar contador de profundidad despues de la cola de division (112..117).
+@118
+200 v90+
+320 1
+210 v90+
+200 v96
+590 v1
+@123
+200 v90+
+330 1
+210 v90+
+200 v96
+590 v1

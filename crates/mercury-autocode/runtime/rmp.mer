@@ -1,0 +1,67 @@
+(RMP: leer mas programa / despachador de capitulos 0 sucesivos.
+ Vive en el sector 6 del tambor y corre en la pagina 15 desde 960.
+ Consulta el indice RMP_IDX en corto 203 dentro de la tabla en etiqueta 80;
+ si hay un sector no nulo, lo carga en las paginas 2..14 sin alterar las
+ variables ni el tambor auxiliar, repone pi y arranca en 128. Reconstruccion.)
+
+@960
+001 101+            ; RMP_IDX
+201 v80             ; sector inicial del proximo capitulo 0
+280 v1
+990 0      (3       ; fin de la cinta de programas
+590 v3
+210 96     (1       ; CAP_ACTUAL_CORTO = sector
+210 v91
+300 0
+210 96+             ; NIVEL_CORTO = 0
+200 101+
+320 1
+210 101+            ; RMP_IDX += 1
+103 2
+200 v91    (2
+677 0
+683 0
+320 1
+210 v91
+123 1
+173 15
+080 v2
+400 v97
+410 31.56           ; repone pi = 3.14159...
+590 128
+
++3.14159265359 (97
+; Hasta 32 capitulos 0 siguientes -tabla parcheada por compilar-.
+=0         (80
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0         (91

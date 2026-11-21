@@ -1,0 +1,34 @@
+; QUICKY 8, PDF 108 folio 105, imprimir Sac entero con signo.
+620 0
+620 30
+620 13
+620 30
+015 0+v7
+016 0+v8
+370 0
+290 v1
+620 11
+167 -1
+380 1v1
+620 14 (1
+106 -30
+210 0+v5
+105 542 (2
+125 177 (3
+570 100
+236 5+v6
+290 v3
+125 464 (4
+090 v4
+126 10
+226 0+v6
+090 v6
+370 0 (5
+290 v2
+625 1 (6
+080 v2
+105 0 (7
+106 0 (8
+620 14
+620 14
+; Nota: los ceros de instrucciones con etiquetas 5, 7, 8 están subrayados en el original, indican modificación dinámica.

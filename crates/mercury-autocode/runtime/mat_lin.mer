@@ -1,0 +1,135 @@
+(OPERACIONES LINEALES Y DIAGONALES, FUNCIONES 11 A 15 Y 17 A 24.
+ Bases A, B, C en 505..507; largo u en 508; factor con signo en 511.
+ Las funciones 17 a 24 operan sobre diagonales de una matriz cuadrada.)
+
+@8.0
+670 491
+680 13
+670 492
+680 14
+102 v1
+590 832
+
+400 1016   (1
+410 v90             ; cantidad de elementos
+200 99+
+370 17
+290 v2
+590 v10
+400 1016   (2
+520 1016
+410 v90
+400 31.58
+410 v91             ; falta para la diagonal (inicialmente cero)
+200 99+
+370 21
+290 v50
+
+400 1012   (10      ; leer B
+102 v11
+590 833
+410 14.60  (11
+200 99+
+370 15
+280 v12
+590 v40             ; copia
+370 17     (12
+290 v20
+590 v30             ; vector: usar C en todos los elementos
+
+400 v91    (20
+701 256
+080 v42             ; fuera de la diagonal
+400 1016
+440 14.58
+410 v91             ; siguiente diagonal a u+1 elementos
+200 99+
+370 21
+290 v60
+400 1022            ; escalar, sin leer C
+590 v31
+
+400 1014   (30      ; leer C, ponderar y avanzar C
+102 v32
+590 833
+520 1022   (32
+410 v92
+400 1014
+440 14.58
+410 1014
+400 v92
+590 v31
+001 v93    (60      ; diagonal copiada en nucleos, incluso si coincide con A
+401 16.0
+520 1022
+200 v93
+320 1
+210 v93
+440 14.60  (31
+410 14.60
+200 99+
+370 17
+290 v42
+590 v40
+
+400 v91    (42
+450 14.58
+410 v91
+400 1010   (40
+102 v41
+590 834
+400 1010   (41
+440 14.58
+410 1010
+400 1012
+440 14.58
+410 1012
+400 v90
+450 14.58
+410 v90
+701 256
+080 v10
+200 99+
+370 21
+290 928
+590 835
+
+; Guardar las ocho paginas de la diagonal y copiar el vector C.
+300 32     (50
+103 16
+677 0      (51
+693 0
+320 1
+123 1
+173 24
+080 v51
+400 1016
+780 28
+410 42
+200 42+
+210 v94
+300 0
+210 v93
+400 1014   (52
+102 v53
+590 833
+001 v93    (53
+411 16.0
+400 1014
+440 14.58
+410 1014
+200 v93
+320 1
+210 v93
+270 v94
+280 v52
+300 0
+210 v93
+590 v10
+
++0         (90
++0         (91
++0         (92
+=0         (93
+=0
+=0         (94

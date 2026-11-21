@@ -1,0 +1,62 @@
+(INT STEP: un subpaso del metodo de Runge-Kutta de orden 4 para ODEs.
+ Vive en el sector 5 del tambor y corre en la pagina 15 desde 960.
+ Parametros de entrada:
+   corto 195 = base y, 197 = base f, 199 = base g, 201 = base h
+   largo 53 = paso de la etapa
+   corto 202 = etapa 0..3:
+     0: g[k]=y[k], h[k]=f[k], y[k]=g[k]+dt*f[k]
+     1 y 2: h[k]=h[k]+2*f[k], y[k]=g[k]+dt*f[k]
+     3: h[k]=h[k]+f[k], y[k]=g[k]+dt*h[k]
+   indice n esta en corto 121; dt esta en largo 53 - medio 106-.
+ Nota: no toca B5, B6 ni indices i..t ni constantes de pagina 14. Reconstruccion.)
+
+@960
+200 60+             ; n
+280 v1              ; n != 0 -> seguir
+590 v29
+210 v91    (1       ; k = n
+200 97+             ; parchear bases de y, f, g, h
+210 v30+
+210 v31+
+200 98+
+210 v32+
+200 99+
+210 v33+
+210 v34+
+200 100+
+210 v35+
+210 v36+
+210 v37+
+210 v38+
+
+001 v91    (20      ; bucle k = n..1
+401 0      (32      ; A = f[k]
+410 34
+200 101             ; etapa en corto 202
+280 v21
+401 0      (30      ; etapa 0: g[k] = y[k], h[k] = f[k]
+411 0      (34
+400 34
+411 0      (38
+590 v24             ; y[k] = g[k] + dt * f[k]
+330 3      (21
+280 v22
+400 34              ; etapa 3: A = h[k] + f[k], usa eso por dt
+421 0      (37
+590 v25
+400 34     (22      ; etapas 1 y 2: h[k] = h[k] + 2*f[k]
+420 34
+421 0      (35
+411 0      (36
+400 34     (24      ; usa A = f[k]
+500 106    (25      ; dt en largo 53 - pagina 1, medio 106 -
+421 0      (33      ; + g[k]
+411 0      (31      ; -> y[k]
+200 v91
+330 1
+210 v91
+280 v20
+
+592 0      (29
+
+=0         (91      ; indice del bucle k

@@ -1,0 +1,166 @@
+(LEER: read. Lee el proximo numero de la cinta de datos y lo deja en A.
+ Entrada en la etiqueta 1, vuelve por B2. Usa B1, B3, B4, el sac, la
+ rutina de division y los largos 32, 34, 36 y 38.
+ Formato segun el Autocode Manual, cap. 1: signo menos optativo, cifras con punto
+ decimal optativo y, optativamente, coma y exponente decimal entero,
+ como -2.5,-3 = -0.0025. Termina en CR, LF o espacio. Antes del numero se
+ saltan blancos, cambios de registro y signos +.
+ La parte entera se acumula sin redondeo, asi que los enteros entran
+ exactos; luego se divide o multiplica por la potencia de 10.
+ Reconstruccion; el original no se conserva.)
+
+012 3      (1       ; guardar B2
+300 0
+210 2               ; negativo = 0
+210 3+              ; exponente = 0
+210 v80             ; empezado = 0
+300 -1
+210 1+              ; cifras decimales = -1 (sin punto)
+400 31.58
+410 32              ; V = 0
+600 2+     (2       ; leer un caracter
+001 2+
+201 v90             ; S = clase
+370 10
+290 v5              ; no es cifra
+210 41+             ; cifra -> largo de conversion
+300 1
+210 v80
+400 32
+520 v94
+440 40
+410 32              ; V = 10 V + cifra
+200 1+
+290 v6
+590 v2
+320 1      (6       ; una cifra decimal mas
+210 1+
+590 v2
+280 v7     (5       ; blanco: terminar o saltar
+200 v80
+280 v30
+590 v2
+370 11     (7
+280 v8
+300 1               ; menos
+210 2
+210 v80
+590 v2
+370 12     (8
+280 v9
+300 0               ; punto
+210 1+
+300 1
+210 v80
+590 v2
+300 0      (9       ; coma: exponente
+210 v81
+400 31.58
+410 38
+600 2+     (21
+001 2+
+201 v90
+370 10
+290 v22
+210 41+
+400 38
+520 v94
+440 40
+410 38
+590 v21
+370 11     (22
+280 v25
+300 1
+210 v81
+590 v21
+370 12     (25      ; punto en el exponente, como 1000,-3.0: se ignora el resto
+280 v23
+600 2+     (26
+001 2+
+201 v90
+370 10
+280 v26
+400 38     (23
+780 28
+410 42
+200 42+
+210 3+
+200 v81
+280 v24
+590 v30
+300 0      (24
+230 3+
+210 3+
+200 1+     (30      ; escala = exponente - cifras decimales
+290 v31
+300 0
+210 1+
+200 3+     (31
+230 1+
+210 1+
+290 v32
+300 0
+230 1+
+210 0      (32      ; |escala|
+003 0
+400 v96
+080 v33
+590 v34
+520 v94    (33
+133 1
+080 v33
+410 38     (34      ; 38 = 10^|escala|
+200 1+
+290 v35
+400 32
+101 19
+102 v36
+590 4               ; V / 10^|escala|
+590 v37    (36
+400 32     (35
+520 38              ; sin redondeo, para que los enteros sigan exactos
+200 2      (37
+280 v38
+590 v39
+520 31.60  (38
+002 3      (39
+592 0
+
++10        (94
++1         (96
+=10        (90      ; clase de cada caracter Ferranti: cifra, 10 blanco,
+=1                  ; 11 menos, 12 punto, 13 coma
+=2
+=10
+=4
+=10
+=10
+=7
+=8
+=10
+=10
+=11
+=10
+=10
+=10
+=13
+=0
+=10
+=10
+=3
+=10
+=5
+=6
+=10
+=10
+=9
+=10
+=10
+=12
+=10
+=10
+=10
+=0         (80      ; empezado
+=0
+=0         (81      ; exponente negativo
+=0

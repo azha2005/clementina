@@ -1,0 +1,94 @@
+(PAGINA 0 DEL AUTOCODE: celdas, division, constantes.
+ Mapa segun Garcia Camarero, AUTOCODE, UBA 1961, Apendice 1:
+ registros 4 a 31 la rutina de division, 32 34 36 38 lugar de trabajo,
+ 58 a 63+ los doce indices i..t. Lo demas es supuesto propio.
+ Esta rutina no es la original, que no se conserva: es una reconstruccion.)
+
+; Celdas cortas (registros 0 a 3):
+;   0  libre       0+ m de print    1  n de print   1+ p (cifras)
+;   2  signo       2+ caracter      3  B2 guardado  3+ exponente decimal
+
+; DIVISION: A = A / L(B1), con L(B1) estandarizado. Vuelve por B2.
+; Usa B3, B4, 34, 36, 38 y 42 (el divisor puede estar en 34, 38 o 42, no
+; en 36). El final esta en los registros 112 a 117 de la pagina 1.
+; Newton-Raphson para h = 1/m2, con m2 = 2m (1 <= |m2| < 2) y m la mantisa
+; del divisor: h0 = 24/17 - 8 m2/17 (error relativo <= 1/17), dos pasos
+; h = h(2 - m2 h) y uno h = h + h(1 - m2 h), que pierde menos; h queda en
+; [0.5, 1] con precision completa. Cociente = A h 2^(1-e).
+@4
+410 36          ; 36 = dividendo
+401 0           ; A = divisor
+103 0
+733 0           ; B3 = -exponente del divisor
+104 1
+714 0           ; exponente 1: A = m2
+410 38          ; 38 = m2
+490 v1
+510 46          ; divisor negativo: h0 = -8 m2/17 - 24/17
+430 48
+590 v2
+510 46   (1     ; h0 = 24/17 - 8 m2/17
+420 48
+410 34   (2
+510 38
+420 44
+500 34          ; h1
+410 34
+510 38
+420 44
+500 34          ; h2
+410 34
+500 38
+440 31.60       ; m2 h - 1, sin redondeo: el 1 forzado se agrandaria al estandarizar
+510 34
+420 34          ; h3
+590 50          ; sigue despues del lugar de trabajo
+
+; Numero corto -> largo: el indice va a la mitad alta de x, con exponente 9.
+@40
+=9              ; 40: largo de conversion de indices [9, 0, 0, k]
+=0
+=0
+=0
+@42
+=0              ; 42: largo de extraccion (parte entera en la mitad baja)
+=0
+=0
+=0
++2              ; 44
++0.470588235294 ; 46: 8/17
++1.41176470588  ; 48: 24/17
+
+; Cociente q = dividendo x h, corregido con el resto: q + (a - q m2) h.
+; Sin la correccion el error llega a casi 5 unidades del ultimo bit; con ella,
+; a 2,5. Un cociente entero exacto puede quedar una unidad por debajo.
+@50
+410 34          ; h3
+500 36          ; q = dividendo x h
+410 42
+510 38          ; -q m2
+440 36          ; resto a - q m2, sin redondeo
+590 112         ; sigue en la pagina 1
+@112
+520 34          ; resto x h
+420 42          ; q corregido
+723 0           ; B3 = exponente - exponente del divisor
+123 1
+713 0           ; exponente del cociente
+592 0
+
+; 56: cero con exponente 0. Sumado sin redondeo a un numero de exponente 9
+; o 29, como los que salen de convertir un indice o de la instruccion 78,
+; lo estandariza por el camino normal de la suma.
+@56
+=0
+=0
+=0
+=0
+
+; Constantes de la pagina 31 (Apendice 1): pi, 0, -1, -4.10^8.
+@31.56
++3.14159265359
++0
+-1
+-4,8

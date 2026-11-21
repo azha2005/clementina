@@ -1,0 +1,43 @@
+; Quicky 12: raíz cuadrada. Manuscrito, PDF página 115.
+; Origen 128: v2 apunta al largo 132 y 2v2 al largo 134.
+; Se fija la salida 1v6 en 163, que sigue a la última instrucción.
+@128
+410 32
+490 v1
+300 12
+590 9
+=1 (2
+=0
+=0
+=-384
+=-1
+=0
+=0
+=-512
+410 34 (1
+410 36
+707 512
+347 -257
+210 34
+707 -1
+210 32
+157 1
+230 33+
+290 163 ; reubicar | 1v6
+080 v3
+320 247
+340 13 (3
+210 35+
+400 34
+300 -2
+590 v5
+430 v2 (4
+500 34
+410 34
+510 32 (5
+500 34
+380 v4
+430 134 ; reubicar | 2v2
+500 34
+420 34
+500 36 (6

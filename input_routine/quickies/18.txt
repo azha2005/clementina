@@ -1,0 +1,46 @@
+; Quicky 18: leer un entero al sac. PDF p. 120, manuscrito p. 117.
+; Los campos subrayados en el manuscrito son modificables: 106 0,
+; 377 0, 990 0 y su operando. Los saltos 590 v1 y 590 9 están subrayados.
+016 0+v9
+010 0+v11
+107 200
+017 v11
+017 0+v5
+600 1+* (1
+106 0
+306 16
+166 16
+357 -1
+280 -2*
+176 10
+090 v4
+300 -9
+026 0+v11
+380 -1*
+016 0+v11
+010 0+v5 (2
+590 v1
+=76v7nb (3, =76
+=76v12nb, =76v8nb
+=76v10nb, =76v1nb
+=76v8nb (6, =239
+017 v11
+280 v2 (7
+280 v1 (8
+300 18 (12
+106 0 (9
+590 9
+176 529 (4
+206 -5v3
+377 0 (5
+097 -76v6
+176 30
+080 v12
+280 v1 (10
+990 0 (11
+006 0+v9
+
+; La tabla corresponde a +, -, punto, LF, espacio, ER, FS y CR.
+; «nb» reproduce provisionalmente la grafía manuscrita; su significado
+; simbólico no está resuelto. El operando de 990 0 se transforma en
+; función 300 o 337. La salida de error salta a la dirección 9.

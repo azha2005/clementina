@@ -1,0 +1,66 @@
+(TRANSFERENCIAS ENTRE VARIABLES AUXILIARES Y DE TRABAJO.
+ Sector 3, pagina 15. Entrada 960 lee y 961 escribe.
+ A trae el indice auxiliar entero con exponente 29. Los cortos
+ 195 y 197 traen direccion de trabajo y cantidad, respectivamente.
+ Supuesto: la pagina 14 se usa de buffer y se repone desde el capitulo.)
+
+@960
+590 v1
+590 v2
+300 0     (1
+590 v3
+300 1     (2
+210 99+   (3       ; 0 lectura, 1 escritura
+003 98+
+080 v4
+592 0              ; longitud cero
+410 42    (4
+200 42+
+350 31
+210 v91
+004 v91            ; B4: desplazamiento de largo en la pagina 14
+780 33
+410 42
+200 42+
+320 128
+210 v90            ; primer sector
+001 97+            ; B1: largo de la variable de trabajo
+
+200 v90   (10
+677 0
+680 14
+200 99+   (11
+280 v12
+404 14.0
+411 0
+590 v13
+401 0     (12
+414 14.0
+121 1     (13
+133 1
+080 v14
+590 v20
+124 1     (14
+174 32
+080 v11
+
+200 99+   (20
+280 v21
+590 v22
+690 14    (21
+173 0     (22
+080 v23
+200 96             ; restaurar pagina 14 del capitulo que llama
+320 12
+677 0
+680 14
+592 0
+104 0     (23
+200 v90
+320 1
+210 v90
+590 v10
+
+=0        (90
+=0
+=0        (91

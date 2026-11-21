@@ -1,0 +1,84 @@
+; Sector 15. Generado desde el manuscrito por enlazar.py.
+0     590 160 ; capitulo01.txt:145
+1     380 243 ; capitulo01.txt:146
+2     590 8 ; capitulo01.txt:147
+3     =807 ; capitulo01.txt:148
+3+    =896 ; capitulo01.txt:148
+4     =718 ; capitulo01.txt:149
+4+    =708 ; capitulo01.txt:149
+5     =812 ; capitulo01.txt:150
+5+    =684 ; capitulo01.txt:150
+6     172 711 ; capitulo01.txt:152
+7     080 269 ; capitulo01.txt:153
+8     450 30 ; capitulo01.txt:154
+9     490 267 ; capitulo01.txt:155
+10    590 8 ; capitulo01.txt:156
+11    440 30 ; capitulo01.txt:157
+12    590 160 ; capitulo01.txt:158
+13    173 132 ; capitulo01.txt:159
+14    080 272 ; capitulo01.txt:160
+15    590 160 ; capitulo01.txt:161
+16    173 134 ; capitulo01.txt:162
+17    080 279 ; capitulo01.txt:163
+18    707 6 ; capitulo01.txt:164
+19    717 0 ; capitulo01.txt:165
+20    410 50 ; capitulo01.txt:166
+21    400 0 ; capitulo01.txt:167
+22    590 160 ; capitulo01.txt:168
+23    172 692 ; capitulo01.txt:169
+24    080 8 ; capitulo01.txt:170
+25    590 809 ; capitulo01.txt:171
+26    =153 ; capitulo01.txt:174
+26+   =1 ; capitulo01.txt:174
+27    =2 ; capitulo01.txt:175
+27+   =923 ; capitulo01.txt:175
+28    =4 ; capitulo01.txt:176
+28+   =588 ; capitulo01.txt:176
+29    =149 ; capitulo01.txt:177
+29+   =7 ; capitulo01.txt:177
+30    =8 ; capitulo01.txt:178
+30+   =612 ; capitulo01.txt:178
+31    =611 ; capitulo01.txt:179
+31+   =237 ; capitulo01.txt:179
+32    =174 ; capitulo01.txt:180
+32+   =153 ; capitulo01.txt:180
+33    =160 ; capitulo01.txt:181
+33+   =677 ; capitulo01.txt:181
+34    =0 ; capitulo01.txt:182
+34+   =610 ; capitulo01.txt:182
+35    =192 ; capitulo01.txt:183
+35+   =3 ; capitulo01.txt:183
+36    =221 ; capitulo01.txt:184
+36+   =5 ; capitulo01.txt:184
+37    =6 ; capitulo01.txt:185
+37+   =377 ; capitulo01.txt:185
+38    =323 ; capitulo01.txt:186
+38+   =9 ; capitulo01.txt:186
+39    =240 ; capitulo01.txt:187
+39+   =170 ; capitulo01.txt:187
+40    =262 ; capitulo01.txt:188
+40+   =173 ; capitulo01.txt:188
+41    =147 ; capitulo01.txt:189
+41+   =160 ; capitulo01.txt:189
+42    100 0 ; capitulo01.txt:191
+43    080 317 ; capitulo01.txt:192
+44    006 137+ ; capitulo01.txt:193
+45    176 5 ; capitulo01.txt:194
+46    080 317 ; capitulo01.txt:195
+47    370 2 ; capitulo01.txt:196
+48    290 307 ; capitulo01.txt:197
+49    370 -2 ; capitulo01.txt:198
+50    290 309 ; capitulo01.txt:199
+51    300 2 ; capitulo01.txt:200
+52    590 9 ; capitulo01.txt:201
+53    350 1 ; capitulo01.txt:202
+54    280 312 ; capitulo01.txt:203
+55    591 0 ; capitulo01.txt:204
+56    006 61+ ; capitulo01.txt:205
+57    206 63+ ; capitulo01.txt:206
+58    320 512 ; capitulo01.txt:207
+59    216 63+ ; capitulo01.txt:208
+60    591 0 ; capitulo01.txt:209
+61    370 0 ; capitulo01.txt:210
+62    280 320 ; capitulo01.txt:211
+63    591 0 ; capitulo01.txt:212

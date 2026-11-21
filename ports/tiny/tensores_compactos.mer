@@ -1,0 +1,122 @@
+; 62+: comienzo en el sector y bit 7 para embeddings empaquetados.
+; Los embeddings avanzan 72 cortos por fila. El resto usa un corto
+; por valor. El primer corto de cada tensor indica el exponente.
+tensor:
+004 61
+674 0
+680 15
+200 62+
+350 127
+210 44
+003 44
+400 31.56
+410 40
+106 $exponente_leido
+590 $leer_corto
+exponente_leido:
+210 40
+010 44+
+010 46
+200 62+
+350 128
+210 45
+280 $fila_corta
+300 {dimension}
+590 $paso_fila
+fila_corta:
+300 72
+paso_fila:
+210 47
+001 60+
+080 $saltar
+592 0
+saltar:
+023 47
+173 128
+090 $otro_sector
+590 $paso_hecho
+otro_sector:
+133 128
+124 1
+paso_hecho:
+131 1
+080 $saltar
+674 0
+680 15
+592 0
+
+leer_tensor:
+016 45+
+200 45
+280 $leer_nueve
+106 $convertir
+590 $leer_corto
+leer_nueve:
+; 44+ indica cuántos bits del corto anterior guarda 46.
+200 44+
+370 9
+280 $combinar
+200 46
+010 44+
+010 46
+590 $signo_nueve
+combinar:
+320 1
+210 44+
+106 $palabra_leida
+590 $leer_corto
+palabra_leida:
+210 46+
+006 44+
+parte_alta:
+340 0
+136 1
+080 $parte_alta
+210 47+
+006 44+
+desplazar_alta:
+210 44
+220 44
+136 1
+080 $desplazar_alta
+210 44
+200 46+
+230 44
+210 46+
+300 10
+230 44+
+210 44
+006 44
+200 46
+desplazar_anterior:
+210 44
+220 44
+136 1
+080 $desplazar_anterior
+220 47+
+210 44
+200 46+
+210 46
+200 44
+signo_nueve:
+360 256
+330 256
+convertir:
+210 41+
+convertir_largo:
+400 40
+440 56
+006 45+
+596 0
+
+leer_corto:
+173 128
+080 $corto_listo
+124 1
+674 0
+680 15
+103 0
+corto_listo:
+203 15.0
+123 1
+596 0

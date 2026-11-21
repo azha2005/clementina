@@ -1,0 +1,111 @@
+; TINY 2.1 de WollyMonjac.
+; Convención: X en 19.0, Y en 7.0 y longitud en 60+.
+; Escala inversa de longitud en 10. Constantes en 12 y 14.
+@2
+-1
+@12
++0.00001
+@14
+=0
+=0
+=0
+=0
+
+; L1Norm: X <- X * (1 / max(media de |X|, epsilon)) * Y.
+@5.0
+101 0
+400 18
+410 24
+401 19.0 (1
+490 v2
+520 2
+440 24 (2
+410 24
+121 1
+071 60+
+080 v1
+520 10
+410 24
+450 12
+490 v3
+400 12
+590 v4
+400 24 (3
+106 v5 (4
+590 2.20
+410 24 (5
+101 0
+401 19.0 (6
+520 24
+521 7.0
+411 19.0
+121 1
+071 60+
+080 v6
+990 0
+
+; ReLU al cuadrado.
+@5.32
+101 0
+401 19.0 (7
+490 v8
+400 18
+590 v9
+521 19.0 (8
+411 19.0 (9
+121 1
+071 60+
+080 v7
+990 0
+
+; Suma residual X <- X + Y.
+@5.48
+101 0
+401 19.0 (10
+441 7.0
+411 19.0
+121 1
+071 60+
+080 v10
+990 0
+
+; Producto escalar X · Y, deja el resultado en A.
+@6.0
+101 0
+400 18
+410 24
+401 19.0 (11
+521 7.0
+440 24
+410 24
+121 1
+071 60+
+080 v11
+990 0
+
+; Inversa escalar y exponencial, con retorno de las rutinas a Stop99.
+@6.16
+106 6.18
+590 2.20
+990 0
+@6.24
+102 6.26
+590 1.0
+; EXP guarda B2 y n en el medio 3, que comparte el largo -1 de Q1.
+410 24
+400 31.60
+410 2
+400 24
+990 0
+
+; Copia al perforador las filas Ferranti ya preparadas por el lanzador.
+@6.36
+104 0
+600 6.38+ (12
+107 0
+627 0
+124 1
+074 60+
+080 v12
+990 0
+

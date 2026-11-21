@@ -1,0 +1,178 @@
+(TRANSPOSICION Y PRODUCTO, FUNCIONES 16, 26 Y 27.
+ Bases A, B, C en 505..507. Dimensiones u, v, w en 508..510.
+ Supuesto: cuando el resultado tiene hasta 384 largos, se arma en las
+ paginas 16 a 27, con respaldo en el deposito secreto, y recien entonces
+ se copia al tambor. Los resultados mayores requieren destinos separados.)
+
+@8.0
+670 491
+680 13
+670 492
+680 14
+102 v1
+590 832
+300 0      (1
+210 v98
+210 v97
+400 1016
+520 1018
+450 v95
+490 v3
+300 1
+210 v98
+300 32
+103 16
+677 0      (2       ; guardar paginas 16..27 en sectores 32..43
+693 0
+320 1
+123 1
+173 28
+080 v2
+
+200 99+    (3
+370 16
+280 v4
+400 1016            ; para la transpuesta, invertir las dimensiones de salida
+410 v90
+400 1018
+410 1016
+400 v90
+410 1018
+590 v5
+400 1018   (4        ; paso entre terminos sucesivos de la columna de C
+200 99+
+370 27
+280 v6
+400 14.58
+410 v88    (6
+400 31.58  (5
+410 v81
+400 1012
+410 v89
+
+400 31.58  (10       ; nueva fila
+410 v82
+200 99+    (11
+370 16
+280 v20
+400 v82              ; transpuesta: B[j,i]
+520 1016
+440 v81
+440 1012
+102 v40
+590 833
+
+400 v89    (20       ; producto escalar
+410 v84
+400 v82
+200 99+
+370 27
+280 v21
+520 1020
+440 1014   (21
+410 v85
+400 1020
+410 v83
+400 31.58
+410 v86
+400 v84    (22
+102 v23
+590 833
+410 v87    (23
+400 v85
+102 v24
+590 833
+520 v87    (24
+440 v86
+410 v86
+400 v84
+440 14.58
+410 v84
+400 v85
+440 v88
+410 v85
+400 v83
+450 14.58
+410 v83
+701 256
+080 v22
+400 v86
+
+200 v98    (40
+280 v41
+410 14.60
+400 1010
+102 v42
+590 834
+400 1010   (42
+440 14.58
+410 1010
+590 v43
+001 v97    (41
+411 16.0
+200 v97
+320 1
+210 v97
+
+400 v82    (43
+440 14.58
+410 v82
+450 1018
+701 256
+080 v11
+400 v89
+440 1020
+410 v89
+400 v81
+440 14.58
+410 v81
+450 1016
+701 256
+080 v10
+
+200 v98
+280 v50
+590 835
+300 0      (50
+210 v96
+001 v96    (51
+401 16.0
+410 14.60
+400 1010
+102 v52
+590 834
+400 1010   (52
+440 14.58
+410 1010
+200 v96
+320 1
+210 v96
+270 v97
+280 v51
+
+300 32
+103 16
+677 0      (53
+683 0
+320 1
+123 1
+173 28
+080 v53
+590 835
+
++0         (81      ; fila
++0         (82      ; columna
++0         (83      ; terminos por acumular
++0         (84      ; elemento de B
++0         (85      ; elemento de C
++0         (86      ; suma parcial
++0         (87      ; termino de B
++0         (88      ; salto en C
++0         (89      ; principio de la fila de B
++0         (90      ; temporal de la transposicion
++385       (95
+=0         (96      ; cursor en el buffer
+=0
+=0         (97      ; cantidad escrita en el buffer
+=0
+=0         (98      ; usar buffer

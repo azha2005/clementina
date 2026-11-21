@@ -1,0 +1,58 @@
+(FIBONACCI EN CODIGO DE MAQUINA DE LA MERCURY.
+ Imprime los numeros de Fibonacci F1..F14 en la perforadora, con tres cifras.
+ Forma escrita de CS 225 A cap. 2: FFb direccion, etiquetas n y vn.
+ Usa B1 = a, B2 = b, B3 = contador, B4 y B5 = cifra, S = B7 = resto.)
+
+620 0          ; cambio a cifras en la perforadora
+101 1          ; B1 = 1   (a)
+102 1          ; B2 = 1   (b)
+103 14         ; B3 = 14  (cantidad de terminos)
+
+011 10   (1    ; H10 = B1
+200 10         ; S = H10
+
+104 0          ; centenas: B4 = 0
+370 100  (2    ; St = S - 100
+290 v3         ; si St >= 0 ir a 3
+590 v4
+330 100  (3    ; S = S - 100
+124 1          ; B4 = B4 + 1
+590 v2
+634 v9   (4    ; perforar la cifra B4 (tabla de caracteres)
+
+104 0          ; decenas
+370 10   (5
+290 v6
+590 v7
+330 10   (6
+124 1
+590 v5
+634 v9   (7
+
+210 10         ; unidades: H10 = S
+005 10         ; B5 = H10
+635 v9         ; perforar la cifra B5
+620 30         ; CR
+620 13         ; LF
+
+012 10         ; H10 = B2          (b)
+021 10         ; B1 = B1 + H10     (a + b)
+011 11         ; H11 = B1
+001 10         ; B1 = H10          (a' = b)
+002 11         ; B2 = H11          (b' = a + b)
+
+133 1          ; B3 = B3 - 1
+080 v1         ; si Bt != 0 repetir
+990 0          ; parar
+
+(Tabla: valor de cinta de cada cifra en registro de cifras, Apendice VI.)
+=16      (9    ; 0
+=1             ; 1
+=2             ; 2
+=19            ; 3
+=4             ; 4
+=21            ; 5
+=22            ; 6
+=7             ; 7
+=8             ; 8
+=25            ; 9

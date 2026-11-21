@@ -1,0 +1,90 @@
+(CLEMENTINE: la cancion popular que le dio nombre a la maquina.
+ Se toca con la instruccion 58 hoot: cada hoot es un impulso al parlante;
+ repetidos a ritmo constante dan una nota. El periodo de cada nota es
+ 240 + 120 k microsegundos, contando los tiempos de seccion 3.11.
+ La tabla tiene pares k = altura y N = cantidad de impulsos; termina en 0 0.)
+
+101 0          ; B1 = posicion en la tabla, en medias palabras
+201 v9   (1    ; S = k
+280 v2         ; si St no es cero, seguir
+990 0          ; fin de la tabla
+210 20   (2    ; H20 = k
+201 v9+        ; S = N
+210 20+        ; H20+ = N
+003 20+        ; B3 = N
+580 0    (3    ; hoot
+002 20         ; B2 = k
+132 1    (4    ; espera: k vueltas de 120 microsegundos
+080 v4
+133 1          ; B3 = B3 - 1
+080 v3
+102 166        ; silencio de unos 20 ms entre notas
+132 1    (5
+080 v5
+121 2          ; siguiente nota
+590 v1
+
+(Tabla. k: Sol3 41, Si3 32, Do4 30, Re4 26, Mi4 23, Fa4 22, Sol4 19.
+ N para una corchea de 200 ms.)
+=30      (9
+=52
+=30
+=52
+=30
+=156
+=41
+=39
+=23
+=67
+=23
+=67
+=23
+=200
+=30
+=52
+=30
+=52
+=23
+=67
+=19
+=238
+=19
+=79
+=22
+=69
+=23
+=67
+=26
+=357
+=26
+=60
+=23
+=67
+=22
+=208
+=22
+=69
+=23
+=67
+=26
+=60
+=23
+=200
+=30
+=52
+=30
+=52
+=23
+=67
+=26
+=179
+=41
+=39
+=32
+=49
+=26
+=60
+=30
+=312
+=0
+=0

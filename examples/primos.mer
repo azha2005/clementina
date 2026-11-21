@@ -1,0 +1,116 @@
+(CALCULANDO PRIMOS: replica de las cintas del Museo de Informatica.
+ Ver docs/cinta/TRANSCRIPCION.md. Calcula los primos menores que N por
+ divisiones sucesivas, hechas con restas, y perfora el resultado directamente
+ en codigo ITA2 de teletipo. N se lee de las llaves F, instruccion 61.
+ Con N = 10 perfora exactamente la cinta 2; con N = 5, el principio de la 1.
+ Registros: B1 = n candidato, B2 = d divisor, B4 B5 B6 = cifras, S = resto.
+ Temporales: H10 = n, H11 = d, H12 = N, H13 = unidades.)
+
+610 12         ; H12 = N  (llaves F)
+
+620 8          ; CR
+620 2          ; LF
+620 31         ; letras
+620 14         ; C
+620 3          ; A
+620 18         ; L
+620 14         ; C
+620 7          ; U
+620 18         ; L
+620 3          ; A
+620 12         ; N
+620 9          ; D
+620 24         ; O
+620 4          ; espacio
+620 22         ; P
+620 10         ; R
+620 6          ; I
+620 28         ; M
+620 24         ; O
+620 5          ; S
+620 27         ; cifras
+620 14         ; :
+620 8          ; CR
+620 2          ; LF
+
+101 2          ; n = 2
+011 10   (1    ; H10 = n
+200 10         ; S = n
+270 12         ; St = n - N
+290 v8         ; si n >= N, terminar
+
+102 2          ; d = 2
+012 11   (2    ; H11 = d
+200 11         ; S = d
+270 10         ; St = d - n
+290 v5         ; si d >= n, n es primo
+
+200 10         ; S = n
+270 11   (3    ; St = S - d
+290 v4         ; si S >= d, restar
+590 v6
+230 11   (4    ; S = S - d
+590 v3
+320 0    (6    ; St = S (resto)
+280 v7         ; resto no nulo: probar el divisor siguiente
+590 v9         ; divisible: n compuesto
+122 1    (7    ; d = d + 1
+590 v2
+
+200 10   (5    ; n es primo: separar las cifras
+104 0          ; centenas
+370 100  (10
+290 v11
+590 v12
+330 100  (11
+124 1
+590 v10
+105 0    (12   ; decenas
+370 10   (13
+290 v14
+590 v15
+330 10   (14
+125 1
+590 v13
+210 13   (15   ; unidades: H13 = S
+006 13         ; B6 = H13
+174 0          ; Bt = B4
+080 v16        ; si hay centenas, imprimir las tres cifras
+175 0          ; Bt = B5
+080 v17        ; si hay decenas, imprimir dos
+590 v18
+634 v20  (16   ; centenas
+635 v20  (17   ; decenas
+636 v20  (18   ; unidades
+620 12         ; ,
+620 4          ; espacio
+
+121 1    (9    ; n = n + 1
+590 v1
+
+620 8    (8    ; CR
+620 2          ; LF
+620 3          ; -
+620 4          ; espacio
+620 31         ; letras
+620 13         ; F
+620 6          ; I
+620 12         ; N
+620 4          ; espacio
+620 27         ; cifras
+620 3          ; -
+620 8          ; CR
+620 2          ; LF
+990 0
+
+(Cifras 0 a 9 en ITA2, registro de cifras.)
+=22      (20
+=23
+=19
+=1
+=10
+=16
+=21
+=7
+=6
+=24

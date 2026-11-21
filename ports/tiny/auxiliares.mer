@@ -1,0 +1,216 @@
+; TINY 2.1 de WollyMonjac. Embeddings, norma L1, residual y salida.
+; 60: longitud; 60+: fila; 61: sector; 61+/62: fuente/destino en largos.
+590 $embedding
+590 $paso
+590 $norma
+590 $residual
+590 $relu
+590 $logits
+
+embedding:
+200 51+
+210 60+
+105 0
+590 $preparar_embed
+paso:
+105 1
+preparar_embed:
+ ; El lector usa B1, B2, B3 y B4 al ubicar la fila.
+102 $embed_listo
+590 $tensor
+embed_listo:
+101 0
+002 62
+sig_embed:
+106 $leer_embed
+590 $leer_tensor
+leer_embed:
+175 0
+080 $sumar_embed
+590 $guardar_embed
+sumar_embed:
+442 0
+guardar_embed:
+412 0
+122 1
+121 1
+071 60
+080 $sig_embed
+590 $volver
+
+residual:
+101 0
+sig_residuo:
+401 {residual}.0
+441 7.0
+411 {residual}.0
+121 1
+071 60
+080 $sig_residuo
+590 $volver
+
+relu:
+101 0
+sig_relu:
+401 19.0
+490 $cuadrado
+400 18
+590 $guardar_relu
+cuadrado:
+521 19.0
+guardar_relu:
+411 19.0
+121 1
+071 60
+080 $sig_relu
+
+norma:
+400 18
+410 26
+101 0
+005 61+
+sig_abs:
+405 0
+490 $positivo
+520 2
+positivo:
+440 26
+410 26
+125 1
+121 1
+071 60
+080 $sig_abs
+171 {dimension}
+080 $media256
+520 31.34
+590 $limite
+media256:
+520 31.36
+limite:
+410 26
+450 31.32
+490 $tomar_media
+400 31.32
+590 $invertir
+tomar_media:
+400 26
+invertir:
+106 $inversa_lista
+590 148
+inversa_lista:
+410 26
+102 $norma_lista
+590 $tensor
+norma_lista:
+101 0
+005 61+
+002 62
+ganancia:
+405 0
+520 26
+410 30
+106 $aplicar
+590 $leer_tensor
+aplicar:
+520 30
+412 0
+122 1
+125 1
+121 1
+071 60
+080 $ganancia
+590 $volver
+
+logits:
+400 31.54
+410 28
+300 0
+210 60+
+fila:
+400 18
+410 26
+102 $hacer_fila
+590 $tensor
+hacer_fila:
+101 0
+sig_logit:
+106 $sumar_logit
+590 $leer_tensor
+sumar_logit:
+521 19.0
+440 26
+410 26
+121 1
+071 60
+080 $sig_logit
+{guardar_logit}
+450 28
+490 $candidato
+590 $sig_fila
+candidato:
+707 0
+370 768
+280 $mejor
+590 $sig_fila
+mejor:
+400 26
+410 28
+200 60+
+210 51+
+sig_fila:
+200 60+
+320 1
+210 60+
+370 55
+280 $fila
+{sorteo}
+volver:
+006 50
+596 0
+
+; Flujo de cortos con una escala global FP40. B2 contiene el retorno.
+; Deja B3/B4 en el corto y el sector iniciales.
+tensor:
+004 61
+674 0
+680 15
+400 15.0
+410 24
+400 31.56
+410 40
+103 4
+001 60+
+171 0
+080 $saltar
+592 0
+saltar:
+123 {dimension}
+173 128
+090 $otro_sector
+590 $paso_hecho
+otro_sector:
+133 128
+124 1
+paso_hecho:
+131 1
+080 $saltar
+674 0
+680 15
+592 0
+
+; Convierte un corto en entero FP40 con signo y le aplica la escala.
+leer_tensor:
+173 128
+080 $corto_listo
+124 1
+674 0
+680 15
+103 0
+corto_listo:
+203 15.0
+210 41+
+400 40
+440 56
+520 24
+123 1
+596 0

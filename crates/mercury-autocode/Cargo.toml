@@ -1,0 +1,9 @@
+[package]
+name = "mercury-autocode"
+description = "Compilador de Mercury Autocode (1961) para el emulador de Clementina"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+mercury-core = { path = "../mercury-core" }

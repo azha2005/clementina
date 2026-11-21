@@ -1,0 +1,70 @@
+; Sector 6 del Input Routine. Comienzo del post mortem y perforación de enteros.
+; Transcripción del manuscrito, PDF págs. 23–24.
+; Los paréntesis sobre valores que la rutina modifica se indican en comentarios.
+; Dudas: 33 =752 es código de instrucción en dos cortos (comentario: S' = S − exponente); 61 parece 990 0, una parada.
+
+0    620 0
+1    620 30
+2    620 13
+3    620 13
+4    620 27
+5    102 6
+6    677 0
+7    177 32
+8    370 0
+9    290 55
+10   620 19
+11   680 31
+12   620 0
+13   620 14
+14   012 41+
+15   013 40+
+16   717 0
+17   103 -18
+18   102 543
+19   370 0
+20   290 25
+21   330 1000
+22   290 36
+23   320 500
+24   102 404
+25   122 177
+26   233 61+
+27   290 25
+28   122 464
+29   090 28
+30   223 61+
+31   123 6
+32   090 37
+33   =752
+33+  =0
+34   280 37
+35   590 18
+36   102 1
+37   622 0
+38   181 18              ; cuenta en B1 los dígitos perforados
+39   900 0
+40   103 0           ; Manuscrito: 103 (0).
+41   670 0           ; Manuscrito: 670 (0).
+42   680 0
+43   290 45
+44   300 -1
+45   370 32
+46   290 44
+47   105 -4
+48   327 0
+49   185 48
+50   704 0
+51   210 52+
+52   103 100         ; Manuscrito: 103 (100).
+53   676 1
+54   680 0
+55   090 10
+56   620 16
+57   590 12
+58   303 1
+59   157 31
+60   183 53
+61   990 0
+62   304 1
+63   590 0

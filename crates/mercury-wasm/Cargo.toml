@@ -1,0 +1,13 @@
+[package]
+name = "mercury-wasm"
+description = "Interfaz WebAssembly sin dependencias para el emulador de Clementina y Mercury Autocode"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+mercury-core = { path = "../mercury-core" }
+mercury-autocode = { path = "../mercury-autocode" }

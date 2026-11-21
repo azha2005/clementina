@@ -1,0 +1,205 @@
+(ARITMETICA DE DOBLE LONGITUD. Sectores 7 a 10, paginas 8 a 11.
+ Largos 52..55: dos pares alto, bajo. Devuelve alto y bajo en 52 y 53.
+ Corto 199: 0 suma, 1 resta, 2 producto, 3 cociente.
+ Supuesto: reconstruccion por suma compensada y producto 52/54.
+ Valen los limites de exponente de la Mercury para los intermedios.)
+
+@8.0
+200 99+
+280 v1
+590 v10
+330 1      (1
+280 v2
+400 108             ; resta: negar el segundo par
+520 31.60
+410 108
+400 110
+520 31.60
+410 110
+590 v10
+330 1      (2
+280 v30
+590 v25
+
+400 104    (10      ; suma de las partes altas
+410 v60
+400 108
+410 v61
+102 v11
+590 v20
+410 v64    (11      ; error de la suma de las partes altas
+400 v62
+410 v65
+400 106
+410 v60
+400 110
+410 v61
+102 v12
+590 v20
+410 v68    (12      ; error de la suma de las partes bajas
+400 v62
+440 v64
+410 v61
+400 v65
+410 v60
+102 v13
+590 v20
+440 v68    (13
+410 v61
+400 v62
+410 v60
+590 v50
+
+; Suma compensada: v62 = u+v en simple longitud, A = error.
+; Se ordenan por modulo para evitar un segundo acarreo al recuperar v.
+400 v60    (20
+701 0
+400 v61
+731 0
+080 v24
+400 v60
+490 v96             ; mismo exponente: comparar sin formar abs de -1
+400 v61
+490 v95
+450 v60
+490 v21
+590 v98
+440 v60    (95
+490 v98
+590 v21
+400 v61    (96
+490 v97
+440 v60
+490 v21
+590 v98
+450 v60    (97
+490 v98
+590 v21
+090 v21    (24
+400 v61    (98
+410 v62
+400 v60
+410 v61
+400 v62
+410 v60
+400 v60    (21
+440 v61
+410 v62
+701 0
+400 v60
+731 0
+131 1
+090 v22
+400 v62
+450 v60
+590 v23
+400 v62    (22      ; acarreo: q = s/2 + (s/2 - u)
+701 1023
+711 0
+410 v63
+450 v60
+440 v63
+410 v63    (23
+400 v61
+450 v63
+592 0
+
+400 104    (25      ; producto entre las partes altas, exacto en dos largos
+520 108
+410 v60
+400 104
+540 108
+440 31.58           ; estandarizar la mitad baja
+410 v64
+400 104
+520 110
+410 v65
+400 106
+520 108
+440 v65
+440 v64
+410 v65
+400 106
+520 110
+440 v65
+410 v61
+590 v50
+
+400 108    (30      ; normalizar el divisor antes de dividir
+410 v60
+400 110
+410 v61
+102 v31
+590 v20
+410 110    (31
+400 v62
+410 108
+200 109+            ; la mitad alta de una mantisa normal no es cero
+280 v32
+590 v33    (33      ; divisor nulo
+400 104    (32
+101 54
+102 v34
+590 4
+410 v66    (34      ; q0
+410 v67
+102 v35
+590 v40
+101 54     (35
+102 v36
+590 4
+410 v69    (36      ; q1
+410 v67
+400 v64
+410 104
+400 31.58
+410 106
+102 v37
+590 v40
+101 54     (37
+102 v38
+590 4
+440 v69    (38      ; q1 + q2
+410 v61
+400 v66
+410 v60
+590 v50
+
+; Resto N - q*D, con q en v67. Devuelve A y v64.
+400 v67    (40
+520 108
+410 v64
+400 104
+450 v64
+410 v64
+400 v67
+540 108
+440 31.58
+410 v65
+400 106
+450 v65
+440 v64
+410 v64
+400 v67
+530 110
+440 v64
+410 v64
+592 0
+
+102 v51    (50      ; normalizar el par de salida
+590 v20
+410 106    (51
+400 v62
+410 104
+590 961
+
++0         (60
++0         (61
++0         (62
++0         (63
++0         (64
++0         (65
++0         (66
++0         (67
++0         (68
++0         (69

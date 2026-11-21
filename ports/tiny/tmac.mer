@@ -1,0 +1,157 @@
+; TINY 2.1 de WollyMonjac. Proyección 3-bit SEQ, grupos de cinco.
+; Parámetros cortos: 60 = columnas con relleno, 60+ = filas,
+; 61 = primer sector de pesos, 61+ = primer sector de escalas/sesgos.
+; Entrada: largos desde 19.0. Salida: largos desde 7.0.
+; Las páginas 16 a 18 guardan las tablas y la 15 recibe el tambor.
+@18
++0
+@2.48
+!2.48
+101 0
+400 18
+411 7.0 (1
+121 1
+071 60+
+080 v1
+004 61
+674 0
+680 15
+103 0
+105 0
+
+; Cada paso de duplicación produce todas las sumas ±x del grupo.
+400 18 (2
+410 16.0
+106 1
+405 19.0 (3
+410 20
+016 63+
+101 0
+301 0 (4
+326 0
+210 62
+002 62
+401 16.0
+410 22
+440 20
+412 16.0
+400 22
+450 20
+411 16.0
+121 1
+071 63+
+080 v4
+125 1
+306 0
+327 0
+210 63+
+006 63+
+176 32
+080 v3
+
+101 0
+401 16.0 (5
+441 16.0
+411 17.0
+441 17.0
+411 18.0
+121 1
+171 32
+080 v5
+
+; Fila par: el primer corto contiene p2 y p1.
+101 0
+401 7.0 (6
+106 v7
+590 v20
+210 62+ (7
+350 31
+210 62
+002 62
+442 17.0
+200 62+
+340 0
+340 0
+340 0
+340 0
+340 0
+210 62
+002 62
+442 18.0
+106 v8
+590 v20
+210 62+ (8
+340 0
+340 0
+340 0
+340 0
+340 0
+210 62
+002 62
+442 16.0
+411 7.0
+121 1
+
+; Fila impar: p2 en el corto anterior, p1 y p0 en el siguiente.
+401 7.0
+200 62+
+350 31
+210 62
+002 62
+442 18.0
+106 v9
+590 v20
+210 62+ (9
+350 31
+210 62
+002 62
+442 16.0
+200 62+
+340 0
+340 0
+340 0
+340 0
+340 0
+210 62
+002 62
+442 17.0
+411 7.0
+121 1
+071 60+
+080 v6
+075 60
+080 v2
+
+; Una multiplicación por fila aplica alpha/8, seguida del sesgo.
+004 61+
+674 0
+680 15
+101 0
+102 0
+401 7.0 (10
+522 15.0
+442 15.2
+411 7.0
+121 1
+071 60+
+080 v11
+990 0
+122 2 (11
+172 32
+080 v10
+124 1
+674 0
+680 15
+102 0
+590 v10
+
+; Siguiente corto del flujo de pesos. Preserva el acumulador.
+173 128 (20
+080 v21
+124 1
+674 0
+680 15
+103 0
+203 15.0 (21
+123 1
+596 0

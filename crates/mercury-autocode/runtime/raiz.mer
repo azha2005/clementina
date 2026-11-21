@@ -1,0 +1,67 @@
+(RAIZ: sqrt. Entrada en la etiqueta 1 con x en A; deja la raiz en A y
+ vuelve por B2. Usa el sac y los largos 32 a 38.
+ x = f 2^2k con f entre 1/4 y 1. g aproxima 1/raiz de f: semilla cubica,
+ error relativo menor que 0.0073, y dos pasos de Newton g = g 1.5 - f g^2 / 2,
+ sin division. Luego s = f g y una correccion s + g f - s^2 / 2.
+ Supuesto: para x negativo da la raiz de -x; el manual pide x > 0.
+ Reconstruccion; el original no se conserva.)
+
+012 3      (1       ; guardar B2
+490 v2
+520 31.60           ; |x|
+410 32     (2
+701 256             ; B1 = 0 si es el cero de la maquina
+080 v3
+002 3
+592 0               ; raiz de 0 = 0
+707 0      (3       ; S = e
+210 1+
+350 1               ; e impar?
+210 2+
+220 1+              ; e + impar
+320 512
+340 256             ; k = (e + impar) / 2
+210 3+
+300 0
+230 2+
+717 0               ; exponente -impar: f en [1/4, 1)
+410 34              ; f
+400 v90             ; semilla: ((c3 f + c2) f + c1) f + c0
+500 34
+420 v91
+500 34
+420 v92
+500 34
+420 v93
+410 36              ; g = g (1.5 - f g^2 / 2), dos veces
+500 36
+500 34
+510 v94
+420 v95
+500 36
+410 36
+500 36
+500 34
+510 v94
+420 v95
+500 36
+410 36              ; g
+500 34
+410 38              ; s = f g
+510 38              ; -s^2
+440 34              ; f - s^2, sin redondeo
+500 36
+500 v94
+420 38              ; s + g (f - s^2) / 2
+707 0               ; exponente + k
+220 3+
+717 0
+002 3
+592 0
+
+-2.46424225  (90
++6.27968349  (91
+-5.9402218   (92
++3.11747485  (93
++0.5         (94
++1.5         (95

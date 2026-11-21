@@ -1,0 +1,71 @@
+(LOG: log natural. Entrada en la etiqueta 1 con x en A; deja log x en A y
+ vuelve por B2. Usa la division y los largos 32 a 38.
+ x = m 2^e con m entre 1/raiz de 2 y raiz de 2; s = m - 1 / m + 1 y
+ log m = 2 s + 2 s^3/3 + ... + 2 s^11/11; log x = e ln2 + log m.
+ Para x <= 0 se provoca el desborde, que detiene la maquina.
+ Reconstruccion; el original no se conserva.)
+
+012 3      (1       ; guardar B2
+410 32
+701 256
+080 v2
+590 v9              ; log 0
+490 v3     (2
+590 v9              ; log de negativo
+703 0      (3       ; B3 = e
+710 0
+410 34              ; m en [1/2, 1)
+450 v90
+490 v4              ; m >= 1/raiz de 2
+400 34
+440 34
+410 34              ; m = 2m
+133 1               ; e = e - 1
+013 1+     (4       ; e
+400 34
+440 v92
+410 38              ; m + 1
+400 34
+450 v93
+450 v93             ; m - 1 como (m - 1/2) - 1/2, exacto aunque m tenga exponente 0
+101 19
+102 v5
+590 4               ; s = (m - 1) / (m + 1)
+410 32     (5
+500 32
+410 34              ; z = s^2
+400 v80
+500 34
+420 v81
+500 34
+420 v82
+500 34
+420 v83
+500 34
+420 v84
+500 34
+420 v85
+500 32              ; log m
+410 32
+001 1+              ; e ln 2
+011 41+
+400 40
+440 56
+500 v86
+420 32
+002 3
+592 0
+400 v95    (9       ; provocar el desborde del exponente
+500 v95
+
++0.7071067811865475 (90
++1                  (92
++0.5                (93
++0.18181818181818182 (80  ; 2/11
++0.2222222222222222  (81  ; 2/9
++0.2857142857142857  (82  ; 2/7
++0.4                 (83  ; 2/5
++0.6666666666666666  (84  ; 2/3
++2                   (85
++0.6931471805599453  (86  ; ln 2
++1,75                (95

@@ -1,0 +1,206 @@
+; Transcripción simbólica preliminar del manuscrito. Las dudas se conservan.
+C 2 P 11
+R 53
+; Capítulo 2, sector 26; C2 P11, R53, entradas C y E. PDF 58–59. Símbolos (N son etiquetas; vN sus referencias.
+; --- PDF 58 ---
+102 v/59
+006 63+
+080 2*
+590 v8
+176 127
+090 v/19 ; v/19 es la entrada de la rutina R19 (falla 3, D R19 en capitulo01), no una etiqueta; el manuscrito escribe la barra.
+670 28
+680 13
+101 26
+010 0+v17/51
+590 v4/51
+670 113 (1
+006 63+
+176 64
+090 2*
+670 112
+680 15
+200 57 (11
+280 v3
+200 58+
+210 57
+270 58+ (3
+290 v4
+300 9
+590 9
+101 v1 (5
+590 2v8
+270 62 (4
+280 v5
+; --- PDF 59: R53 continúa ---
+200 62+
+026 63+
+156 126
+226 15.0+
+230 62
+216 15.0
+206 15.0+
+105 -4
+327 0 (7
+185 v7
+220 62
+216 15.0+
+690 15
+010 62 (8
+101 v9
+106 128
+590 v3/20
+010 57 (9
+017 58+
+670 30
+680 12
+172 v/1
+080 11.61
+101 v10
+590 v/54
+670 33 (10
+680 12
+102 v/55
+590 v3/3
+L 11.61
+670 29
+680 11
+590 v1
+; Dudas: leer * en 2* según notación manuscrita; 590 2v8; primera dirección v/59 y cruces con / son referencias externas, verificar identidad de grafías en PDF.
+C 2 P 12
+R 51
+; Capítulo 2: R51, sectores 27 y 28, referencias y etiquetas, páginas 12 y 13.
+; --- PDF 60 ---
+011 0+v23 (1
+017 0+v3
+300 -31
+400 38
+417 31.62
+380 -1*
+105 0
+200 62+ (24
+677 0
+690 1
+590 v9
+101 v21 (19
+005 47
+300 0
+175 9
+080 v/4
+300 3
+590 v/4
+400 42 (21
+415 30.62
+002 13.0
+005 13.0+
+590 v24
+410 42 (5
+200 45+
+677 0
+680 1
+101 v6
+590 v/27
+690 1 (6
+590 v8
+; --- PDF 61 ---
+176 32 (22
+090 9
+016 59+
+676 64
+680 31
+006 59
+156 31
+405 27.54 (11
+707 0
+080 v15
+175 100 (12
+185 v11
+200 59+
+105 -4
+327 0 (13
+185 v13
+326 0
+210 59
+690 31
+200 62+
+677 0
+680 1
+590 v23
+416 31.0 (15
+400 38
+415 27.54
+176 31
+186 v12
+690 31
+010 59
+006 59+
+126 1
+590 v16
+; --- PDF 62 ---
+L 13.0
+670 27 (4 ; Supuesto: el manuscrito no marca el (4 sobre esta línea. Sale de la cabecera de R51 (PDF 60): «Entered at v4 (line 13.0)», y PDF 62 marca «entry» aquí.
+680 12
+400 27.54
+707 0
+080 v1
+590 11.63
+175 (300) (17
+090 2*
+590 v7
+700 0
+186 v5
+670 41
+680 11
+016 47
+101 v18/67
+011 0+v16/67
+012 13.0
+015 13.0+
+200 62+
+677 0
+680 1
+590 v/20
+670 27 (20
+680 12
+300 9
+101 v19
+590 v/4
+; --- PDF 63 ---
+405 16.0 (2
+410 44
+200 44+
+350 7
+370 6
+290 v7
+006 44+
+146 0
+146 0
+146 101
+406 31.0
+090 v17
+200 44
+370 (0) (3
+280 v7
+700 0
+080 v5
+400 44 (7
+300 (0)
+417 16.0
+320 1
+210 1+v7
+125 1 (8
+075 60+ (9
+080 v2
+200 1+v7
+210 60+
+105 0
+006 59
+300 -4
+146 0 (10
+380 v10
+300 (12) (16
+280 v22
+670 (0) (23
+680 11
+590 11.63
+; Revisado a escala de página, con ampliación sólo de las filas de R51 dudosas: v/4 y v/27 son entradas de las rutinas R4 y R27 (la barra indica rutina, no etiqueta), y ambas rutinas están en capitulo01. -1* y 2* son direcciones relativas a la propia instrucción, tal como aparecen en el manuscrito; se dejan así. La última cifra de v/27 es borrosa en la página; se lee 27 por coherencia con R27.

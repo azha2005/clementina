@@ -1,0 +1,66 @@
+; Sector 29. Generado desde el manuscrito por enlazar.py.
+0     106 127 ; capitulo03.txt:5
+1     016 61+ ; capitulo03.txt:6
+2     200 57+ ; capitulo03.txt:7
+3     210 62+ ; capitulo03.txt:8
+4     677 0 ; capitulo03.txt:9
+5     680 1 ; capitulo03.txt:10
+6     101 712 ; capitulo03.txt:11
+7     590 768 ; capitulo03.txt:12
+8     690 1 ; capitulo03.txt:13
+9     101 715 ; capitulo03.txt:14
+10    590 804 ; capitulo03.txt:15
+11    105 0 ; capitulo03.txt:16
+12    075 60+ ; capitulo03.txt:17
+13    080 724 ; capitulo03.txt:18
+14    200 57+ ; capitulo03.txt:19
+15    677 0 ; capitulo03.txt:20
+16    680 1 ; capitulo03.txt:21
+17    670 3 ; capitulo03.txt:22
+18    680 0 ; capitulo03.txt:23
+19    590 59 ; capitulo03.txt:24
+20    670 35 ; capitulo03.txt:25
+21    680 12 ; capitulo03.txt:26
+22    405 1024 ; capitulo03.txt:27
+23    410 44 ; capitulo03.txt:28
+24    590 797 ; capitulo03.txt:29
+25    200 45+ ; capitulo03.txt:30
+26    101 732 ; capitulo03.txt:31
+27    590 768 ; capitulo03.txt:32
+28    620 28 ; capitulo03.txt:33
+29    200 45 ; capitulo03.txt:34
+30    350 126 ; capitulo03.txt:35
+31    340 0 ; capitulo03.txt:36
+32    101 738 ; capitulo03.txt:37
+33    590 768 ; capitulo03.txt:38
+34    200 45 ; capitulo03.txt:39
+35    157 1 ; capitulo03.txt:40
+36    185 742 ; capitulo03.txt:41
+37    590 716 ; capitulo03.txt:42
+38    620 26 ; capitulo03.txt:43
+39    590 716 ; capitulo03.txt:44
+40    102 746 ; capitulo03.txt:48
+41    590 188 ; capitulo03.txt:49
+42    440 18 ; capitulo03.txt:50
+43    410 40 ; capitulo03.txt:51
+44    200 41 ; capitulo03.txt:52
+45    370 11 ; capitulo03.txt:53
+46    290 753 ; capitulo03.txt:54
+47    210 56 ; capitulo03.txt:55
+48    590 5 ; capitulo03.txt:56
+49    300 14 ; capitulo03.txt:57
+50    590 9 ; capitulo03.txt:58
+51    =0 ; capitulo03.txt:60
+51+   =7 ; capitulo03.txt:60
+52    =768 ; capitulo03.txt:61
+52+   >61 ; capitulo03.txt:61
+53    670 479 ; capitulo03.txt:62
+54    690 0 ; capitulo03.txt:63
+55    670 43 ; capitulo03.txt:64
+56    680 0 ; capitulo03.txt:65
+57    210 0+ ; capitulo03.txt:66
+58    210 8+ ; capitulo03.txt:67
+59    300 8 ; capitulo03.txt:68
+60    590 30 ; capitulo03.txt:69
+61    300 0 ; capitulo03.txt:70
+63    592 0 ; capitulo03.txt:72

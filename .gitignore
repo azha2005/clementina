@@ -1,0 +1,18 @@
+/target
+*.wav
+__pycache__/
+*.pyc
+# Salidas sueltas de la consola (las réplicas buenas están en docs/cinta/)
+/*.svg
+
+# Materiales de consulta y ejemplos privados del archivo local
+/docs/refs/
+/docs/text/
+/docs/autocode_manual/
+/docs/autocode_extra/
+/docs/cinta/cinta*/
+/docs/cinta/*.svg
+/examples/nombre.mer
+/examples/nombre_ferranti.mer
+/.claude/
+/.hallmark/

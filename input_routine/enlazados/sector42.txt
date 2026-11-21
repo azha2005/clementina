@@ -1,0 +1,78 @@
+; Sector 42. Generado desde el manuscrito por enlazar.py.
+0     101 770 ; capitulo15.txt:70
+1     590 566 ; capitulo15.txt:71
+2     205 129+ ; capitulo15.txt:72
+3     101 773 ; capitulo15.txt:73
+4     590 566 ; capitulo15.txt:74
+5     204 128 ; capitulo15.txt:75
+6     350 3 ; capitulo15.txt:76
+7     207 777 ; capitulo15.txt:77
+8     597 0 ; capitulo15.txt:78
+9     =779 ; capitulo15.txt:79
+9+    =784 ; capitulo15.txt:79
+10    =788 ; capitulo15.txt:80
+10+   =791 ; capitulo15.txt:80
+11    172 5 ; capitulo15.txt:81
+12    182 709 ; capitulo15.txt:82
+13    102 1 ; capitulo15.txt:83
+14    134 1 ; capitulo15.txt:84
+15    590 713 ; capitulo15.txt:85
+16    200 43 ; capitulo15.txt:86
+17    226 63+ ; capitulo15.txt:87
+18    216 63+ ; capitulo15.txt:88
+19    590 779 ; capitulo15.txt:89
+20    200 43 ; capitulo15.txt:90
+21    340 0 ; capitulo15.txt:91
+22    590 785 ; capitulo15.txt:92
+23    206 63+ ; capitulo15.txt:93
+24    340 0 ; capitulo15.txt:94
+25    027 43 ; capitulo15.txt:95
+26    206 63+ ; capitulo15.txt:96
+27    220 43 ; capitulo15.txt:97
+28    220 43 ; capitulo15.txt:98
+29    216 63+ ; capitulo15.txt:99
+30    090 779 ; capitulo15.txt:100
+31    206 63 ; capitulo15.txt:101
+32    330 512 ; capitulo15.txt:102
+33    216 63 ; capitulo15.txt:103
+34    590 779 ; capitulo15.txt:104
+35    =29 ; capitulo15.txt:106
+35+   =360 ; capitulo15.txt:106
+36    =49 ; capitulo15.txt:107
+36+   =269 ; capitulo15.txt:107
+37    =49 ; capitulo15.txt:108
+37+   =581 ; capitulo15.txt:108
+38    =0 ; capitulo15.txt:109
+38+   =0 ; capitulo15.txt:109
+39    =50 ; capitulo15.txt:110
+39+   =274 ; capitulo15.txt:110
+40    =50 ; capitulo15.txt:111
+40+   =637 ; capitulo15.txt:111
+41    =51 ; capitulo15.txt:112
+41+   =638 ; capitulo15.txt:112
+42    =52 ; capitulo15.txt:113
+42+   =597 ; capitulo15.txt:113
+43    =53 ; capitulo15.txt:114
+43+   =295 ; capitulo15.txt:114
+44    =53 ; capitulo15.txt:115
+44+   =888 ; capitulo15.txt:115
+45    =55 ; capitulo15.txt:116
+45+   =558 ; capitulo15.txt:116
+46    =56 ; capitulo15.txt:117
+46+   =642 ; capitulo15.txt:117
+47    =57 ; capitulo15.txt:118
+47+   =590 ; capitulo15.txt:118
+48    =0 ; capitulo15.txt:119
+48+   =0 ; capitulo15.txt:119
+49    =58 ; capitulo15.txt:120
+49+   =286 ; capitulo15.txt:120
+50    =58 ; capitulo15.txt:121
+50+   =900 ; capitulo15.txt:121
+51    =60 ; capitulo15.txt:122
+51+   =547 ; capitulo15.txt:122
+52    =0 ; capitulo15.txt:123
+52+   =0 ; capitulo15.txt:123
+53    =61 ; capitulo15.txt:124
+53+   =266 ; capitulo15.txt:124
+54    =47 ; capitulo15.txt:125
+54+   =791 ; capitulo15.txt:125

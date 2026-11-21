@@ -1,0 +1,658 @@
+(JUEGO DEL NIM - MARIENBAD.
+ Reconstruccion nueva en codigo de maquina de la Ferranti Mercury basada en
+ Wilfred Duran, C.O.M.I.C., 2018, pags. 33-36. No se conserva el programa
+ original de 1961.
+ Como usar:
+  1. B5 indica que pide cada parada 99:
+     1..4 = cantidad de palillos de la fila 1..4 en llaves F, 0 a 10
+     5    = fila elegida por el jugador en llaves F, 1 a 4
+     6    = cantidad a quitar de esa fila en llaves F, 1 a fila
+     7    = gano Clementina; 8 = gano el jugador; 9 = trampa.
+  2. Antes de cada parada los visores muestran los palillos como pulsos en
+     B1..B4 y en Display A, E con la instruccion 64.
+  3. Los mensajes se perforan a lo largo de la cinta en 5 canales de alto.
+ Memoria en pagina 0: H10..H11+ filas 1..4; H12 fila; H12+ cant.; H13 nim-sum;
+ H13+ aux.; H14 aux./ret.; H14+ cursor mensaje; H15 fase; H15+ glifo aux.;
+ largo 16 para Display A, E.)
+
+@1.0
+
+(--- Inicio de partido: pedir las 4 filas iniciales de 0 a 10 palillos ---)
+300 0    (1    ; limpiar filas 1..4
+210 10
+210 10+
+210 11
+210 11+
+
+101 0          ; pedir fila 1..4 con B1 = 0..3
+011 13   (2    ; guardar indice 0..3 en H13
+200 13   (3    ; reintentar misma fila usando H13
+320 1          ; S = fase 1..4
+210 15         ; H15 = fase
+005 15         ; B5 = fase
+102 v4
+590 v80        ; mostrar visores
+990 1    (4    ; esperar palillos en llaves F
+610 12         ; leer F en H12
+200 12         ; St = F
+290 v5         ; bit 9 en 0 => 0 <= F <= 511
+590 v3         ; fuera de rango: volver a pedir la misma fila
+370 11   (5    ; St = F - 11
+290 v3         ; si F >= 11, volver a pedir la misma fila
+001 13         ; B1 = indice 0..3
+200 12
+211 10         ; fila[B1] = F
+121 1          ; siguiente fila
+011 13         ; H13 = B1
+200 13
+370 4
+290 v6         ; si B1 >= 4, probar suma total
+590 v2
+
+200 10   (6    ; verificar que haya al menos 1 palillo en total
+220 10+
+220 11
+220 11+
+320 0
+280 v7         ; total != 0, arrancar juego
+590 v1         ; todo en cero, volver a pedir
+
+(--- Evaluar nim-sum inicial ---)
+200 10   (7    ; X = fila1 ^ fila2 ^ fila3 ^ fila4
+260 10+
+260 11
+260 11+
+210 13
+320 0
+280 v8
+106 0          ; X == 0 => posicion segura para el segundo jugador
+102 v9
+590 v81        ; perforar JUEGUE QUE YO LE GANARE
+106 1    (8    ; X != 0 => posicion mala para el segundo jugador
+102 v9
+590 v81        ; perforar MI POSICION ES MALA PERO CUIDESE
+106 17   (9    ; perforar espacio separador
+102 v10
+590 v81
+
+(--- Turno del jugador humano ---)
+105 5    (10   ; fase 5: elegir fila 1..4
+102 v11
+590 v80
+990 5    (11
+610 12         ; H12 = fila elegida
+105 6          ; fase 6: elegir cantidad a quitar
+102 v12
+590 v80
+990 6    (12
+610 12+        ; H12+ = cantidad a quitar
+
+(Validar fila: 1 <= r <= 4)
+200 12
+330 1          ; S = St = r - 1 mod 1024
+210 12         ; H12 = r - 1
+290 v13        ; pasa si 1 <= r <= 512
+590 v40        ; si no, trampa
+370 4    (13   ; St = r - 5
+290 v40        ; si r >= 5, trampa
+
+(Validar cantidad: 1 <= k <= fila[r - 1])
+001 12         ; B1 = r - 1
+200 12+
+330 1          ; S = St = k - 1
+290 v14        ; pasa si 1 <= k <= 512
+590 v40
+271 10   (14   ; St = k - 1 - fila[B1]
+290 v40        ; si St >= 0 => k > fila[B1], trampa
+
+(Aplicar jugada humana)
+201 10         ; S = fila[B1]
+230 12+        ; S = fila[B1] - k
+211 10         ; guardar resto
+
+(Verificar si gano el humano)
+200 10
+220 10+
+220 11
+220 11+
+320 0
+280 v20        ; quedan palillos: juega Clementina
+106 16         ; no quedan: USTED GANO ! QUIERO REVANCHA
+102 v15
+590 v81
+106 17   (15
+102 v16
+590 v81
+105 8    (16
+102 v17
+590 v80
+990 8    (17
+590 v1
+
+(--- Turno de Clementina ---)
+200 10   (20   ; calcular X = fila1 ^ fila2 ^ fila3 ^ fila4
+260 10+
+260 11
+260 11+
+210 13         ; H13 = X
+320 0
+280 v21
+590 v25        ; X == 0: posicion mala, sacar 1 palillo
+
+(Posicion ganadora: buscar primera fila con fila[i] ^ X < fila[i])
+101 0    (21
+201 10   (22
+260 13         ; S = target = fila[B1] ^ X
+210 14         ; H14 = target
+271 10         ; St = target - fila[B1]
+290 v23        ; si target >= fila[B1], probar fila siguiente
+201 10         ; encontrada: take = fila[B1] - target
+230 14
+210 12+        ; H12+ = take
+200 14
+211 10         ; fila[B1] = target
+011 12         ; H12 = indice fila 0..3
+590 v30
+121 1    (23
+590 v22
+
+(Posicion mala: buscar la fila con mas palillos y quitar 1)
+101 0    (25
+300 0
+210 13+        ; H13+ = best_idx = 0
+210 14         ; H14 = best_val = 0
+201 10   (26   ; S = fila[B1]
+230 14         ; S = fila[B1] - best_val
+330 1          ; S = St = S - 1
+290 v27        ; si fila[B1] > best_val
+590 v28
+011 13+  (27   ; best_idx = B1
+201 10
+210 14         ; best_val = fila[B1]
+121 1    (28
+011 15+
+200 15+
+370 4
+290 v29
+590 v26
+001 13+  (29   ; B1 = best_idx
+201 10
+330 1
+211 10         ; fila[best_idx] -= 1
+011 12         ; H12 = best_idx
+300 1
+210 12+        ; H12+ = 1
+
+(Perforar QUITE <cant> DE LA FILA <fila>)
+106 2    (30   ; QUITE
+102 v31
+590 v81
+200 12+  (31   ; cant 1..10 => mensaje 3 + cant = 4..13
+320 3
+210 15+
+006 15+
+102 v32
+590 v81
+106 3    (32   ; DE LA FILA
+102 v33
+590 v81
+200 12   (33   ; indice 0..3 => mensaje 4 + idx = 4..7
+320 4
+210 15+
+006 15+
+102 v34
+590 v81
+106 17   (34   ; espacio separador
+102 v35
+590 v81
+
+(Verificar si gano Clementina)
+200 10   (35
+220 10+
+220 11
+220 11+
+320 0
+280 v10        ; todavia quedan palillos: vuelve al humano
+106 15         ; GANE ! QUIERO OTRO
+102 v36
+590 v81
+106 17   (36
+102 v37
+590 v81
+105 7    (37
+102 v38
+590 v80
+990 7    (38
+590 v1
+
+(--- Jugada ilegal / trampa ---)
+106 14   (40   ; NO JUEGO MAS PORQUE HIZO TRAMPA
+102 v41
+590 v81
+106 17   (41
+102 v42
+590 v81
+105 9    (42
+102 v43
+590 v80
+990 9    (43
+590 v1
+
+(--- Subrutina v80: cargar patrones en H16..H17+, Display 64 y B1..B4; conserva B5 ---)
+012 14   (80   ; guardar retorno B2 en H14
+001 10         ; fila 1
+201 v90
+210 17+
+001 10+        ; fila 2
+201 v90
+210 17
+001 11         ; fila 3
+201 v90
+210 16+
+001 11+        ; fila 4
+201 v90
+210 16
+640 16         ; enviar largo 8 al monitor Display A, E
+001 17+        ; B1 = patron fila 1
+002 17         ; B2 = patron fila 2
+003 16+        ; B3 = patron fila 3
+004 16         ; B4 = patron fila 4
+006 14         ; B6 = retorno
+596 0
+
+(--- Subrutina v81: perforar mensaje B6 en banner de 5 canales, retorno en B2 ---)
+206 v91  (81   ; S = offset inicial en vMSG
+210 14+        ; H14+ = cursor en vMSG
+001 14+  (82   ; B1 = cursor
+201 v92        ; S = glifo 0..23 o 255
+370 255
+280 v83        ; si != 255 imprimir glifo
+592 0          ; fin de mensaje
+210 15+  (83   ; H15+ = glifo
+220 15+        ; S = 2 * glifo
+210 15+
+220 15+        ; S = 4 * glifo
+210 15+
+003 15+        ; B3 = 4 * glifo
+104 4          ; B4 = 4 columnas
+203 v93  (84   ; S = columna de 5 bits
+627 0          ; perforar columna
+123 1
+134 1
+080 v84        ; siguiente columna
+620 0          ; 1 columna en blanco entre caracteres
+200 14+
+320 1
+210 14+        ; cursor += 1
+590 v82
+
+(--- Tablas alineadas en paginas 6, 7 y 8 ---)
+
+@6.0
+(v90: patrones visuales para 0..10 palillos; Duran 2018 pag. 35)
+=0       (90
+=1
+=5
+=21
+=85
+=341
+=63
+=127
+=255
+=511
+=1023
+
+@6.16
+(v91: offset de cada mensaje 0..17 dentro de vMSG)
+=0       (91
+=24
+=57
+=64
+=77
+=81
+=85
+=90
+=97
+=103
+=108
+=114
+=119
+=125
+=130
+=162
+=181
+=210
+
+@7.0
+(v93: fuente longitudinal 4 columnas x 5 bits, 24 glifos.
+ Indices: 0=esp 1=A 2=C 3=D 4=E 5=F 6=G 7=H 8=I 9=J 10=L 11=M
+          12=N 13=O 14=P 15=Q 16=R 17=S 18=T 19=U 20=V 21=Y 22=Z 23=!)
+=0       (93   ; 0: espacio
+=0
+=0
+=0
+=15            ; 1: A
+=20
+=20
+=15
+=14            ; 2: C
+=17
+=17
+=17
+=31            ; 3: D
+=17
+=17
+=14
+=31            ; 4: E
+=21
+=21
+=17
+=31            ; 5: F
+=20
+=20
+=16
+=14            ; 6: G
+=17
+=21
+=23
+=31            ; 7: H
+=4
+=4
+=31
+=17            ; 8: I
+=31
+=17
+=0
+=2             ; 9: J
+=1
+=17
+=30
+=31            ; 10: L
+=1
+=1
+=1
+=31            ; 11: M
+=8
+=8
+=31
+=31            ; 12: N
+=12
+=6
+=31
+=14            ; 13: O
+=17
+=17
+=14
+=31            ; 14: P
+=20
+=20
+=8
+=14            ; 15: Q
+=17
+=19
+=13
+=31            ; 16: R
+=20
+=22
+=9
+=9             ; 17: S
+=21
+=21
+=18
+=16            ; 18: T
+=31
+=16
+=16
+=30            ; 19: U
+=1
+=1
+=30
+=28            ; 20: V
+=3
+=3
+=28
+=24            ; 21: Y
+=7
+=4
+=24
+=19            ; 22: Z
+=21
+=25
+=17
+=0             ; 23: !
+=29
+=0
+=0
+
+@8.0
+(v92: mensajes codificados con los indices de vFONT, terminados en 255)
+(0 @0: JUEGUE QUE YO LE GANARE)
+=9       (92
+=19
+=4
+=6
+=19
+=4
+=0
+=15
+=19
+=4
+=0
+=21
+=13
+=0
+=10
+=4
+=0
+=6
+=1
+=12
+=1
+=16
+=4
+=255
+(1 @24: MI POSICION ES MALA PERO CUIDESE)
+=11
+=8
+=0
+=14
+=13
+=17
+=8
+=2
+=8
+=13
+=12
+=0
+=4
+=17
+=0
+=11
+=1
+=10
+=1
+=0
+=14
+=4
+=16
+=13
+=0
+=2
+=19
+=8
+=3
+=4
+=17
+=4
+=255
+(2 @57: QUITE )
+=15
+=19
+=8
+=18
+=4
+=0
+=255
+(3 @64:  DE LA FILA )
+=0
+=3
+=4
+=0
+=10
+=1
+=0
+=5
+=8
+=10
+=1
+=0
+=255
+(4 @77: UNO)
+=19
+=12
+=13
+=255
+(5 @81: DOS)
+=3
+=13
+=17
+=255
+(6 @85: TRES)
+=18
+=16
+=4
+=17
+=255
+(7 @90: CUATRO)
+=2
+=19
+=1
+=18
+=16
+=13
+=255
+(8 @97: CINCO)
+=2
+=8
+=12
+=2
+=13
+=255
+(9 @103: SEIS)
+=17
+=4
+=8
+=17
+=255
+(10 @108: SIETE)
+=17
+=8
+=4
+=18
+=4
+=255
+(11 @114: OCHO)
+=13
+=2
+=7
+=13
+=255
+(12 @119: NUEVE)
+=12
+=19
+=4
+=20
+=4
+=255
+(13 @125: DIEZ)
+=3
+=8
+=4
+=22
+=255
+(14 @130: NO JUEGO MAS PORQUE HIZO TRAMPA)
+=12
+=13
+=0
+=9
+=19
+=4
+=6
+=13
+=0
+=11
+=1
+=17
+=0
+=14
+=13
+=16
+=15
+=19
+=4
+=0
+=7
+=8
+=22
+=13
+=0
+=18
+=16
+=1
+=11
+=14
+=1
+=255
+(15 @162: GANE ! QUIERO OTRO)
+=6
+=1
+=12
+=4
+=0
+=23
+=0
+=15
+=19
+=8
+=4
+=16
+=13
+=0
+=13
+=18
+=16
+=13
+=255
+(16 @181: USTED GANO ! QUIERO REVANCHA)
+=19
+=17
+=18
+=4
+=3
+=0
+=6
+=1
+=12
+=13
+=0
+=23
+=0
+=15
+=19
+=8
+=4
+=16
+=13
+=0
+=16
+=4
+=20
+=1
+=12
+=2
+=7
+=1
+=255
+(17 @210: espacio separador)
+=0
+=255

@@ -1,0 +1,69 @@
+; Sector 35. Generado desde el manuscrito por enlazar.py.
+0     015 794+ ; capitulo05.txt:65
+1     016 795+ ; capitulo05.txt:66
+2     210 788+ ; capitulo05.txt:67
+3     106 -30 ; capitulo05.txt:68
+4     105 543 ; capitulo05.txt:69
+5     370 0 ; capitulo05.txt:70
+6     290 779 ; capitulo05.txt:71
+7     330 1000 ; capitulo05.txt:72
+8     290 791 ; capitulo05.txt:73
+9     320 500 ; capitulo05.txt:74
+10    105 404 ; capitulo05.txt:75
+11    125 177 ; capitulo05.txt:76
+12    236 796+ ; capitulo05.txt:77
+13    570 100 ; capitulo05.txt:78
+14    290 779 ; capitulo05.txt:79
+15    125 464 ; capitulo05.txt:80
+16    090 783 ; capitulo05.txt:81
+17    226 796+ ; capitulo05.txt:82
+18    126 10 ; capitulo05.txt:83
+19    090 792 ; capitulo05.txt:84
+20    370 0 ; capitulo05.txt:85
+21    280 792 ; capitulo05.txt:86
+22    590 772 ; capitulo05.txt:87
+23    105 1 ; capitulo05.txt:88
+24    625 0 ; capitulo05.txt:89
+25    080 772 ; capitulo05.txt:90
+26    105 0 ; capitulo05.txt:91
+27    106 0 ; capitulo05.txt:92
+28    591 0 ; capitulo05.txt:93
+29    620 0 ; capitulo05.txt:95
+30    620 30 ; capitulo05.txt:96
+31    620 13 ; capitulo05.txt:97
+32    620 12 ; capitulo05.txt:98
+33    200 44+ ; capitulo05.txt:99
+34    340 0 ; capitulo05.txt:100
+35    340 0 ; capitulo05.txt:101
+36    340 0 ; capitulo05.txt:102
+37    101 807 ; capitulo05.txt:103
+38    280 768 ; capitulo05.txt:104
+39    620 23 ; capitulo05.txt:105
+40    200 44 ; capitulo05.txt:106
+41    101 811 ; capitulo05.txt:107
+42    590 768 ; capitulo05.txt:108
+43    106 -14 ; capitulo05.txt:109
+44    206 828 ; capitulo05.txt:110
+45    627 0 ; capitulo05.txt:111
+46    186 812 ; capitulo05.txt:112
+47    106 -876 ; capitulo05.txt:113
+48    580 0 ; capitulo05.txt:114
+49    300 -15 ; capitulo05.txt:115
+50    380 818 ; capitulo05.txt:116
+51    186 816 ; capitulo05.txt:117
+52    590 729 ; capitulo05.txt:118
+53    =14 ; capitulo05.txt:119
+53+   =27 ; capitulo05.txt:119
+54    =14 ; capitulo05.txt:120
+54+   =15 ; capitulo05.txt:120
+55    =20 ; capitulo05.txt:121
+55+   =0 ; capitulo05.txt:121
+56    =14 ; capitulo05.txt:122
+56+   =27 ; capitulo05.txt:122
+57    =19 ; capitulo05.txt:123
+57+   =5 ; capitulo05.txt:123
+58    =20 ; capitulo05.txt:124
+58+   =0 ; capitulo05.txt:124
+59    =14 ; capitulo05.txt:125
+59+   =11 ; capitulo05.txt:125
+60    =14 ; capitulo05.txt:126

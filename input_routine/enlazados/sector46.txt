@@ -1,0 +1,101 @@
+; Sector 46. Generado desde el manuscrito por enlazar.py.
+0     600 961+ ; capitulo28.txt:4
+1     106 0 ; capitulo28.txt:5
+2     080 965 ; capitulo28.txt:6
+3     185 987 ; capitulo28.txt:7
+4     590 8 ; capitulo28.txt:8
+5     176 31 ; capitulo28.txt:9
+6     090 960 ; capitulo28.txt:10
+7     600 983+ ; capitulo28.txt:11
+8     000 983+ ; capitulo28.txt:12
+9     080 967 ; capitulo28.txt:13
+10    172 160 ; capitulo28.txt:14
+11    080 982 ; capitulo28.txt:15
+12    206 1008 ; capitulo28.txt:16
+13    677 0 ; capitulo28.txt:17
+14    680 11 ; capitulo28.txt:18
+15    205 992 ; capitulo28.txt:19
+16    080 978 ; capitulo28.txt:20
+17    206 992 ; capitulo28.txt:21
+18    597 0 ; capitulo28.txt:22
+19    =4 ; capitulo28.txt:23
+19+   =7 ; capitulo28.txt:23
+20    =23 ; capitulo28.txt:24
+20+   =-32 ; capitulo28.txt:24
+21    =12 ; capitulo28.txt:25
+21+   =-55 ; capitulo28.txt:25
+22    306 -12 ; capitulo28.txt:26
+23    101 -4 ; capitulo28.txt:27
+24    280 986 ; capitulo28.txt:28
+25    101 -1 ; capitulo28.txt:29
+26    105 -3 ; capitulo28.txt:30
+27    275 980 ; capitulo28.txt:31
+28    280 963 ; capitulo28.txt:32
+29    302 -800 ; capitulo28.txt:33
+30    590 193 ; capitulo28.txt:34
+31    =798 ; capitulo28.txt:35
+31+   =819 ; capitulo28.txt:35
+32    =8 ; capitulo28.txt:39
+32+   =704 ; capitulo28.txt:39
+33    =8 ; capitulo28.txt:40
+33+   =705 ; capitulo28.txt:40
+34    =705 ; capitulo28.txt:41
+34+   =704 ; capitulo28.txt:41
+35    =753 ; capitulo28.txt:42
+35+   =8 ; capitulo28.txt:42
+36    =8 ; capitulo28.txt:43
+36+   =750 ; capitulo28.txt:43
+37    =711 ; capitulo28.txt:44
+37+   =8 ; capitulo28.txt:44
+38    =704 ; capitulo28.txt:45
+38+   =705 ; capitulo28.txt:45
+39    =732 ; capitulo28.txt:46
+39+   =8 ; capitulo28.txt:46
+40    =8 ; capitulo28.txt:47
+40+   =704 ; capitulo28.txt:47
+41    =704 ; capitulo28.txt:48
+41+   =8 ; capitulo28.txt:48
+42    =704 ; capitulo28.txt:49
+42+   =756 ; capitulo28.txt:49
+43    =8 ; capitulo28.txt:50
+43+   =221 ; capitulo28.txt:50
+44    =8 ; capitulo28.txt:51
+44+   =8 ; capitulo28.txt:51
+45    =8 ; capitulo28.txt:52
+45+   =8 ; capitulo28.txt:52
+46    =8 ; capitulo28.txt:53
+46+   =744 ; capitulo28.txt:53
+47    =8 ; capitulo28.txt:54
+47+   =8 ; capitulo28.txt:54
+48    =22 ; capitulo28.txt:55
+48+   =34 ; capitulo28.txt:55
+49    =22 ; capitulo28.txt:56
+49+   =26 ; capitulo28.txt:56
+50    =34 ; capitulo28.txt:57
+50+   =26 ; capitulo28.txt:57
+51    =45 ; capitulo28.txt:58
+51+   =22 ; capitulo28.txt:58
+52    =22 ; capitulo28.txt:59
+52+   =32 ; capitulo28.txt:59
+53    =45 ; capitulo28.txt:60
+53+   =22 ; capitulo28.txt:60
+54    =36 ; capitulo28.txt:61
+54+   =39 ; capitulo28.txt:61
+55    =40 ; capitulo28.txt:62
+55+   =22 ; capitulo28.txt:62
+56    =26 ; capitulo28.txt:63
+56+   =41 ; capitulo28.txt:63
+57    =32 ; capitulo28.txt:64
+57+   =26 ; capitulo28.txt:64
+58    =40 ; capitulo28.txt:65
+58+   =34 ; capitulo28.txt:65
+59    =22 ; capitulo28.txt:66
+59+   =22 ; capitulo28.txt:66
+60    =22 ; capitulo28.txt:67
+60+   =22 ; capitulo28.txt:67
+61    =22 ; capitulo28.txt:68
+61+   =22 ; capitulo28.txt:68
+62    =22 ; capitulo28.txt:69
+62+   =29 ; capitulo28.txt:69
+63    =22 ; capitulo28.txt:70
+63+   =22 ; capitulo28.txt:70

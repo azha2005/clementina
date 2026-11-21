@@ -1,0 +1,9 @@
+( Copia el mapa Ferranti entero, con sus cambios de registro.
+  La cinta termina con n en cifras, código 29 reservado en estos mapas. )
+600 10   (1
+001 10
+171 29
+080 v2
+990 0
+630 10   (2
+590 v1

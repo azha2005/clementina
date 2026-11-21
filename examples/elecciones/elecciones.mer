@@ -1,0 +1,459 @@
+// ELECCIONES: resultados electorales argentinos de 1904 a 1962 en el
+// teleimpresor de Clementina. Los datos salen de los atlas de 257arg, ver
+// LEEME.md; la cinta la arma generar_cinta.mjs.
+//
+// La cinta empieza con la consulta, tres numeros:
+//   eleccion   numero del catalogo: 18 es 1958 y 19 es 1962
+//   vista      0 catalogo, 1 total del pais, 2 distritos con su ganador,
+//              3 ficha de un distrito, 4 diferencia entre los dos primeros,
+//              5 mapa del ganador por distrito
+//   distrito   numero de la vista 2, para la vista 3
+// y sigue con los datos. Los nombres se leen caracter por caracter con la
+// funcion 60 y se perforan con la 63 tal como vienen, sin guardarlos.
+//
+// El capitulo 0 recorre la cinta y saltea lo que no se pidio; el capitulo 1
+// perfora un registro pedido y los rotulos fijos; el capitulo 2 lee el mapa
+// y lo perfora si se pidio. Se entra con down y se vuelve con up.
+//
+// Indices: i eleccion pedida, q vista, r distrito pedido, j eleccion leida,
+// n distritos, s registro (0 el pais), l filas de partido, m metricas,
+// t contador, k caracter, p que hacer con el registro (0 saltarlo,
+// 1 ficha, 2 ganador, 4 diferencia, 5 porcentajes del mapa).
+// Variables: d denominador de los porcentajes, u inscriptos, w votantes,
+// x votos, f y g las dos primeras filas, b y c la menor diferencia y su
+// distrito, a distrito encontrado, h perforar el texto o no, e y v1 a v39
+// el simbolo del ganador de cada distrito en el mapa, f en el capitulo 2
+// el registro de la perforadora.
+
+chapter 1
+v -> 40
+
+// Entrada 1: el registro s, con L M D I V W ya leidos; sigue el NOMBRE.
+1) h = 1
+jump 2, p = 1
+jump 2, p = 5
+print(s)2,0
+2) o) = 3)
+jump 50
+3) newline
+jump 53, p = 5
+jump 4, p != 1
+newline
+jump 4, l != 0
+620,27
+620,19
+620,9
+620,14
+620,0
+620,14
+620,27
+620,4
+620,1
+620,20
+620,15
+620,0
+newline
+4) f = 0
+g = 0
+t = 0
+
+// Filas de partido: VOTOS NOMBRE.
+5) jump 20, t = l
+t = t + 1
+read(x)
+jump 54, p = 5
+jump 7, p != 1
+print(x)8,0
+54) jump 6, 0 >= d
+y = 100x/d
+print(y)3,2
+6) h = 1
+o) = 12)
+jump 50
+7) jump 10, t != 1
+f = x
+jump 10, p != 2
+jump 8, 0 >= d
+y = 100x/d
+print(y)8,2
+8) h = 1
+o) = 12)
+jump 50
+10) jump 11, t != 2
+g = x
+11) h = 0
+o) = 5)
+jump 50
+12) newline
+jump 5
+
+// Metricas: VALOR ROTULO, solo en la ficha.
+20) t = 0
+21) jump 30, t = m
+t = t + 1
+read(x)
+h = 0
+jump 22, p != 1
+print(x)8,0
+h = 1
+22) o) = 23)
+jump 50
+23) jump 21, h = 0
+newline
+jump 21
+
+// Fin del registro: participacion, sin dato o diferencia.
+30) jump 55, p = 5
+jump 32, p != 1
+jump 40, 0 >= u
+jump 40, 0 >= w
+y = 100w/u
+print(y)8,2
+620,27
+620,16
+620,1
+620,18
+620,20
+620,9
+620,3
+620,9
+620,16
+620,1
+620,3
+620,9
+620,15
+620,14
+620,0
+newline
+jump 40
+32) jump 34, l != 0
+620,0
+620,14
+620,14
+620,14
+620,14
+620,14
+620,14
+620,14
+620,27
+620,19
+620,9
+620,14
+620,0
+620,14
+620,27
+620,4
+620,1
+620,20
+620,15
+620,0
+newline
+jump 40
+34) jump 40, p != 4
+jump 40, 0 >= d
+y = 100f/d
+print(y)8,2
+y = 100g/d
+print(y)3,2
+z = 100f/d - 100g/d
+print(z)3,2
+newline
+jump 40, z >= b
+b = z
+c = s
+40) up
+
+// Entrada 41: fin de la eleccion pedida.
+41) jump 46, q != 3
+jump 49, a != 0
+620,27
+620,14
+620,15
+620,0
+620,14
+620,27
+620,8
+620,1
+620,25
+620,0
+620,14
+620,27
+620,4
+620,9
+620,19
+620,20
+620,18
+620,9
+620,20
+620,15
+620,0
+newline
+jump 49
+46) jump 49, q != 4
+jump 49, c = 0
+newline
+620,27
+620,13
+620,5
+620,14
+620,15
+620,18
+620,0
+620,14
+620,27
+620,4
+620,9
+620,6
+620,5
+620,18
+620,5
+620,14
+620,3
+620,9
+620,1
+620,0
+print(c)3,0
+print(b)3,2
+newline
+49) up
+
+// Entrada 45: la cinta termino sin la eleccion pedida.
+45) 620,27
+620,14
+620,15
+620,0
+620,14
+620,27
+620,5
+620,19
+620,20
+620,1
+620,0
+newline
+up
+
+// Rutina de texto: lee caracteres hasta el CR, los perfora si h = 1 y
+// se come el LF. Vuelve por o.
+50) 600(k)
+jump 52, k = 30
+jump 50, h = 0
+630(k)
+jump 50
+52) 600(k)
+jump(o)
+
+// Cabecera y separacion de la tabla nacional del mapa.
+53) 620,27
+620,16
+620,15
+620,18
+620,0
+620,14
+620,27
+620,3
+620,9
+620,5
+620,14
+620,20
+620,15
+620,0
+newline
+jump 4
+55) newline
+up
+close
+
+// Mapa: F filas de tramos LARGO VALOR y la leyenda, CODIGO NOMBRE. VALOR 0
+// es fuera del pais, 1 a N el relleno del distrito, que es el simbolo del
+// ganador que el capitulo 0 dejo en v, y 100 + codigo un caracter fijo,
+// borde o numero de distrito. Un codigo de 32 en adelante va en registro
+// de letras; f lleva el registro de la perforadora, 0 cifras y 1 letras.
+// La rutina 60 perfora el codigo de k y vuelve por n; usa r.
+chapter 2
+variables 1
+1) p = 0
+jump 2, j != i
+jump 2, q != 5
+p = 1
+620,0
+f = 0
+2) read(l)
+3) jump 10, l = 0
+l = l - 1
+read(m)
+4) jump 8, m = 0
+m = m - 1
+read(x)
+read(y)
+jump 4, p = 0
+t = φintpt(x)
+k = 14
+jump 6, y = 0
+k = φintpt(y)
+jump 5, y >= 100
+s = k
+z = vs
+k = φintpt(z)
+jump 6
+5) k = k - 100
+6) n) = 7)
+jump 60
+7) t = t - 1
+jump 6, t != 0
+jump 4
+8) jump 3, p = 0
+jump 9, f = 0
+620,0
+f = 0
+9) newline
+jump 3
+
+// Leyenda.
+10) read(l)
+jump 11, p = 0
+newline
+11) jump 20, l = 0
+l = l - 1
+read(k)
+h = p
+jump 12, p = 0
+n) = 13)
+jump 60
+13) 620,0
+f = 0
+620,14
+620,14
+12) o) = 14)
+jump 50
+14) jump 11, p = 0
+newline
+jump 11
+20) up
+
+// Perforar el codigo de k, con el cambio de registro si hace falta.
+60) r = k
+jump 62, r >= 32
+jump 61, f = 0
+620,0
+f = 0
+61) 630(r)
+jump(n)
+62) r = r - 32
+jump 63, f = 1
+620,27
+f = 1
+63) 630(r)
+jump(n)
+
+// Rutina de texto, como la del capitulo 1.
+50) 600(k)
+jump 52, k = 30
+jump 50, h = 0
+630(k)
+jump 50
+52) 600(k)
+jump(o)
+close
+
+chapter 0
+variables 1
+read(i)
+read(q)
+read(r)
+a = 0
+
+// Encabezado de cada eleccion: numero y titulo, distritos y fuente.
+1) read(j)
+jump 99, j = 0
+h = 0
+jump 2, q = 0
+jump 3, j != i
+2) h = 1
+jump 3, q != 0
+print(j)2,0
+3) o) = 4)
+jump 50
+4) jump 5, h = 0
+newline
+5) read(n)
+h = 0
+jump 6, j != i
+jump 6, q = 0
+h = 1
+6) o) = 7)
+jump 50
+7) jump 8, h = 0
+newline
+newline
+8) s = 0
+b = 1000
+c = 0
+
+// Registro s: L M D I V W NOMBRE; lo que no se pidio se saltea aca.
+9) read(l)
+read(m)
+read(d)
+read(u)
+read(w)
+read(e)
+vs = e
+p = 0
+jump 14, j != i
+jump 56, q = 5
+jump 10, q != 1
+jump 14, s != 0
+p = 1
+jump 13
+10) jump 11, q != 3
+jump 14, s != r
+p = 1
+a = 1
+jump 13
+11) jump 14, s = 0
+jump 12, q != 2
+p = 2
+jump 13
+12) jump 14, q != 4
+p = 4
+13) down 1/1
+jump 18
+14) h = 0
+o) = 15)
+jump 50
+15) t = l + m
+16) jump 18, t = 0
+t = t - 1
+read(x)
+o) = 16)
+jump 50
+18) jump 20, s = n
+s = s + 1
+jump 9
+20) down 1/2
+
+// Fin de la eleccion: si era la pedida, no hace falta seguir leyendo.
+19) jump 1, j != i
+jump 1, q = 0
+down 41/1
+jump 98
+
+// El mapa incluye los porcentajes del registro nacional.
+56) jump 14, s != 0
+p = 5
+jump 13
+
+// Fin de la cinta.
+99) jump 98, q = 0
+down 45/1
+98) newline
+end
+
+// Rutina de texto, como la del capitulo 1.
+50) 600(k)
+jump 52, k = 30
+jump 50, h = 0
+630(k)
+jump 50
+52) 600(k)
+jump(o)
+close

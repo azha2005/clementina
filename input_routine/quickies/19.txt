@@ -1,0 +1,137 @@
+; Quicky 19: leer un decimal fijo o flotante al acumulador.
+; PDF p. 121, manuscrito p. 118.
+015 0+v19
+016 0+v20
+300 v12nb
+210 1v7
+210 4+v7
+400 0 (1
+105 0
+300 304
+210 v3
+300 77
+210 v4
+600 1+* (2
+106 0
+306 16
+166 16
+357 -1
+280 -2*
+016 v9
+136 10
+090 v21
+520 v8
+990 #v9 (3
+990 -1 (4
+590 v2
+176 7 (21
+090 v22
+206 v7 (5
+175 0
+597 v6
+106 v14nb (23
+600 1+v2
+036 1+v2
+376 31
+290 -4*
+376 14
+287 -1v11n14v6
+070 4+v7
+090 v26
+305 0
+590 1v18
+
+; PDF p. 122, manuscrito p. 119: tabla de potencias y saltos.
+=213, =1001
+=960, =388
+=107, =437
+=557, =315
+=54, =312
+=222, =284
+=27, =0
+=481, =381
+=14, =0
+=512, =312
+=7, =0
+=0, =400
+=4 (8, =0
+=0, =320
+=9, =0
+=0, =0 (9
+=29, =0
+=0, =384
+=-212, =325
+=1023, =336
+=-106, =982
+=392, =415
+=-53, =664
+=172, =461
+=-26, =738
+=611, =343
+=-13, =747
+=440, =419
+=-6, =328
+=696, =327
+=-3 (10, =410
+=614, =409
+=v11nb (7, =v11nb
+=0, =v15nb
+=v14nb, =v2nb
+=v15nb, =0
+=1v14nb, =0
+
+; PDF p. 123, manuscrito p. 120: continuación.
+590 1v2
+080 v6 (11
+300 312
+105 -1 (25
+596 2v1
+080 v23 (14
+080 v23
+080 v6 (15
+590 v2
+107 69 (24
+186 v25
+136 12 (22
+176 8
+090 v5
+300 19 (6
+590 v19
+090 v6
+010 4+v7
+410 32
+015 0+v18
+590 v1
+010 1v7 (12
+596 -2v24
+440 2v9 (26
+410 34
+400 32
+200 34+
+320 0 (18
+327 2
+290 4*
+106 #v10
+360 -1
+380 2*
+106 #v8
+016 3+*
+106 -8
+290 2*
+526 0
+327 0
+186 -3*
+105 0 (19
+106 0 (20
+280 9
+
+; «nb» reproduce provisionalmente la grafía manuscrita, de significado
+; simbólico no resuelto. «#» representa el signo que precede a v9, v10
+; y v8; se parece a ≠, pero no se interpreta aquí.
+; El segundo cero de la fila (9 y los operandos cero de (18, (19 y
+; (20 están subrayados en el manuscrito. En la tabla de saltos también
+; están subrayados los ceros de las filas segunda y quinta.
+; El manuscrito tiene anotaciones tenues al margen de la tabla de saltos:
+; aparentemente -13, -13 / 0, -7 / -9, -20 / -7, 0 / -2, 0.
+; Son lecturas inciertas y no se incorporan a la tabla. El salto final a 9
+; conduce a la impresión de error, según la anotación del manuscrito.

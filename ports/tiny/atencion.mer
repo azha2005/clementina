@@ -1,0 +1,290 @@
+; TINY 2.1 de WollyMonjac. Caché, ALiBi y atención de cuatro cabezas.
+; 60: primer sector de K o V; 51: posición actual.
+; Un registro por vector: escala y pares de valores con signo.
+590 $guardar_kv
+590 $atender
+
+guardar_kv:
+200 51
+210 4
+106 $buscar_escala
+590 $localizar
+buscar_escala:
+400 31.40
+410 10
+101 0
+absmax:
+401 7.0
+490 $comparar
+520 2
+comparar:
+410 28
+450 10
+490 $guardar_max
+590 $sig_absmax
+guardar_max:
+400 28
+410 10
+sig_absmax:
+121 1
+171 {cabeza}
+080 $absmax
+400 10
+520 31.38
+{guardar_escala}
+106 $escala_inversa
+590 148
+escala_inversa:
+410 14
+{preparar_cuantizador}
+101 0
+123 {cortos_escala}
+empaquetar:
+106 $alto
+590 $cuantizar
+alto:
+210 7
+220 7
+210 7
+220 7
+210 7
+220 7
+210 7
+220 7
+210 7
+220 7
+210 7
+121 1
+106 $bajo
+590 $cuantizar
+bajo:
+220 7
+213 15.0
+123 1
+121 1
+171 {cabeza}
+080 $empaquetar
+200 6+
+677 0
+690 15
+590 $volver
+
+cuantizar:
+401 7.0
+520 14
+490 $cuantizar_positivo
+520 2
+300 1
+590 $redondear_magnitud
+cuantizar_positivo:
+300 0
+redondear_magnitud:
+ ; Redondear en magnitud evita perder el signo al desestandarizar
+ ; un negativo muy cercano a cero después de sumarle 1/2.
+210 7+
+{guardar_magnitud}
+440 31.42
+780 28
+410 42
+200 42+
+{ajustar_redondeo}
+poner_signo:
+200 7+
+370 0
+280 $invertir_signo
+200 6
+590 $cuantizado
+invertir_signo:
+300 0
+230 6
+cuantizado:
+350 31
+596 0
+
+atender:
+200 51
+320 1
+210 5+
+300 0
+210 4+
+210 5
+400 31.56
+410 40
+cabeza:
+400 31.54
+410 10
+300 0
+210 4
+003 5
+403 31.46
+410 16
+clave:
+200 60
+210 7+
+105 $producto
+590 $desempacar
+producto:
+101 0
+002 4+
+400 18
+410 26
+producto_qk:
+402 7.0
+521 {kv_buffer}.0
+440 26
+410 26
+122 1
+121 1
+171 {cabeza}
+080 $producto_qk
+520 31.44
+410 26
+200 51
+230 4
+210 41+
+400 40
+440 56
+520 16
+410 28
+400 26
+450 28
+003 4
+413 24.0
+450 10
+490 $maximo
+590 $sig_clave
+maximo:
+403 24.0
+410 10
+sig_clave:
+200 4
+320 1
+210 4
+270 5+
+280 $clave
+
+400 18
+410 12
+002 4+
+101 0
+limpiar:
+412 19.0
+122 1
+121 1
+171 {cabeza}
+080 $limpiar
+300 0
+210 4
+valor:
+003 4
+403 24.0
+450 10
+102 $peso
+590 64
+peso:
+410 24
+440 12
+410 12
+ ; EXP ocupa el medio 3, que comparte el largo -1 de Q1.
+400 31.60
+410 2
+200 60
+320 {sectores_vector}
+210 7+
+105 $ponderar
+590 $desempacar
+ponderar:
+101 0
+002 4+
+ponderar_v:
+401 {kv_buffer}.0
+520 24
+442 19.0
+412 19.0
+122 1
+121 1
+171 {cabeza}
+080 $ponderar_v
+200 4
+320 1
+210 4
+270 5+
+280 $valor
+
+400 12
+106 $normalizar
+590 148
+normalizar:
+410 12
+101 0
+002 4+
+dividir:
+402 19.0
+520 12
+412 19.0
+122 1
+121 1
+171 {cabeza}
+080 $dividir
+200 4+
+320 {cabeza}
+210 4+
+200 5
+320 1
+210 5
+370 4
+280 $cabeza
+volver:
+006 50
+596 0
+
+; B5 vuelve al llamador, B6 vuelve del acceso al tambor.
+desempacar:
+106 $leer_escala
+590 $ubicar
+leer_escala:
+{leer_escala}
+123 {cortos_escala}
+101 0
+leer_par:
+203 15.0
+210 6
+340 0
+340 0
+340 0
+340 0
+340 0
+106 $leer_bajo
+590 $expandir
+leer_bajo:
+200 6
+350 31
+106 $sig_par
+590 $expandir
+sig_par:
+123 1
+171 {cabeza}
+080 $leer_par
+595 0
+
+expandir:
+330 16
+290 $expandir_negativo
+320 16
+590 $escribir_valor
+expandir_negativo:
+330 16
+escribir_valor:
+210 41+
+400 40
+440 56
+520 8
+411 {kv_buffer}.0
+121 1
+596 0
+
+localizar:
+200 60
+210 7+
+ubicar:
+{direccion_vector}

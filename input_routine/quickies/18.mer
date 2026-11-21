@@ -1,0 +1,46 @@
+; Quicky 18, manuscrito PDF p. 120. Origen fijo 128.
+; Supuesto: nb resta la dirección de la entrada (6 de la tabla.
+; Las diferencias de la tabla y las referencias relativas se resolvieron aquí.
+@128
+016 155+ ; reubicar
+010 164+ ; reubicar
+107 200
+017 164 ; reubicar
+017 159+ ; reubicar
+600 134+ (1 ; reubicar
+106 0
+306 16
+166 16
+357 -1
+280 136 ; reubicar
+176 10
+090 v4
+300 -9
+026 164+ ; reubicar
+380 142 ; reubicar
+016 164+ ; reubicar
+010 159+ (2 ; reubicar
+590 v1
+=78 (3
+=76
+=80
+=79
+=89
+=59
+=79 (6
+=239
+017 164 ; reubicar
+280 v2 (7
+280 v1 (8
+300 18 (12
+106 0 (9
+590 9
+176 529 (4
+206 142 ; reubicar
+377 0 (5
+097 74 ; reubicar
+176 30
+080 v12
+280 v1 (10
+990 0 (11
+006 155+ ; reubicar

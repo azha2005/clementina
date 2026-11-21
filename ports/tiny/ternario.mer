@@ -1,0 +1,87 @@
+; TINY 2.1 de WollyMonjac. Cada corto guarda dos filas de la misma
+; terna de columnas. Los dos índices apuntan a la tabla de la página 6.
+; Parámetros en 60..61+ como en tmac.mer.
+101 0
+400 18
+limpiar:
+411 {y}
+121 1
+071 60+
+080 $limpiar
+004 61
+674 0
+680 15
+103 0
+105 0
+grupo:
+405 {x}
+410 20
+125 1
+405 {x}
+410 22
+125 1
+405 {x}
+410 24
+125 1
+{tabla_ternaria}
+101 0
+par_de_filas:
+173 128
+080 $leer_par
+124 1
+674 0
+680 15
+103 0
+leer_par:
+203 15.0
+210 62
+340 0
+340 0
+340 0
+340 0
+340 0
+210 62+
+002 62+
+401 {y}
+442 6.0
+411 {y}
+121 1
+200 62
+350 31
+210 62+
+002 62+
+401 {y}
+442 6.0
+411 {y}
+121 1
+123 1
+071 60+
+080 $par_de_filas
+075 60
+080 $grupo
+
+; Multiplicación por la escala de fila y suma del sesgo.
+004 61+
+674 0
+680 15
+101 0
+102 0
+escala:
+401 {y}
+522 15.0
+442 15.2
+411 {y}
+121 1
+071 60+
+080 $sig_escala
+006 50
+596 0
+sig_escala:
+122 2
+172 32
+080 $escala
+124 1
+674 0
+680 15
+102 0
+590 $escala

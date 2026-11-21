@@ -1,0 +1,86 @@
+; SECTOR 0 del Input Routine (Ferranti, julio de 1959).
+; Transcripción del manuscrito "Annotated Input Routine", págs. 5 a 7
+; (docs/refs/mercury_input_routine_annotated_1959.pdf, págs. 8 a 10 del PDF).
+; Formato: línea del sector (registro medio, con + para la mitad derecha),
+; y la instrucción o el entero en forma escrita. "(0)" en el manuscrito es
+; una dirección que el programa planta antes de usarla; aquí va 0.
+;
+; Arranque ("kick-off"), líneas 0-14, 61 y 62. El botón initial transfer
+; trae este sector a la página 0 y entra en la línea 0. Lee las llaves de
+; mano; con la llave 9 entra en el sector dado por las otras nueve; si no,
+; pone n+1 en B6 (n = llave más significativa puesta) y elige el sector de
+; la tabla. El sector elegido se entra en la línea 63.
+0    610 2+         ; llaves de mano a 2+ (la dirección de la línea 2)
+1    106 -1
+2    107 0          ; (0): B7 = llaves
+3    090 6          ; salta salvo que esté la llave 9
+4    590 61         ; a entrar el sector puesto
+5    147 0          ; } n+1 en B6
+6    186 5          ; }
+7    206 10         ; tabla de sectores
+8    677 0          ; elegir el sector
+9    590 62         ; entrarlo en la línea 63
+10   =2             ; empezar borrando
+10+  =2             ; empezar sin borrar
+11   =511           ; rutinas de los ingenieros
+11+  =1             ; tele-input
+12   =2             ; tele-output
+12+  =2             ; rescate
+13   =2             ; post mortem
+13+  =2             ; post mortem
+14   =2             ; post mortem
+14+  =2             ; volver a empezar
+
+; Tele-output, líneas 15-60 y 63 (págs. 6 y 7). Perfora en binario los
+; sectores pedidos, cada uno precedido de 28, 8, 0, 4, 0 ("leer 128 pares
+; de caracteres a 2.0") y seguido de su suma de control y de la orden de
+; escribir la página 2 en el sector.
+15   990 0          ; } primer sector de las llaves
+16   610 19+        ; }
+17   990 0          ; } último sector de las llaves
+18   610 53+        ; }
+19   104 0          ; (0): primer sector a B4 (entrada desde el sector 3)
+20   300 -99        ; } 10 pulgadas de cinta en blanco
+21   620 0          ; }
+22   380 21
+23   674 0          ; } sector a la página 2
+24   680 2          ; }
+25   620 28         ; } perforar 28, 8, 0, 4, 0
+26   620 8
+27   620 0
+28   620 4
+29   620 0
+30   103 0          ; B3 = 0 para la suma de control
+31   105 0          ; B5 recorre la página 2
+32   101 41         ; B1: vuelta después de perforar dos caracteres
+33   205 2.0        ; palabra a perforar
+34   210 39+        ; plantar
+35   106 -4         ; } correr 5 lugares
+36   340 0          ; }
+37   186 36
+38   627 0          ; perforar los 5 bits de arriba
+39   620 0          ; (0): perforar los 5 de abajo
+40   591 0
+41   033 39+        ; restar la palabra de B3 para la suma de control
+42   175 127        ; } recorrer la página 2
+43   185 33         ; }
+44   303 0          ; suma de control al sac
+45   101 47         ; B1: vuelta después de perforar la suma
+46   590 34
+47   620 26         ; carácter de aviso "escribir la página en el sector"
+48   304 0          ; número de sector al sac
+49   101 51
+50   590 34
+51   620 2          ; página 2 al sector
+52   300 -9         ; sac para 1 pulgada en blanco
+53   174 0          ; (0): comparar B4 con el último sector
+54   184 21         ; volver si faltan
+55   990 1.0        ; parada (el sector 3 la cambia por un salto)
+56   620 30         ; carácter de aviso de parada en bucle
+57   300 -9         ; } 1 pulgada de borrados al final
+58   620 31         ; }
+59   380 58
+60   590 60         ; bucle
+61   677 512        ; sector puesto con la llave 9
+62   680 0          ; entrarlo en la línea 63
+63   590 15         ; entrada con la llave 9

@@ -1,0 +1,69 @@
+; Sector 13. Generado desde el manuscrito por enlazar.py.
+0     +101 ; capitulo01.txt:7
+2     300 13 ; capitulo01.txt:8
+3     590 9 ; capitulo01.txt:9
+4     400 0 ; capitulo01.txt:11
+5     103 134 ; capitulo01.txt:12
+6     520 16 ; capitulo01.txt:13
+7     440 14 ; capitulo01.txt:14
+8     590 160 ; capitulo01.txt:15
+9     300 0 ; capitulo01.txt:17
+10    207 143 ; capitulo01.txt:18
+11    727 0 ; capitulo01.txt:19
+12    717 0 ; capitulo01.txt:20
+13    591 0 ; capitulo01.txt:21
+14    =29 ; capitulo01.txt:22
+14+   =0 ; capitulo01.txt:22
+15    =0 ; capitulo01.txt:23
+15+   =0 ; capitulo01.txt:23
+16    =1 ; capitulo01.txt:24
+16+   =0 ; capitulo01.txt:24
+17    =-1 ; capitulo01.txt:25
+17+   =1 ; capitulo01.txt:25
+18    =0 ; capitulo01.txt:26
+18+   =0 ; capitulo01.txt:26
+19    104 154 ; capitulo01.txt:28
+20    592 0 ; capitulo01.txt:29
+21    172 692 ; capitulo01.txt:30
+22    080 8 ; capitulo01.txt:31
+23    033 804+ ; capitulo01.txt:32
+24    173 802 ; capitulo01.txt:33
+25    080 8 ; capitulo01.txt:34
+26    103 719 ; capitulo01.txt:35
+27    010 918+ ; capitulo01.txt:36
+28    010 298+ ; capitulo01.txt:37
+29    400 0 ; capitulo01.txt:38
+30    410 50 ; capitulo01.txt:39
+31    102 160 ; capitulo01.txt:40
+32    600 161+ ; capitulo01.txt:43
+33    106 0 ; capitulo01.txt:44
+34    206 282 ; capitulo01.txt:45
+35    172 160 ; capitulo01.txt:46
+36    290 166 ; capitulo01.txt:47
+37    597 0 ; capitulo01.txt:48
+38    370 10 ; capitulo01.txt:49
+39    297 0 ; capitulo01.txt:50
+40    210 15+ ; capitulo01.txt:51
+41    593 0 ; capitulo01.txt:52
+42    670 46 ; capitulo01.txt:53
+43    680 15 ; capitulo01.txt:54
+44    590 960 ; capitulo01.txt:55
+45    330 511 ; capitulo01.txt:57
+46    330 174 ; capitulo01.txt:58
+47    210 185+ ; capitulo01.txt:59
+48    101 183 ; capitulo01.txt:60
+49    290 336 ; capitulo01.txt:61
+50    172 160 ; capitulo01.txt:62
+51    080 345 ; capitulo01.txt:63
+52    670 37 ; capitulo01.txt:64
+53    680 11 ; capitulo01.txt:65
+54    590 704 ; capitulo01.txt:66
+55    104 185 ; capitulo01.txt:67
+56    592 0 ; capitulo01.txt:68
+57    300 0 ; capitulo01.txt:69
+58    210 401+ ; capitulo01.txt:70
+59    102 388 ; capitulo01.txt:71
+60    400 0 ; capitulo01.txt:72
+61    103 132 ; capitulo01.txt:73
+62    590 160 ; capitulo01.txt:74
+63    181 193 ; capitulo01.txt:77

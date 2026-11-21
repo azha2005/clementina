@@ -1,0 +1,11 @@
+[workspace]
+resolver = "2"
+members = ["crates/mercury-core", "crates/mercury-autocode", "crates/mercury-cli", "crates/mercury-wasm"]
+
+[workspace.package]
+edition = "2021"
+version = "0.1.0"
+authors = ["clementinemu contributors"]
+
+[profile.release]
+opt-level = 3

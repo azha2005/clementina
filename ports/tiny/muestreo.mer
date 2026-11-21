@@ -1,0 +1,64 @@
+; Muestreo categórico de los 55 puntajes de la página 25.
+; El divisor común de softmax se incorpora al umbral del sorteo.
+muestrear:
+400 18
+410 26
+300 0
+210 60+
+peso_del_token:
+003 60+
+403 25.0
+450 28
+520 31.28
+102 $guardar_peso
+590 64
+guardar_peso:
+003 60+
+413 25.0
+440 26
+410 26
+200 60+
+320 1
+210 60+
+370 55
+280 $peso_del_token
+
+; LFSR de 10 bits (x^10 + x^7 + 1). Se avanzan diez pasos por token.
+; La semilla y el estado residen en el corto 13.60.
+105 10
+paso_azar:
+200 13.60
+350 1
+280 $realimentar
+200 13.60
+340 0
+590 $guardar_azar
+realimentar:
+200 13.60
+340 0
+360 576
+guardar_azar:
+210 13.60
+135 1
+080 $paso_azar
+360 512
+210 41+
+400 40
+440 31.30
+520 31.26
+520 26
+103 0
+tomar_token:
+453 25.0
+490 $siguiente_token
+013 51+
+590 $restaurar
+siguiente_token:
+123 1
+173 55
+080 $tomar_token
+restaurar:
+; EXP usó el medio 3, que comparte el largo de -1.
+400 31.60
+410 2
+590 $volver

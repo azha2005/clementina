@@ -1,0 +1,74 @@
+(PRESERVE Y RESTORE: guarda y recupera las 16 paginas de trabajo y los
+ 12 indices i..t en el deposito correspondiente segun el nivel de down:
+ sectores 48..63 si NIVEL_CORTO == 0, o 64..79 si NIVEL_CORTO != 0.
+ Vive en el sector 4 del tambor y corre en la pagina 15 desde 960.
+ Entrada 960: preserve. Entrada 961: restore. Repone pi, 0, -1 y -4e8 en
+ la pagina 31 como exige el manual. Reconstruccion.)
+
+@960
+590 v1
+590 v2
+
+400 58     (1       ; copiar indices i..t de 0.58..0.62 a 31.58..31.62
+410 31.58
+400 60
+410 31.60
+400 62
+410 31.62
+104 v10             ; seleccionar deposito maestro 48 o subcapitulo 64
+590 v30
+103 16     (10
+200 v91    (11      ; volcar paginas 16..31 al tambor
+677 0
+693 0
+320 1
+210 v91
+123 1
+173 32
+080 v11
+590 v40             ; reponer constantes 31.56..31.62 y volver
+
+104 v20    (2
+590 v30
+103 16     (20
+200 v91    (21      ; leer paginas 16..31 desde el tambor
+677 0
+683 0
+320 1
+210 v91
+123 1
+173 32
+080 v21
+400 31.58           ; restaurar indices i..t a 0.58..0.62
+410 58
+400 31.60
+410 60
+400 31.62
+410 62
+590 v40
+
+; Subrutina v30: poner primer sector en v91 segun NIVEL_CORTO 193, vuelve B4.
+200 96+    (30
+280 v31
+300 48
+590 v32
+300 64     (31
+210 v91    (32
+594 0
+
+; Subrutina v40: reponer constantes en 31.56..31.62 y volver por B2.
+400 v80    (40
+410 31.56
+400 v81
+410 31.58
+400 v82
+410 31.60
+400 v83
+410 31.62
+592 0
+
++3.14159265359 (80  ; pi
++0         (81      ; 0
+-1         (82      ; -1
+-4,8       (83      ; -4.10^8
+=0         (91      ; cursor de sector

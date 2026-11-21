@@ -1,0 +1,124 @@
+(ARCTAN: arctan x, y = arco tangente de y/x entre -pi y pi, con el
+ cuadrante de cos z, sen z proporcionales a x, y. Entrada en la etiqueta 1
+ con x en A e y en el largo de la pagina 1, registro 102; deja el angulo en
+ A y vuelve por B2. Usa la division, el sac y los largos 32 a 38.
+ t = menor / mayor de |x|, |y|; si t > tan pi/8, u = t - 1 / t + 1 y se
+ suma pi/4; arctan u por un polinomio de grado 6 en u^2, error 2 10^-11.
+ Despues se corrige por el cambio de x e y, y por los signos.
+ arctan 0, 0 = 0. Reconstruccion; el original no se conserva.)
+
+012 3      (1       ; guardar B2
+410 32              ; x
+300 0
+210 v60             ; x negativo
+210 v61             ; y negativo
+210 v62             ; cambiados
+210 v63             ; mas pi/4
+400 32
+490 v2
+520 31.60
+300 1
+210 v60
+410 v70    (2       ; |x|
+400 102
+490 v3
+520 31.60
+300 1
+210 v61
+410 v71    (3       ; |y|
+450 v70
+490 v4              ; |y| >= |x|: cambiar
+400 v70
+410 38
+400 v71
+590 v5              ; t = |y| / |x|
+300 1      (4
+210 v62
+400 v71
+701 256
+080 v41
+400 31.58           ; x = y = 0
+590 v99
+410 38     (41
+400 v70             ; t = |x| / |y|
+101 19     (5
+102 v6
+590 4
+410 v72    (6       ; t
+450 v90
+490 v7              ; t > tan pi/8: reducir
+400 v72
+590 v8
+400 v72    (7
+440 v91
+410 38
+400 v72
+450 v91
+101 19
+102 v9
+590 4               ; u = (t - 1) / (t + 1)
+410 32     (9
+300 1
+210 v63
+400 32
+410 32     (8       ; u
+500 32
+410 34              ; z = u^2
+400 v80
+500 34
+420 v81
+500 34
+420 v82
+500 34
+420 v83
+500 34
+420 v84
+500 34
+420 v85
+500 34
+420 v86
+500 32              ; arctan u
+200 v63
+280 v10
+590 v11
+420 v92    (10      ; + pi/4
+200 v62    (11
+280 v12
+590 v13
+520 31.60  (12      ; pi/2 - angulo
+420 v93
+200 v60    (13
+280 v14
+590 v15
+520 31.60  (14      ; pi - angulo
+420 v94
+200 v61    (15
+280 v16
+590 v99
+520 31.60  (16      ; - angulo
+002 3      (99
+592 0
+
++0.41421356237309503  (90  ; tan pi/8
++1                    (91
++0.7853981633974483   (92  ; pi/4
++1.5707963267948966   (93  ; pi/2
++3.141592653589793    (94  ; pi
++0.04712996323828179  (80
+-0.0845910884338494   (81
++0.11041054141584804  (82
+-0.142816392633429    (83
++0.19999885899198858  (84
+-0.33333332127896925  (85
++0.9999999999791301   (86
++0         (70      ; |x|
++0         (71      ; |y|
++0         (72      ; t
+=0         (60
+=0
+=0         (61
+=0
+=0         (62
+=0
+=0         (63
+=0

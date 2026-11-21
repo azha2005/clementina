@@ -1,0 +1,18 @@
+f -> 180
+h = $/360
+s = 0 (1) 179
+ b = F cos (sh)
+ fs = F exp (-a/b)
+repeat
+f180 = 0
+y = 0
+r = 1 (1) 90
+ newline
+ print (r) 2,0
+ space
+ s = 2r - 1
+ f = f(s-1) + 4fs + f(s+1)
+ y = y + hf/3
+ print (y) 1,6
+repeat
+end

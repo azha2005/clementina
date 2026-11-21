@@ -1,0 +1,214 @@
+(IMPRIMIR: print x m, n.
+ Entrada en la etiqueta 1 con x en A, m en la celda 0+ y n en la celda 1.
+ Vuelve por B2. Usa B1, B3, B4, el sac y los largos 32, 34 y 36.
+ m > 0: punto fijo con m lugares enteros y n decimales, redondeando con
+ 0.5 x 10^-n; los ceros no significativos se suprimen, el signo, espacio o
+ menos va pegado a la primera cifra; si la parte entera tiene mas de m
+ cifras se imprimen todas. m = 0, o x >= 2^28: flotante, mantisa con n
+ decimales, coma y exponente de dos cifras. Siempre siguen dos espacios.
+ Reconstruccion; el original no se conserva. Supone la perforadora en
+ registro de cifras.)
+
+012 3      (1       ; guardar B2
+410 32
+300 14
+210 2               ; signo: espacio
+490 v10
+520 31.60
+410 32
+300 11
+210 2               ; signo: menos
+200 0+     (10      ; m
+280 v11
+590 v40             ; m = 0: forma flotante
+104 v12    (11
+590 v50             ; redondear
+707 0      (12      ; S = exponente
+330 29
+290 v40             ; x >= 2^28: forma flotante
+104 v14
+590 v20
+620 14     (14      ; dos espacios y volver
+620 14
+002 3
+592 0
+
+; FIJO: imprime 32 (>= 0) con m lugares enteros y n decimales, sin redondear.
+; Enlace B4.
+400 32     (20
+780 28
+410 36              ; parte entera (exponente 29, sin estandarizar)
+440 56              ; estandarizada, para no perder la fraccion al restar
+520 31.60
+440 32
+410 34              ; parte fraccionaria
+103 8
+400 36
+300 0      (21
+453 v91    (22      ; restar 10^k mientras se pueda
+490 v23
+443 v91
+213 v93             ; cifra k
+133 1
+090 v21
+590 v24
+320 1      (23
+590 v22
+103 8      (24      ; primera cifra no nula
+203 v93    (25
+280 v26
+133 1
+080 v25
+013 1+     (26      ; p
+200 0+
+330 1
+230 1+              ; m - 1 - p espacios
+370 1      (27
+290 v28
+590 v29
+620 14     (28
+330 1
+590 v27
+630 2      (29      ; signo
+203 v93    (30      ; cifras enteras
+210 2+
+001 2+
+201 v92
+210 2+
+630 2+
+133 1
+090 v30
+003 1               ; n
+080 v31
+594 0
+620 28     (31      ; punto
+400 34
+520 v94    (32      ; cifras decimales
+410 34
+780 28
+410 42
+440 56
+520 31.60
+440 34
+410 34              ; fraccion - cifra
+001 42+
+201 v92
+210 2+
+630 2+
+133 1
+080 v32
+594 0
+
+; FLOTANTE: mantisa en [1, 10), coma y exponente.
+300 0      (40
+210 3+              ; e = 0
+400 32
+701 256             ; B1 = 0 si es el cero de la maquina
+080 v41
+300 -128            ; el cero se imprime 0,-128
+210 3+
+590 v46
+400 32     (41      ; mientras x >= 10
+450 v94
+490 v42
+590 v43
+400 32     (42
+500 v95
+410 32
+200 3+
+320 1
+210 3+
+590 v41
+400 32     (43      ; mientras x < 1
+450 v96
+490 v44
+400 32
+520 v94
+410 32
+200 3+
+330 1
+210 3+
+590 v43
+104 v45    (44
+590 v50             ; redondear
+400 32     (45      ; si llego a 10, corregir
+450 v94
+490 v47
+590 v46
+400 32     (47
+500 v95
+410 32
+200 3+
+320 1
+210 3+
+300 1      (46      ; mantisa con m = 1
+210 0+
+104 v48
+590 v20
+620 15     (48      ; coma
+300 14
+210 2
+200 3+
+290 v49
+300 11
+210 2
+300 0
+230 3+
+210 3+
+001 3+     (49      ; exponente con m = 2, n = 0
+011 41+
+400 40
+440 56
+410 32
+300 2
+210 0+
+300 0
+210 1
+104 v14
+590 v20
+
+; REDONDEO: 32 = 32 + 0.5 x 10^-n. Enlace B4.
+400 v97    (50
+003 1
+080 v51
+590 v52
+500 v95    (51
+133 1
+080 v51
+420 32     (52
+410 32
+594 0
+
++10        (94
++0.1       (95
++1         (96
++0.5       (97
++1         (91      ; 10^0 a 10^8
++10
++100
++1000
++10000
++100000
++1000000
++10000000
++100000000
+=16        (92      ; cifras en codigo Ferranti: 0 1 2 3 4 5 6 7 8 9
+=1
+=2
+=19
+=4
+=21
+=22
+=7
+=8
+=25
+=0         (93      ; cifras de la parte entera
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0

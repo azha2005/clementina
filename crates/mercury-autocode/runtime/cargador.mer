@@ -1,0 +1,57 @@
+(CARGADOR DE OVERLAYS EN PAGINAS 8..14 DEL CAPITULO. Vive en el sector 2
+ del tambor, ensamblado en la pagina 15 desde 960.
+ Entrada 960: carga OVL_NPAGES sectores desde OVL_SEC a paginas 8.. y salta a 512.
+ Entrada 961: restaura las paginas 8.. del capitulo actual desde CAP_ACTUAL_CORTO
+ sin tocar A ni las paginas 16..31, y vuelve por B2. Reconstruccion.)
+
+@960
+590 v1
+590 v2
+
+012 v90    (1       ; guardar B2 de quien llamo
+200 97+             ; OVL_SEC
+210 v92
+300 0
+230 98+             ; -OVL_NPAGES
+210 v91
+103 8
+200 v92    (10
+677 0
+683 0
+320 1
+210 v92
+123 1
+200 v91
+320 1
+210 v91
+280 v10
+590 512             ; entrar al overlay cargado en 8.0
+
+200 96     (2       ; CAP_ACTUAL_CORTO
+280 v21
+590 v29             ; si es 0 -test aislado-, volver directo
+320 6      (21      ; pagina 8 del capitulo = primer_sector + 6
+210 v92
+300 0
+230 98+
+210 v91
+103 8
+200 v92    (22
+677 0
+683 0
+320 1
+210 v92
+123 1
+200 v91
+320 1
+210 v91
+280 v22
+002 v90    (29      ; restaurar B2 sin tocar A
+592 0
+
+=0         (90      ; B2 guardado
+=0
+=0         (91      ; contador negativo de paginas
+=0
+=0         (92      ; cursor de sector
+=0

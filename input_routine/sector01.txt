@@ -1,0 +1,82 @@
+; SECTOR 1 del Input Routine (Ferranti, julio de 1959): tele-input.
+; Transcripción del manuscrito "Annotated Input Routine", págs. 8 a 10
+; (docs/refs/mercury_input_routine_annotated_1959.pdf, págs. 11 a 13 del PDF).
+; Mismo formato que sector00.txt.
+;
+; Una sección de cinta binaria es una secuencia de aviso, encabezada por un
+; carácter de aviso, y la información principal con su suma de control. Entre
+; secciones se buscan caracteres de aviso y se ignora todo lo demás:
+;   26, a, b, c      escribir la página c en el sector 32a+b
+;   27, a, b, c      leer el sector 32a+b a la página c
+;   28, a, b, c, d   leer 32c+d pares de caracteres al corto ("half
+;                    register") 32a+b en adelante
+;   29, a, b         saltar a la línea 32a+b
+;   30               bocina en bucle
+; La suma de 10 bits de las palabras y de la suma de control da cero; si la
+; suma de control se perfora como 1023 no se verifica.
+; Se entra trayendo el sector 1 a la página 0 y entrando en la línea 63.
+
+0    215 0          ; (0): plantar la palabra de 10 bits
+1    600 2+         ; } subrutina de B1: arma en el sac una palabra
+2    300 0          ; } de 10 bits con dos caracteres de la cinta
+3    106 -3         ; } (0) en la 2: primer carácter
+4    327 0          ; } S = 2S, cuatro veces
+5    186 4          ; }
+6    600 7+         ; }
+7    327 0          ; } (0): S = 2S + segundo carácter
+8    591 0          ; } vuelta
+9    210 10+        ; } información principal: sumar a la suma
+10   124 0          ; } de control en B4
+11   175 0          ; } (0): contar; sale antes de plantar
+12   185 0          ; } la suma de control
+13   174 0          ; } verificar la suma de control
+14   080 17         ; }
+15   590 19
+16   990 0          ; parada por suma de control errada
+17   370 1023       ; } se ignora el error si la suma de
+18   280 16         ; } control es 1023
+19   101 41         ; entrada a la búsqueda de secuencia de aviso
+20   600 21+        ; } carácter x a B5
+21   105 0          ; } (0)
+22   175 30         ; } salta si x = 30, 31
+23   090 26         ; }
+24   175 26         ; } a leer 32a+b al sac para x = 26, 27, 28, 29
+25   090 1          ; }
+26   080 20         ; se ignora x < 26 o x = 31
+27   580 0          ; } bocina en bucle para x = 30
+28   300 -85        ; } Supuesto: "-85"; la cifra de las decenas está
+29   380 29         ; } borroneada y podría ser un 2. Sólo cambia el
+30   590 27         ; } ritmo de la bocina.
+31   087 0          ; salta a 32a+b si x = 29
+32   210 0+         ; x = 28: 32a+b a la instrucción que planta
+33   101 35         ; } a leer 32c+d
+34   590 1          ; }
+35   330 1          ; } 32c+d-1 a la instrucción compañera
+36   210 11+        ; }
+37   104 0          ; B4 para la suma de control
+38   105 -1         ; B5 modifica la instrucción que planta
+39   101 9          ; } a leer 32c+d pares de caracteres al corto
+40   590 1          ; } 32a+b en adelante
+41   175 28         ; } después de leer 32a+b: salta si x = 28 o 29
+42   090 31         ; }
+43   677 0          ; x = 26 o 27: elegir el sector 32a+b
+44   600 45+        ; } c al sac
+45   300 0          ; } (0)
+46   175 27         ; } salta si x = 26
+47   080 50         ; }
+48   687 0          ; sector 32a+b a la página c
+49   590 20         ; a buscar la secuencia de aviso siguiente
+50   697 0          ; x = 26: página c al sector 32a+b
+51   106 -5         ; } último corto de la página c: 128c + 127
+52   327 0          ; }
+53   186 52         ; }
+54   327 127        ; }
+55   210 58+        ; }
+56   106 -127       ; } verificación del tambor:
+57   680 1          ; } sector 32a+b a la página 1
+58   206 0          ; } (0): comparar la página c
+59   276 1.63+      ; } con la página 1
+60   280 60         ; } bucle si son distintas
+61   186 58         ; }
+62   590 20         ; a buscar la secuencia de aviso siguiente
+63   590 19         ; entrada

@@ -1,0 +1,30 @@
+(CINTA CON UN NOMBRE EN CODIGO FERRANTI, version de ejemplo sin datos personales.
+ Perfora guia en blanco, cambio a letras 27 y el texto CLEMENTINA.)
+
+101 0          ; B1 = posicion en la tabla
+201 v9   (1    ; S = H(tabla + B1)
+370 1023       ; St = S - 1023
+280 v2         ; si no es el final, perforar
+990 0
+631 v9   (2    ; perforar H(tabla + B1)
+121 1
+590 v1
+
+=0       (9    ; guia en blanco
+=0
+=0
+=0
+=0
+=0
+=27            ; cambio a letras
+=3             ; C
+=12            ; L
+=5             ; E
+=13            ; M
+=5             ; E
+=14            ; N
+=20            ; T
+=9             ; I
+=14            ; N
+=1             ; A
+=1023          ; fin de tabla

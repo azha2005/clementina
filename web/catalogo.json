@@ -1,0 +1,432 @@
+{
+  "programas": [
+    {
+      "id": "fibonacci",
+      "nombre": "Fibonacci (forma escrita)",
+      "grupo": "Código de máquina",
+      "descripcion": "Calcula y perfora los 14 primeros números de Fibonacci (001 a 377) con tres cifras decimales en código Ferranti.",
+      "fuente": "Forma escrita de CS 225 A cap. 2 (examples/fibonacci.mer).",
+      "carga": "escrito",
+      "archivo": "examples/fibonacci.mer",
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 0, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": null,
+      "datos_defecto": "",
+      "pasos_1961": [
+        "Al terminar los 14 términos se detiene en una parada 99."
+      ],
+      "esperado": {
+        "parada": 1,
+        "salida_exacta": "001\n001\n002\n003\n005\n008\n013\n021\n034\n055\n089\n144\n233\n377\n"
+      }
+    },
+    {
+      "id": "midi_conversor",
+      "nombre": "Conversor MIDI",
+      "grupo": "Música",
+      "descripcion": "Tocá una melodía de prueba o abrí un MIDI y un guion de texto para tocar y perforar a la vez.",
+      "fuente": "Conversor de Clementina. El reproductor ejecuta instrucciones HOOT y de perforación en la Mercury.",
+      "carga": "midi",
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 0, "J": 0, "D": 0 },
+      "velocidad_defecto": 1,
+      "parametro_facil": null,
+      "datos_defecto": "CLEMENTINA",
+      "pasos_1961": [],
+      "esperado": { "parada": 1, "salida_contiene": "CLEMENTINA", "hoots_min": 100 }
+    },
+    {
+      "id": "primos_ferranti",
+      "nombre": "Calculando primos (código Ferranti)",
+      "grupo": "Código de máquina",
+      "descripcion": "Réplica en código Ferranti (Apéndice VI) de las cintas de cálculo de números primos menores que N (leído de las llaves INPUT F).",
+      "fuente": "Adaptado de las cintas 1 y 2 del Museo de Informática (examples/primos_ferranti.mer).",
+      "carga": "escrito",
+      "archivo": "examples/primos_ferranti.mer",
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 10, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": {
+        "tipo": "llaves_f",
+        "etiqueta": "Límite N en llaves INPUT F (1 a 500)",
+        "min": 2,
+        "max": 500,
+        "valor": 10
+      },
+      "datos_defecto": "",
+      "pasos_1961": [
+        "Armá N en binario en INPUT antes de PREPULSE. Para N = 10, subí las llaves 3 y 1."
+      ],
+      "esperado": {
+        "parada": 1,
+        "salida_exacta": "\nCALCULANDO PRIMOS\n2, 3, 5, 7, \n- FIN -\n"
+      }
+    },
+    {
+      "id": "primos_ita2",
+      "nombre": "Calculando primos (teletipo ITA2)",
+      "grupo": "Código de máquina",
+      "descripcion": "Réplica exacta de la cinta 2 del Museo de Informática: lee N de las llaves F y perfora en código ITA2 de teletipo en lugar de Ferranti.",
+      "fuente": "Museo de Informática, cintas 1 y 2 (docs/cinta/TRANSCRIPCION.md, examples/primos.mer).",
+      "carga": "escrito",
+      "archivo": "examples/primos.mer",
+      "codigo_salida": "ita2",
+      "llaves_defecto": { "F": 10, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": {
+        "tipo": "llaves_f",
+        "etiqueta": "Límite N en llaves INPUT F (1 a 500)",
+        "min": 2,
+        "max": 500,
+        "valor": 10
+      },
+      "datos_defecto": "",
+      "pasos_1961": [
+        "Armá N en binario en INPUT antes de PREPULSE. Para N = 10, subí las llaves 3 y 1.",
+        "La salida se decodifica con el alfabeto ITA2 de teletipo."
+      ],
+      "esperado": {
+        "parada": 1,
+        "salida_exacta": "\nCALCULANDO PRIMOS:\n2, 3, 5, 7, \n- FIN -\n"
+      }
+    },
+    {
+      "id": "nombre_ejemplo",
+      "nombre": "Un nombre en la cinta (ejemplo)",
+      "grupo": "Código de máquina",
+      "descripcion": "Perfora guía en blanco, cambio a letras y el texto CLEMENTINA en código Ferranti (versión de ejemplo sin datos personales de la cinta 3).",
+      "fuente": "Basado en examples/nombre_ferranti.mer sin datos personales.",
+      "carga": "escrito",
+      "archivo": "examples/nombre_ejemplo.mer",
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 0, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": null,
+      "datos_defecto": "",
+      "pasos_1961": [
+        "Leé el nombre en la cinta de salida y en el teleimpresor."
+      ],
+      "esperado": {
+        "parada": 1,
+        "salida_exacta": "CLEMENTINA"
+      }
+    },
+    {
+      "id": "clementine",
+      "nombre": "My Darling Clementine (parlante HOOT)",
+      "grupo": "Código de máquina",
+      "descripcion": "Toca la melodía con impulsos de la instrucción 58 (HOOT) sobre el parlante del pupitre. Corre en tiempo real de 1961 (×1).",
+      "fuente": "Manual CS 225 A §3.11 (examples/clementine.mer).",
+      "carga": "escrito",
+      "archivo": "examples/clementine.mer",
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 0, "J": 0, "D": 0 },
+      "velocidad_defecto": 1,
+      "parametro_facil": null,
+      "datos_defecto": "",
+      "pasos_1961": [],
+      "esperado": {
+        "parada": 1,
+        "hoots_min": 3000
+      }
+    },
+    {
+      "id": "nim",
+      "nombre": "El juego del Nim (Marienbad)",
+      "grupo": "Reconstrucciones",
+      "descripcion": "Reconstrucción nueva del juego de exhibición programado por Wilfred Durán (1961): lee palillos y jugadas desde las llaves INPUT (F), dibuja los palillos como pulsos en B1–B4 y en Display A/E (64), y perfora mensajes longitudinales de 5 agujeros de alto.",
+      "fuente": "Reconstrucción según Wilfred Durán, C.O.M.I.C. (2018), págs. 33–36 (examples/nim.mer; código original no conservado).",
+      "carga": "escrito",
+      "archivo": "examples/nim.mer",
+      "codigo_salida": "longitudinal",
+      "llaves_defecto": { "F": 1, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": {
+        "tipo": "nim",
+        "filas": [1, 3, 5, 7]
+      },
+      "datos_defecto": "",
+      "pasos_1961": [
+        "Después de arrancar, mirá B5 en el primer visor. De 1 a 4 pide los palillos iniciales de cada fila, en 5 pide la fila humana y en 6 cuántos palillos sacar.",
+        "Armá el número de la respuesta en las llaves INPUT y pulsá PREPULSE. Usá 0 a 10 para cada fila inicial y 1 a 4 al elegir fila.",
+        "Para ver los palillos como pulsos en el segundo visor, elegí Display A, E (64)."
+      ],
+      "esperado": {
+        "parada": 1,
+        "nim_prueba": true
+      }
+    },
+    {
+      "id": "autocode_fib2",
+      "nombre": "Autocode: Fibonacci (fib2.mer)",
+      "grupo": "Mercury Autocode",
+      "descripcion": "Programa del compilador de Edimburgo usando índices enteros r, s, t (−512 a 511): al superar 511 desbordan los índices en aritmética modular de 10 bits.",
+      "fuente": "Edimburgo, pruebas del compilador de Mercury Autocode (samples/autocode/fib2.mer).",
+      "carga": "autocode",
+      "archivo": "samples/autocode/fib2.mer",
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 0, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": null,
+      "datos_defecto": "",
+      "pasos_1961": [
+        "La directiva caption imprime la cabecera y los términos salen por la perforadora."
+      ],
+      "esperado": {
+        "parada": 1,
+        "header_contiene": "fibonnacci numbers",
+        "salida_contiene": "20     -318"
+      }
+    },
+    {
+      "id": "autocode_int",
+      "nombre": "Autocode: integral de Sievert (int.mer)",
+      "grupo": "Mercury Autocode",
+      "descripcion": "Integra la función de Sievert por regla de Simpson con 180 intervalos usando φ cos, φ exp y formato de impresión (prefijo a = 1).",
+      "fuente": "Mercury Autocode Manual cap. 1 / Edimburgo (samples/autocode/int.mer).",
+      "carga": "autocode",
+      "archivo": "samples/autocode/int.mer",
+      "prefijo_autocode": "a = 1\n",
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 0, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": null,
+      "datos_defecto": "",
+      "pasos_1961": [
+        "El programa usa a = 1 y perfora 90 renglones antes de la parada final."
+      ],
+      "esperado": {
+        "parada": 1,
+        "salida_contiene": "90    0.328286"
+      }
+    },
+    {
+      "id": "autocode_contour",
+      "nombre": "Autocode: contornos de Whitfield (contour.mer)",
+      "grupo": "Mercury Autocode",
+      "descripcion": "Mapa de líneas equipotenciales ASCII en dos capítulos con datos adjuntos después de «->» e instrucción 625 B-modificada.",
+      "fuente": "H. Whitfield, prueba del compilador de Edimburgo (samples/autocode/contour.mer).",
+      "carga": "autocode",
+      "archivo": "samples/autocode/contour.mer",
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 0, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": {
+        "tipo": "datos",
+        "etiqueta": "Nueve alturas de contorno en la cinta de datos (una por línea)",
+        "multilinea": true
+      },
+      "datos_defecto": "1.0,-18\n1.0,-14\n1.0,-10\n1.0,-8\n1.0,-6\n1.0,-5\n2.5,-5\n5.0,-5\n7.5,-5\n",
+      "pasos_1961": [
+        "Podés poner tu cinta de 9 alturas antes de PREPULSE o cuando el programa quede esperando en el lector."
+      ],
+      "esperado": {
+        "parada": 9,
+        "salida_archivo": "samples/autocode/contour.salida.txt"
+      }
+    },
+    {
+      "id": "elecciones",
+      "nombre": "Elecciones argentinas",
+      "grupo": "Mercury Autocode",
+      "descripcion": "Consultá los resultados de presidente de 1958 y diputados nacionales de 1962 y 1965. Clementina lee los datos de la cinta y perfora la respuesta.",
+      "fuente": "Atlas de 257arg (examples/elecciones/LEEME.md).",
+      "carga": "autocode",
+      "archivo": "examples/elecciones/elecciones.mer",
+      "archivo_datos": "examples/elecciones/cinta.txt",
+      "archivo_catalogo": "examples/elecciones/catalogo.txt",
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 0, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": { "tipo": "elecciones" },
+      "datos_defecto": "0 0 0\n",
+      "pasos_1961": [
+        "Elegí la consulta antes de poner la cinta. Los tres números de la consulta van detrás del programa y delante de los datos electorales."
+      ],
+      "esperado": {
+        "parada": 1,
+        "salida_archivo": "examples/elecciones/salidas/catalogo.txt"
+      }
+    },
+    {
+      "id": "mapas_provinciales",
+      "nombre": "Mapas provinciales · 1958, 1962 y 1965",
+      "grupo": "Mapas electorales",
+      "descripcion": "Elegí la elección y el distrito para perforar la tabla de porcentajes y el mapa por departamento. La letra identifica al bloque ganador y el número remite al índice.",
+      "fuente": "Cantón (1968), t. II y geometría departamental de 1960 de 257arg. Trazos con el método de Alex Harri.",
+      "carga": "escrito",
+      "archivo": "examples/elecciones/perforar_mapa.mer",
+      "archivo_catalogo": "examples/elecciones/mapas_provinciales.json",
+      "papel_mapa": true,
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 0, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": { "tipo": "mapas_provinciales" },
+      "datos_defecto": "",
+      "pasos_1961": [
+        "Elegí la elección y el distrito antes de poner la cinta. El programa copia la tabla, el mapa y el índice al teleimpresor."
+      ],
+      "esperado": {
+        "parada": 1,
+        "salida_contiene": "CORDOBA - DIPUTADOS NACIONALES 1962"
+      }
+    },
+    {
+      "id": "quicky_raiz",
+      "nombre": "Input Routine: Quicky Q12 (raíz cuadrada)",
+      "grupo": "Input Routine (Quickies)",
+      "descripcion": "El Input Routine original de 1959 lee una cinta en forma escrita (C1P2 R1 Q19 Q12 300 6 Q10), enlaza los Quickies desde el tambor, lee el número y perfora √x.",
+      "fuente": "Manuscrito del Input Routine de julio 1959, Q19/Q12/Q10 (input_routine/quickies/).",
+      "carga": "input_routine",
+      "cinta_programa": "C1P2\nR1\nQ19\nQ12\n300 6\nQ10\n990 0\nE v/1\n",
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 0, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": {
+        "tipo": "datos",
+        "etiqueta": "Número x para calcular √x (terminado en dos espacios o fin de línea)",
+        "multilinea": false
+      },
+      "datos_defecto": "2  ",
+      "pasos_1961": [
+        "Perforá el dato numérico (terminado en dos espacios) y poné la cinta completa detrás del programa en el lector.",
+        "Dejá todas las llaves INPUT (F) en 0 (7.4 entrada normal del Input Routine), MANUAL en AUTO y WRITE CURRENT en ON.",
+        "Apretá INITIAL TRANSFER y pasá SINGLE a CONTINUOUS: el cargador copia las subrutinas del tambor a la página 2 y ejecuta."
+      ],
+      "esperado": {
+        "parada": 1,
+        "salida_contiene": "1.41421"
+      }
+    },
+    {
+      "id": "quicky_seno",
+      "nombre": "Input Routine: Quicky Q6 (seno)",
+      "grupo": "Input Routine (Quickies)",
+      "descripcion": "Carga real por el Input Routine de 1959 usando Q19 (lectura), Q6 (sen x) y Q10 (impresión flotante).",
+      "fuente": "Manuscrito del Input Routine de 1959, Q6 (input_routine/quickies/06.mer).",
+      "carga": "input_routine",
+      "cinta_programa": "C1P2\nR1\nQ19\nQ6\n300 6\nQ10\n990 0\nE v/1\n",
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 0, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": {
+        "tipo": "datos",
+        "etiqueta": "Ángulo x en radianes para sen(x)",
+        "multilinea": false
+      },
+      "datos_defecto": "0.5  ",
+      "pasos_1961": [
+        "Perforá el ángulo en radianes (seguido de dos espacios) y poné la cinta en el lector.",
+        "Dejá las llaves INPUT (F) en 0, MANUAL en AUTO y WRITE CURRENT en ON.",
+        "Apretá INITIAL TRANSFER y pasá SINGLE a CONTINUOUS."
+      ],
+      "esperado": {
+        "parada": 1,
+        "salida_contiene": "4.79426"
+      }
+    },
+    {
+      "id": "quicky_reciproco",
+      "nombre": "Input Routine: Quicky Q1 (recíproco 1/x)",
+      "grupo": "Input Routine (Quickies)",
+      "descripcion": "Carga real por el Input Routine de 1959 usando Q19 (lectura), Q1 (1/x por Newton-Raphson) y Q10 (impresión flotante).",
+      "fuente": "Manuscrito del Input Routine de 1959, Q1 (input_routine/quickies/01.mer).",
+      "carga": "input_routine",
+      "cinta_programa": "C1P2\nR1\nQ19\nQ1\n300 6\nQ10\n990 0\nE v/1\n",
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 0, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": {
+        "tipo": "datos",
+        "etiqueta": "Número x distinto de cero para calcular 1/x",
+        "multilinea": false
+      },
+      "datos_defecto": "4  ",
+      "pasos_1961": [
+        "Perforá el número x (seguido de dos espacios) y poné la cinta en el lector.",
+        "Dejá las llaves INPUT (F) en 0, MANUAL en AUTO y WRITE CURRENT en ON.",
+        "Apretá INITIAL TRANSFER y pasá SINGLE a CONTINUOUS."
+      ],
+      "esperado": {
+        "parada": 1,
+        "salida_contiene": "2.50000"
+      }
+    },
+    {
+      "id": "tiny-compacto",
+      "nombre": "TINY 2.1 compacto (3 bloques, 512 sectores)",
+      "grupo": "TINY 2.1",
+      "descripcion": "Modelo de lenguaje de WollyMonjac portado a Clementina, arrancado por tele-input binario.",
+      "fuente": "ports/tiny/README.md (checkpoint externo en ~/Downloads/tiny68k).",
+      "carga": "tele_input",
+      "variante_tiny": "compacto",
+      "opcional": true,
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 4, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": {
+        "tipo": "pregunta_tiny",
+        "etiqueta": "Pregunta en inglés, en minúsculas, hasta 58 letras",
+        "valor": "name the capital of argentina"
+      },
+      "datos_defecto": "name the capital of argentina\n",
+      "pasos_1961": [
+        "Perforá la pregunta terminada en fin de línea y empalmala detrás de la cinta binaria de TINY en el lector (7.1).",
+        "En las llaves INPUT (F) subí la llave 2 (valor 4), la del tele-input (7.4).",
+        "Dejá MANUAL en AUTO, WRITE CURRENT en ON y HOOT en ON, apretá INITIAL TRANSFER y pasá SINGLE a CONTINUOUS (7.5)."
+      ],
+      "esperado": {}
+    },
+    {
+      "id": "tiny-ternario",
+      "nombre": "TINY 2.1 ternario (2 bloques, 482 sectores)",
+      "grupo": "TINY 2.1",
+      "descripcion": "Variante ternaria {-1, 0, +1} de TINY 2.1.",
+      "fuente": "ports/tiny/README.md (checkpoint externo en ~/Downloads/tiny68k).",
+      "carga": "tele_input",
+      "variante_tiny": "ternario",
+      "opcional": true,
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 4, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": {
+        "tipo": "pregunta_tiny",
+        "etiqueta": "Pregunta en inglés, en minúsculas, hasta 58 letras",
+        "valor": "name the capital of argentina"
+      },
+      "datos_defecto": "name the capital of argentina\n",
+      "pasos_1961": [
+        "Perforá la pregunta terminada en fin de línea y ponela en el lector detrás de TINY (7.1).",
+        "Subí la llave 2 de INPUT (valor 4) para el tele-input (7.4).",
+        "Dejá AUTO, WRITE CURRENT ON y HOOT ON, apretá INITIAL TRANSFER y pasá SINGLE a CONTINUOUS (7.5)."
+      ],
+      "esperado": {}
+    },
+    {
+      "id": "tiny-3bit",
+      "nombre": "TINY 2.1 3 bits (2 bloques, 462 sectores)",
+      "grupo": "TINY 2.1",
+      "descripcion": "Variante 3-bit SEQ de 2 bloques de TINY 2.1.",
+      "fuente": "ports/tiny/README.md (checkpoint externo en ~/Downloads/tiny68k).",
+      "carga": "tele_input",
+      "variante_tiny": "3bit",
+      "opcional": true,
+      "codigo_salida": "ferranti",
+      "llaves_defecto": { "F": 4, "J": 0, "D": 0 },
+      "velocidad_defecto": 0,
+      "parametro_facil": {
+        "tipo": "pregunta_tiny",
+        "etiqueta": "Pregunta en inglés, en minúsculas, hasta 58 letras",
+        "valor": "name the capital of argentina"
+      },
+      "datos_defecto": "name the capital of argentina\n",
+      "pasos_1961": [
+        "Perforá la pregunta terminada en fin de línea y ponela en el lector detrás de TINY (7.1).",
+        "Subí la llave 2 de INPUT (valor 4) para el tele-input (7.4).",
+        "Dejá AUTO, WRITE CURRENT ON y HOOT ON, apretá INITIAL TRANSFER y pasá SINGLE a CONTINUOUS (7.5)."
+      ],
+      "esperado": {}
+    }
+  ]
+}

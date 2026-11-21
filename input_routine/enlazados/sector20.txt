@@ -1,0 +1,70 @@
+; Sector 20. Generado desde el manuscrito por enlazar.py.
+0     200 137+ ; capitulo01.txt:487
+1     330 7 ; capitulo01.txt:488
+2     290 583 ; capitulo01.txt:489
+3     300 -1 ; capitulo01.txt:491
+4     000 298+ ; capitulo01.txt:492
+5     080 583 ; capitulo01.txt:493
+6     300 -2 ; capitulo01.txt:494
+7     220 61+ ; capitulo01.txt:495
+8     590 650 ; capitulo01.txt:496
+9     400 42 ; capitulo01.txt:497
+10    410 1580 ; capitulo01.txt:498
+11    590 5 ; capitulo01.txt:499
+12    080 592 ; capitulo01.txt:502
+13    670 40 ; capitulo01.txt:503
+14    680 11 ; capitulo01.txt:504
+15    590 751 ; capitulo01.txt:505
+16    000 61 ; capitulo01.txt:506
+17    300 1194 ; capitulo01.txt:507
+18    080 601 ; capitulo01.txt:508
+19    590 606 ; capitulo01.txt:509
+20    =718 ; capitulo01.txt:510
+20+   =708 ; capitulo01.txt:510
+21    =896 ; capitulo01.txt:511
+21+   =388 ; capitulo01.txt:511
+22    =933 ; capitulo01.txt:512
+22+   =641 ; capitulo01.txt:512
+23    =571 ; capitulo01.txt:513
+23+   =692 ; capitulo01.txt:513
+24    =684 ; capitulo01.txt:514
+24+   =795 ; capitulo01.txt:514
+25    210 602+ ; capitulo01.txt:515
+26    072 597 ; capitulo01.txt:516
+27    370 1201 ; capitulo01.txt:517
+28    380 594 ; capitulo01.txt:518
+29    080 8 ; capitulo01.txt:519
+30    104 608 ; capitulo01.txt:520
+31    592 0 ; capitulo01.txt:521
+32    102 641 ; capitulo01.txt:522
+33    590 188 ; capitulo01.txt:523
+34    320 2 ; capitulo01.txt:525
+35    330 2 ; capitulo01.txt:526
+36    320 -608 ; capitulo01.txt:527
+37    006 137+ ; capitulo01.txt:528
+38    172 160 ; capitulo01.txt:529
+39    210 137+ ; capitulo01.txt:530
+40    080 626 ; capitulo01.txt:531
+41    006 61+ ; capitulo01.txt:532
+42    101 620 ; capitulo01.txt:533
+43    590 534 ; capitulo01.txt:534
+44    300 1 ; capitulo01.txt:535
+45    210 298+ ; capitulo01.txt:536
+46    300 3 ; capitulo01.txt:537
+47    210 61 ; capitulo01.txt:538
+48    102 896 ; capitulo01.txt:539
+49    590 188 ; capitulo01.txt:540
+50    172 896 ; capitulo01.txt:541
+51    080 633 ; capitulo01.txt:542
+52    176 6 ; capitulo01.txt:543
+53    090 8 ; capitulo01.txt:544
+54    173 132 ; capitulo01.txt:545
+55    080 8 ; capitulo01.txt:546
+56    590 160 ; capitulo01.txt:547
+57    172 812 ; capitulo01.txt:548
+58    080 8 ; capitulo01.txt:549
+59    450 128 ; capitulo01.txt:550
+60    490 130 ; capitulo01.txt:551
+61    440 128 ; capitulo01.txt:552
+62    440 18 ; capitulo01.txt:553
+63    410 46 ; capitulo01.txt:554

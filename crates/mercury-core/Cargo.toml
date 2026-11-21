@@ -1,0 +1,8 @@
+[package]
+name = "mercury-core"
+description = "Núcleo del emulador de la Ferranti Mercury (Clementina, UBA 1961)"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]

@@ -1,0 +1,37 @@
+; Quicky 11; manuscrito, PDF página 114.
+; Las referencias con desplazamiento se resolvieron para origen 128.
+@128
+620 0
+620 30
+620 13
+620 30
+015 158+ ; reubicar
+016 159+ ; reubicar
+210 152+ ; reubicar
+106 -30
+105 543 (1
+370 0
+290 v2
+330 1000
+290 v5
+320 500
+105 404
+125 177 (2
+236 160+ ; reubicar
+570 100
+290 v2
+125 464 (3
+090 v3
+226 160+ ; reubicar
+126 10
+090 156 ; reubicar
+370 0 (4
+280 156 ; reubicar
+590 v1
+105 1 (5
+625 0
+080 v1
+105 0 (6
+106 0 (7
+620 14
+620 14

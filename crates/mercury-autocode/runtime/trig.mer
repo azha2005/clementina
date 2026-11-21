@@ -1,0 +1,136 @@
+(TRIG: sin en la etiqueta 1, cos en la 2 y tan en la 3. x en A, en
+ radianes; deja el resultado en A y vuelve por B2. Usa la division solo en
+ tan, B4 como enlace interno, el sac y los largos 32 a 38 y 42.
+ n = entero mas cercano a 2x/pi; r = x - n pi/2, con pi/2 partido en dos:
+ r queda entre -pi/4 y pi/4. El cuadrante n + 1 para cos elige entre
+ sen r y cos r y el signo. sen r y cos r por sus series hasta r^11 y r^12,
+ error menor que 10^-10. tan = sen r / cos r, o -cos r / sen r en los
+ cuadrantes impares.
+ Supuesto: n entra en un indice, asi que |x| < 800 aproximadamente.
+ Reconstruccion; el original no se conserva.)
+
+012 3      (1       ; sin
+300 0
+590 v9
+012 3      (2       ; cos
+300 1
+590 v9
+012 3      (3       ; tan
+300 4
+210 v71    (9       ; desplazamiento del cuadrante; 4 = tan
+410 32
+500 v90             ; 2x/pi
+420 v91
+780 28
+410 42
+440 56
+410 34              ; n como numero
+200 v71
+350 3
+220 42+
+210 v72             ; cuadrante
+400 34
+520 v92             ; n C1 sin redondeo: exacto
+410 36
+400 32
+450 36
+410 36              ; x - n C1
+400 34
+500 v93
+520 31.60
+440 36
+410 32              ; r = x - n C1 - n C2
+500 32
+410 34              ; z = r^2
+200 v71
+350 4
+280 v40             ; tan
+200 v72
+350 1
+280 v20             ; cuadrante impar: cos r
+104 v30
+590 v50             ; sen r
+104 v30    (20
+590 v60             ; cos r
+200 v72    (30      ; cuadrantes 2 y 3: cambiar el signo
+350 2
+280 v31
+590 v32
+520 31.60  (31
+002 3      (32
+592 0
+104 v45    (40      ; tan
+590 v50
+410 v73    (45      ; sen r
+104 v46
+590 v60
+200 v72    (46      ; A = cos r
+350 1
+280 v42
+410 38              ; par: sen r / cos r
+400 v73
+590 v43
+410 v74    (42      ; impar: -cos r / sen r
+400 v73
+410 38
+400 v74
+101 19     (43
+102 v44
+590 4
+200 v72    (44
+350 1
+280 v31
+590 v32
+
+; SEN: r (1 + z (s1 + z (s2 + ...))), con r en 32 y z en 34. Enlace B4.
+400 v80    (50
+500 34
+420 v81
+500 34
+420 v82
+500 34
+420 v83
+500 34
+420 v84
+500 34
+420 v96
+500 32
+594 0
+; COS: 1 + z (c1 + z (c2 + ...)). Enlace B4.
+400 v85    (60
+500 34
+420 v86
+500 34
+420 v87
+500 34
+420 v88
+500 34
+420 v89
+500 34
+420 v98
+500 34
+420 v96
+594 0
+
++0.6366197723675814   (90  ; 2/pi
++0.5                  (91
++1.5707931518554688   (92  ; C1: pi/2 con 19 cifras binarias
++3.174939427807999,-6 (93  ; C2 = pi/2 - C1
+-2.505210838544172,-8 (80  ; -1/11!
++2.7557319223985893,-6 (81 ; 1/9!
+-0.0001984126984126984 (82 ; -1/7!
++0.008333333333333333  (83 ; 1/5!
+-0.16666666666666666   (84 ; -1/3!
++2.08767569878681,-9   (85 ; 1/12!
+-2.755731922398589,-7  (86 ; -1/10!
++2.48015873015873,-5   (87 ; 1/8!
+-0.001388888888888889  (88 ; -1/6!
++0.041666666666666664  (89 ; 1/4!
+-0.5                   (98
++1                     (96
+=0         (71      ; desplazamiento
+=0
+=0         (72      ; cuadrante
+=0
++0         (73      ; sen r, para tan
++0         (74      ; cos r, para tan

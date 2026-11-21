@@ -1,0 +1,67 @@
+; Sector 44. Generado desde el manuscrito por enlazar.py.
+0     106 0 ; capitulo77.txt:6
+1     620 15 ; capitulo77.txt:7
+2     186 51 ; capitulo77.txt:8
+3     105 0 ; capitulo77.txt:9
+4     106 0 ; capitulo77.txt:10
+5     300 0 ; capitulo77.txt:11
+6     670 43 ; capitulo77.txt:12
+7     680 0 ; capitulo77.txt:13
+8     015 3+ ; capitulo77.txt:14
+9     016 4+ ; capitulo77.txt:15
+10    210 5+ ; capitulo77.txt:16
+11    080 23 ; capitulo77.txt:17
+12    200 65 ; capitulo77.txt:18
+13    350 511 ; capitulo77.txt:19
+14    370 8 ; capitulo77.txt:20
+15    290 17 ; capitulo77.txt:21
+16    637 58 ; capitulo77.txt:22
+17    620 10 ; capitulo77.txt:23
+18    290 47 ; capitulo77.txt:24
+19    320 200 ; capitulo77.txt:25
+20    210 22 ; capitulo77.txt:26
+21    200 65+ ; capitulo77.txt:27
+22    300 0 ; capitulo77.txt:28
+23    210 40+ ; capitulo77.txt:29
+24    106 -30 ; capitulo77.txt:30
+25    105 543 ; capitulo77.txt:31
+26    290 31 ; capitulo77.txt:32
+27    330 1000 ; capitulo77.txt:33
+28    290 43 ; capitulo77.txt:34
+29    330 500 ; capitulo77.txt:35
+30    105 404 ; capitulo77.txt:36
+31    125 177 ; capitulo77.txt:37
+32    236 48+ ; capitulo77.txt:38
+33    570 100 ; capitulo77.txt:39
+34    290 31 ; capitulo77.txt:40
+35    125 464 ; capitulo77.txt:41
+36    090 35 ; capitulo77.txt:42
+37    226 48+ ; capitulo77.txt:43
+38    126 10 ; capitulo77.txt:44
+39    090 44 ; capitulo77.txt:45
+40    177 0 ; capitulo77.txt:46
+41    080 44 ; capitulo77.txt:47
+42    590 25 ; capitulo77.txt:48
+43    105 1 ; capitulo77.txt:49
+44    625 0 ; capitulo77.txt:50
+45    080 25 ; capitulo77.txt:51
+46    590 3 ; capitulo77.txt:52
+47    106 -3 ; capitulo77.txt:53
+48    010 46+ ; capitulo77.txt:54
+49    410 8 ; capitulo77.txt:55
+50    100 0 ; capitulo77.txt:56
+51    206 9+ ; capitulo77.txt:57
+52    016 0+ ; capitulo77.txt:58
+53    080 23 ; capitulo77.txt:59
+54    290 23 ; capitulo77.txt:60
+55    167 -1 ; capitulo77.txt:61
+56    620 11 ; capitulo77.txt:62
+57    380 23 ; capitulo77.txt:63
+58    =16 ; capitulo77.txt:64
+58+   =1 ; capitulo77.txt:64
+59    =2 ; capitulo77.txt:65
+59+   =19 ; capitulo77.txt:65
+60    =4 ; capitulo77.txt:66
+60+   =21 ; capitulo77.txt:66
+61    =22 ; capitulo77.txt:67
+61+   =7 ; capitulo77.txt:67

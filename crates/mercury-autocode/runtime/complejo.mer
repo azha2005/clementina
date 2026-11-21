@@ -1,0 +1,127 @@
+(COCIENTE DE NUMEROS COMPLEJOS. Entra en 8.0 y sale por el cargador 961.
+ Largos 52..55: partes real e imaginaria de numerador y denominador.
+ Regresa con las partes del cociente en 52 y 53.
+ Division por cocientes de Smith; se divide por dos cada sumando cuando
+ los exponentes son altos para evitar desborde en las sumas. Reconstruccion.)
+
+@8.0
+300 0
+210 v90
+400 108
+440 31.58           ; estandarizar también un cero de núcleos sin inicializar
+410 108
+400 110
+440 31.58
+410 110
+400 110
+701 0
+400 108
+731 0
+090 v1
+590 v4
+080 v3     (1
+490 v15             ; comparar módulos sin negar una mantisa extrema
+400 110
+490 v16
+450 108
+490 v4
+590 v3
+440 108    (16
+490 v3
+590 v4
+400 110    (15
+490 v17
+440 108
+490 v4
+590 v3
+450 108    (17
+490 v3
+590 v4
+
+300 1      (3       ; invertir las dos parejas y conjugar al final
+210 v90
+400 104
+410 v80
+400 106
+410 104
+400 v80
+410 106
+400 108
+410 v80
+400 110
+410 108
+400 v80
+410 110
+
+200 108+   (4       ; c es la componente de mayor modulo
+280 v5
+200 109
+280 v5
+200 109+
+280 v5
+590 v6     (6       ; division por cero
+400 110    (5
+101 54
+102 v7
+590 4
+410 v81    (7       ; r = d / c
+
+; Escalar por un medio si hay riesgo de desborde.
+400 108
+701 769
+080 v70
+590 v8
+400 104    (70
+701 769
+080 v71
+590 v8
+400 106    (71
+701 769
+080 v9
+400 104    (8
+520 v83
+410 104
+400 106
+520 v83
+410 106
+400 108
+520 v83
+410 108
+400 110
+520 v83
+410 110
+
+400 110    (9
+520 v81
+440 108
+410 v82            ; c + d*r
+
+400 106
+520 v81
+440 104
+101 314
+102 v10
+590 4
+410 v80    (10      ; parte real
+
+400 104
+530 v81
+440 106
+101 314
+102 v11
+590 4
+200 v90    (11
+280 v12
+590 v13
+520 31.60  (12
+410 106    (13
+400 v80
+410 104
+590 961
+
+@9.48
++0         (80
++0         (81
++0         (82
++0.5       (83
+=0         (90

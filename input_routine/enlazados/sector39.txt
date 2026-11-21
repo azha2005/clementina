@@ -1,0 +1,66 @@
+; Sector 39. Generado desde el manuscrito por enlazar.py.
+0     680 11 ; capitulo08.txt:5
+1     102 779 ; capitulo08.txt:6
+2     670 26 ; capitulo08.txt:7
+3     590 704 ; capitulo08.txt:8
+4     101 712 ; capitulo08.txt:9
+5     590 804 ; capitulo08.txt:10
+6     =25 ; capitulo08.txt:11
+6+    =0 ; capitulo08.txt:11
+7     =0 ; capitulo08.txt:12
+7+    =384 ; capitulo08.txt:12
+8     010 63+ ; capitulo08.txt:13
+9     010 63 ; capitulo08.txt:14
+10    300 7 ; capitulo08.txt:15
+11    210 137+ ; capitulo08.txt:16
+12    102 718 ; capitulo08.txt:17
+13    590 188 ; capitulo08.txt:18
+14    101 720 ; capitulo08.txt:19
+15    590 897 ; capitulo08.txt:20
+16    410 50 ; capitulo08.txt:21
+17    174 185 ; capitulo08.txt:22
+18    080 755 ; capitulo08.txt:23
+19    400 0 ; capitulo08.txt:24
+20    594 0 ; capitulo08.txt:25
+21    174 154 ; capitulo08.txt:26
+22    080 8 ; capitulo08.txt:27
+23    007 45 ; capitulo08.txt:28
+24    700 0 ; capitulo08.txt:29
+25    187 732 ; capitulo08.txt:30
+26    300 5 ; capitulo08.txt:31
+27    590 9 ; capitulo08.txt:32
+28    090 734 ; capitulo08.txt:33
+29    590 8 ; capitulo08.txt:34
+30    300 0 ; capitulo08.txt:35
+31    080 737 ; capitulo08.txt:36
+32    200 43 ; capitulo08.txt:37
+33    210 23 ; capitulo08.txt:38
+34    400 22 ; capitulo08.txt:39
+35    000 43+ ; capitulo08.txt:40
+36    090 742 ; capitulo08.txt:41
+37    440 20 ; capitulo08.txt:42
+38    440 50 ; capitulo08.txt:43
+39    440 18 ; capitulo08.txt:44
+40    410 50 ; capitulo08.txt:45
+41    200 51 ; capitulo08.txt:46
+42    220 51 ; capitulo08.txt:47
+43    350 126 ; capitulo08.txt:48
+44    000 50+ ; capitulo08.txt:49
+45    090 751 ; capitulo08.txt:50
+46    320 1 ; capitulo08.txt:51
+47    210 61+ ; capitulo08.txt:52
+48    006 42 ; capitulo08.txt:53
+49    101 782 ; capitulo08.txt:54
+50    590 828 ; capitulo08.txt:55
+51    174 154 ; capitulo08.txt:56
+52    080 8 ; capitulo08.txt:57
+53    440 710 ; capitulo08.txt:58
+54    410 40 ; capitulo08.txt:59
+55    200 40+ ; capitulo08.txt:60
+56    106 -2 ; capitulo08.txt:61
+57    340 0 ; capitulo08.txt:62
+58    186 761 ; capitulo08.txt:63
+59    210 61+ ; capitulo08.txt:64
+60    200 41 ; capitulo08.txt:65
+61    590 789 ; capitulo08.txt:66
+63    590 725 ; capitulo08.txt:68

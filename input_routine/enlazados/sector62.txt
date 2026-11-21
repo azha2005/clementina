@@ -1,0 +1,2 @@
+; Sector 62. Reconstruido con empaquetar_quickies y la tabla de R67.
+; La tabla de R67 de septiembre de 1960 no usa este sector.
