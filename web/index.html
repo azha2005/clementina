@@ -597,6 +597,7 @@ const FUENTE_NIM = [
   ['N',[31,12,6,31]], ['O',[14,17,17,14]], ['P',[31,20,20,8]], ['Q',[14,17,19,13]],
   ['R',[31,20,22,9]], ['S',[9,21,21,18]], ['T',[16,31,16,16]], ['U',[30,1,1,30]],
   ['V',[28,3,3,28]], ['Y',[24,7,4,24]], ['Z',[19,21,25,17]], ['!',[0,29,0,0]],
+  [',',[0,1,6,0]],
 ];
 
 const TINY_VOCAB = " !\"'()*+,-./0123456789:;=?\\abcdefghijklmnopqrstuvwxyz";
@@ -1988,10 +1989,12 @@ function construirConsultaElecciones(cont, p) {
   const vista = $('eleccionesVista');
   const anio = $('eleccionesAnio');
   const distrito = $('eleccionesDistrito');
-  vista.onchange = () => {
+  const sincronizar = () => {
     anio.disabled = vista.value === '0';
-    distrito.disabled = $('eleccionesCampoDistrito').hidden = vista.value !== '3';
+    distrito.disabled = $('eleccionesCampoDistrito').hidden = vista.value !== '3' || anio.value === '1967';
   };
+  vista.onchange = sincronizar;
+  anio.onchange = sincronizar;
   getFuente(p.archivo_catalogo).then(texto => {
     const candidatas = [];
     for (const linea of texto.split('\n')) {
@@ -1999,7 +2002,9 @@ function construirConsultaElecciones(cont, p) {
       if (fila) candidatas.push(new Option(fila[2], Number(fila[1])));
     }
     if (!candidatas.length) throw new Error('El catálogo de la cinta está vacío.');
+    candidatas.push(new Option('1967', 1967));
     anio.replaceChildren(...candidatas);
+    sincronizar();
   }).catch(e => {
     anio.options[0].textContent = 'Catálogo no disponible';
     anio.setCustomValidity(e.message);
@@ -2012,7 +2017,8 @@ function leerConsultaElecciones() {
   const anio = $('eleccionesAnio');
   const distrito = $('eleccionesDistrito');
   if (!anio.reportValidity() || !distrito.reportValidity()) return null;
-  return `${anio.value} ${vista} ${vista === '3' ? distrito.valueAsNumber : 0}\n`;
+  const dist = vista === '3' && anio.value !== '1967' ? distrito.valueAsNumber : 0;
+  return `${anio.value} ${vista} ${dist}\n`;
 }
 
 function construirMapaProvincial(cont) {
@@ -2902,8 +2908,15 @@ function drawStrip(canvas, filas, pitchCss, longitudinal = false, seguirSalida =
   }
 }
 
+function codigoSalidaActual() {
+  if (programa?.id === 'elecciones' && $('eleccionesAnio')?.value === '1967' && $('eleccionesVista')?.value !== '0') {
+    return 'longitudinal';
+  }
+  return programa?.codigo_salida || 'ferranti';
+}
+
 function dibujarSalida(filas, seguirSalida = true) {
-  const longitudinal = programa?.codigo_salida === 'longitudinal';
+  const longitudinal = codigoSalidaActual() === 'longitudinal';
   drawStrip($('outTape'), filas, longitudinal ? 7 : 8, longitudinal, seguirSalida);
 }
 
@@ -3119,7 +3132,7 @@ function renderSnapshot(snap) {
   setActividad('iPunch', runningLive && snap.outRows.length > (anterior?.outRows.length || 0), 'perforando', 'quieto');
 
   // Salida en teleimpresor y perforadora
-  const code = programa?.codigo_salida || 'ferranti';
+  const code = codigoSalidaActual();
   const esLong = code === 'longitudinal';
   $('outCodeLbl').textContent =
     esLong ? 'Cinta de salida (letras de 5 agujeros a lo largo)'
@@ -3149,7 +3162,7 @@ function renderSnapshot(snap) {
       papel.appendChild(cEl);
     }
     papel.scrollTop = alFinal ? papel.scrollHeight : posicion;
-    const muestraMapa = programa?.papel_mapa || $('eleccionesVista')?.value === '5';
+    const muestraMapa = programa?.papel_mapa || ($('eleccionesVista')?.value === '5' && $('eleccionesAnio')?.value !== '1967');
     if (muestraMapa && snap.stopCode === STOP.STOP99 && anterior?.stopCode !== STOP.STOP99) {
       papel.scrollTop = 0;
     }

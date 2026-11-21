@@ -82,3 +82,34 @@ fn consultas_sin_respuesta() {
     assert!(consultar("18 3 30").contains("NO HAY DISTRITO"));
     assert!(consultar("7 1 0").contains("NO ESTA"));
 }
+
+#[test]
+fn consulta_1967_cinta_5_canales() {
+    let img = compilar(PROGRAMA).unwrap();
+    let mut m = Machine::new(Default::default());
+    img.cargar(&mut m);
+    let mut io = BufferIo::with_tape(&tape::encode("1967 1 0\n").unwrap());
+    assert_eq!(m.run(&mut io, 1_000_000), Some(Stop::Stop99));
+    let esperado: Vec<u16> = [
+        31, 12, 6, 31, 0, // N
+        14, 17, 17, 14, 0, // O
+        0, 0, 0, 0, 0, // espacio
+        15, 20, 20, 15, 0, // A
+        31, 12, 6, 31, 0, // N
+        31, 17, 17, 14, 0, // D
+        15, 20, 20, 15, 0, // A
+        0, 1, 6, 0, 0, // ,
+        0, 0, 0, 0, 0, // espacio
+        31, 8, 8, 31, 0, // M
+        17, 31, 17, 0, 0, // I
+        0, 0, 0, 0, 0, // espacio
+        14, 17, 21, 23, 0, // G
+        31, 21, 21, 17, 0, // E
+        31, 12, 6, 31, 0, // N
+        31, 21, 21, 17, 0, // E
+        31, 20, 22, 9, 0, // R
+        15, 20, 20, 15, 0, // A
+        31, 1, 1, 1, 0, // L
+    ].to_vec();
+    assert_eq!(io.output[1], esperado);
+}
