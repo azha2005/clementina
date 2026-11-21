@@ -230,7 +230,7 @@
       "id": "elecciones",
       "nombre": "Elecciones argentinas",
       "grupo": "Mercury Autocode",
-      "descripcion": "Consultá los resultados de presidente de 1958 y diputados nacionales de 1962 y 1965. Clementina lee los datos de la cinta y perfora la respuesta.",
+      "descripcion": "Consultá los resultados de presidente de 1958 y diputados nacionales de 1962 y 1965, o perforá los mapas provinciales por departamento.",
       "fuente": "Atlas de 257arg (examples/elecciones/LEEME.md).",
       "carga": "autocode",
       "archivo": "examples/elecciones/elecciones.mer",
@@ -244,32 +244,17 @@
       "pasos_1961": [
         "Elegí la consulta antes de poner la cinta. Los tres números de la consulta van detrás del programa y delante de los datos electorales."
       ],
+      "mapas_provinciales": {
+        "archivo": "examples/elecciones/perforar_mapa.mer",
+        "archivo_catalogo": "examples/elecciones/mapas_provinciales.json",
+        "fuente": "Cantón (1968), t. II y geometría departamental de 1960 de 257arg. Trazos con el método de Alex Harri.",
+        "pasos_1961": [
+          "Elegí la elección y el distrito antes de poner la cinta. El programa copia la tabla, el mapa y el índice al teleimpresor."
+        ]
+      },
       "esperado": {
         "parada": 1,
         "salida_archivo": "examples/elecciones/salidas/catalogo.txt"
-      }
-    },
-    {
-      "id": "mapas_provinciales",
-      "nombre": "Mapas provinciales · 1958, 1962 y 1965",
-      "grupo": "Mapas electorales",
-      "descripcion": "Elegí la elección y el distrito para perforar la tabla de porcentajes y el mapa por departamento. La letra identifica al bloque ganador y el número remite al índice.",
-      "fuente": "Cantón (1968), t. II y geometría departamental de 1960 de 257arg. Trazos con el método de Alex Harri.",
-      "carga": "escrito",
-      "archivo": "examples/elecciones/perforar_mapa.mer",
-      "archivo_catalogo": "examples/elecciones/mapas_provinciales.json",
-      "papel_mapa": true,
-      "codigo_salida": "ferranti",
-      "llaves_defecto": { "F": 0, "J": 0, "D": 0 },
-      "velocidad_defecto": 0,
-      "parametro_facil": { "tipo": "mapas_provinciales" },
-      "datos_defecto": "",
-      "pasos_1961": [
-        "Elegí la elección y el distrito antes de poner la cinta. El programa copia la tabla, el mapa y el índice al teleimpresor."
-      ],
-      "esperado": {
-        "parada": 1,
-        "salida_contiene": "CORDOBA - DIPUTADOS NACIONALES 1962"
       }
     },
     {

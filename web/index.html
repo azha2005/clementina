@@ -80,6 +80,8 @@ canvas { display: block; }
 .modos button { border: 0; background: transparent; padding: 0 var(--space-md); min-height: 36px; border-radius: calc(var(--radius-control) - 2px); cursor: pointer; color: var(--color-ink-2); font-weight: 550; }
 .modos button:hover { background: var(--color-paper-2); }
 .modos button[aria-selected="true"] { background: var(--color-paper-3); color: var(--color-ink); box-shadow: inset 0 0 0 var(--rule-hair) var(--color-ink); font-weight: 650; }
+.modos.chico { width: 100%; }
+.modos.chico button { flex: 1; min-height: 32px; padding: 0 var(--space-sm); font-size: var(--text-sm); }
 .estado { margin-left: auto; font-size: var(--text-sm); color: var(--color-muted); display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-3xs); text-align: right; }
 .estado strong { color: var(--color-ink); font-weight: 600; }
 .estado.vivo strong { color: var(--color-accent); }
@@ -856,6 +858,7 @@ function codificarFerranti(texto) {
 const INICIO_1961 = { J: 0, D: 0, F: 0, manual: true, single: true, write: false, hoot: false, hsStop: false, inhibit: false };
 let catalogo = [];
 let atlasProvinciales = null;
+let eleccionesTab = new URLSearchParams(location.search).has('provincia') ? 'provincial' : 'nacional';
 let programa = null;
 let tinyInfoCache = new Map();
 let tinyCintaCache = new Map();
@@ -1265,9 +1268,31 @@ function usaTamborParaMusica(p) {
   return p?.carga === 'midi' || p?.carga === 'escrito_tambor';
 }
 
+function esModoMapaProvincial(p = programa) {
+  return p?.id === 'elecciones' && eleccionesTab === 'provincial' && !!p.mapas_provinciales;
+}
+
+function fuenteProgramaActual(p = programa) {
+  if (!esModoMapaProvincial(p)) return p;
+  const mp = p.mapas_provinciales;
+  return {
+    ...p,
+    carga: 'escrito',
+    archivo: mp.archivo,
+    archivo_datos: null,
+    archivo_catalogo: mp.archivo_catalogo,
+    fuente: mp.fuente,
+    papel_mapa: true,
+    parametro_facil: { tipo: 'mapas_provinciales' },
+    datos_defecto: '',
+    pasos_1961: mp.pasos_1961,
+  };
+}
+
 function tieneCintaDePrograma(p) {
+  const cfg = fuenteProgramaActual(p);
   return esAutocodeLocal(p) ||
-    ['escrito', 'escrito_tambor', 'autocode', 'input_routine', 'tele_input', 'midi'].includes(p?.carga);
+    ['escrito', 'escrito_tambor', 'autocode', 'input_routine', 'tele_input', 'midi'].includes(cfg?.carga);
 }
 
 function esParadaDeCarga(snap) {
@@ -1283,27 +1308,30 @@ function unirFilas(primero, segundo) {
 }
 
 async function prepararCintaDePrograma(p) {
+  const cfg = fuenteProgramaActual(p);
+  const tab = p?.id === 'elecciones' ? eleccionesTab : null;
   const local = esAutocodeLocal(p);
   const fuenteLocal = local ? programaLocal.fuenteAutocode : undefined;
-  if (p.carga !== 'midi' && cintaProgramaMontada?.programa === p &&
+  if (cfg.carga !== 'midi' && cintaProgramaMontada?.programa === p &&
+      cintaProgramaMontada?.tab === tab &&
       (!local || cintaProgramaMontada.fuenteLocal === fuenteLocal)) return cintaProgramaMontada;
-  if (p.carga === 'input_routine') {
-    const filas = codificarFerranti(p.cinta_programa);
+  if (cfg.carga === 'input_routine') {
+    const filas = codificarFerranti(cfg.cinta_programa);
     if (!filas) throw new Error('La cinta de programa tiene caracteres inválidos.');
     // Los Quickies del catálogo entran en 2.00 con el avance de línea de E pendiente.
     return {
-      programa: p, filas: Uint8Array.from(filas),
+      programa: p, tab, filas: Uint8Array.from(filas),
       entrada: { direccion: 128, filas: filas.length - 1 },
     };
   }
-  if (p.carga === 'tele_input') {
-    const { info, bin } = await getTiny(p.variante_tiny);
+  if (cfg.carga === 'tele_input') {
+    const { info, bin } = await getTiny(cfg.variante_tiny);
     // La última orden de las cintas de TINY es el salto 29, a, b del tele-input.
     const [orden, a, b] = bin.subarray(-3);
     const entrada = orden === 29 ? { direccion: 32 * a + b, filas: bin.length } : null;
-    return { programa: p, filas: bin, info, teleInput: true, entrada };
+    return { programa: p, tab, filas: bin, info, teleInput: true, entrada };
   }
-  if (p.carga === 'midi') {
+  if (cfg.carga === 'midi') {
     const datos = await midiEntrada();
     if (programa !== p) throw new Error('Cambió el programa seleccionado.');
     const len = writeScratchPar(datos.midi, datos.guion);
@@ -1322,39 +1350,40 @@ async function prepararCintaDePrograma(p) {
         r.notas_omitidas ? r.notas_omitidas + ' notas fuera del registro de HOOT' : '',
       ].filter(Boolean).join(' · ');
     }
-    return { programa: p, filas: resultado.slice(corte + 1), teleInput: true, pausa: true, vuelta: wasm.wasm_get_cinta_vuelta() };
+    return { programa: p, tab, filas: resultado.slice(corte + 1), teleInput: true, pausa: true, vuelta: wasm.wasm_get_cinta_vuelta() };
   }
 
-  const autocode = local || p.carga === 'autocode';
+  const autocode = local || cfg.carga === 'autocode';
   let codigo, datosTambor, datosAdicionales;
   if (local) {
     if (!fuenteLocal.trim()) throw new Error('Escribí o abrí un programa de Autocode.');
     codigo = te.encode(fuenteLocal);
     if (codigo.length > 2 * 1024 * 1024) throw new Error('El código supera 2 MiB.');
-  } else if (p.carga === 'escrito_tambor') {
+  } else if (cfg.carga === 'escrito_tambor') {
     [codigo, datosTambor] = await Promise.all([
-      leerArchivoMIDI(p.archivos.mer), leerArchivoMIDI(p.archivos.tambor),
+      leerArchivoMIDI(cfg.archivos.mer), leerArchivoMIDI(cfg.archivos.tambor),
     ]);
   } else {
     let src;
     [src, datosAdicionales] = await Promise.all([
-      getFuente(p.archivo),
-      p.archivo_datos ? getFuente(p.archivo_datos) : '',
+      getFuente(cfg.archivo),
+      cfg.archivo_datos ? getFuente(cfg.archivo_datos) : '',
     ]);
-    codigo = te.encode((p.prefijo_autocode || '') + src);
+    codigo = te.encode((cfg.prefijo_autocode || '') + src);
   }
   if (programa !== p) throw new Error('Cambió el programa seleccionado.');
   const preparacion = autocode ? wasm.wasm_preparar_cinta_autocode : wasm.wasm_preparar_cinta_programa;
   if (!preparacion(writeScratchPar(codigo, datosTambor || new Uint8Array(0)))) throw new Error(readErr());
   const filas = new Uint8Array(mem.buffer, wasm.wasm_result_ptr(), wasm.wasm_result_len()).slice();
-  return { programa: p, filas, teleInput: true, pausa: true, vuelta: wasm.wasm_get_cinta_vuelta(),
+  return { programa: p, tab, filas, teleInput: true, pausa: true, vuelta: wasm.wasm_get_cinta_vuelta(),
     header: autocode ? readAutocodeHeader() : '', datos: autocode ? readAutocodeData() : '',
     datosAdicionales, fuenteLocal };
 }
 
 function montarCintaDePrograma(cinta, incluirDatos = false, consulta) {
+  const cfg = fuenteProgramaActual(cinta.programa);
   const datos = cinta.datosAdicionales
-    ? (consulta ?? cinta.programa.datos_defecto) + cinta.datosAdicionales
+    ? (consulta ?? cfg.datos_defecto) + cinta.datosAdicionales
     : consulta ?? cinta.datos;
   const extra = cintaArchivoMontada?.filas || (incluirDatos && datos ? codificarFerranti(datos) : undefined);
   if (extra === null) throw new Error('Los datos del programa contienen caracteres ajenos al código Ferranti.');
@@ -1967,6 +1996,33 @@ function construirControlesMIDI(cont) {
 
 function construirConsultaElecciones(cont, p) {
   cont.innerHTML = `
+    <div class="modos chico" role="tablist" aria-label="Tipo de consulta electoral">
+      <button type="button" role="tab" id="tabElecNacional" aria-selected="${eleccionesTab === 'nacional'}">Resultados</button>
+      <button type="button" role="tab" id="tabElecProvincial" aria-selected="${eleccionesTab === 'provincial'}">Mapas provinciales</button>
+    </div>
+    <div id="eleccionesPanel" class="campo-grupo"></div>`;
+  const cambiarTab = nueva => {
+    if (eleccionesTab === nueva) return;
+    eleccionesTab = nueva;
+    cintaProgramaMontada = null;
+    if (nueva !== 'provincial') {
+      const u = new URL(location.href);
+      u.searchParams.delete('anio');
+      u.searchParams.delete('provincia');
+      history.replaceState(null, '', u);
+    }
+    seleccionarPrograma('elecciones', false);
+  };
+  $('tabElecNacional').onclick = () => cambiarTab('nacional');
+  $('tabElecProvincial').onclick = () => cambiarTab('provincial');
+
+  const sub = $('eleccionesPanel');
+  if (eleccionesTab === 'provincial') {
+    construirMapaProvincial(sub);
+    return;
+  }
+
+  sub.innerHTML = `
     <label for="eleccionesVista">Vista</label>
     <select id="eleccionesVista" class="campo">
       <option value="0">Catálogo de la cinta</option>
@@ -2060,7 +2116,7 @@ function construirMapaProvincial(cont) {
 }
 
 function leerDatosSeleccionados(p) {
-  switch (p.parametro_facil?.tipo) {
+  switch (fuenteProgramaActual(p).parametro_facil?.tipo) {
     case 'elecciones': return leerConsultaElecciones();
     case 'mapas_provinciales':
       return atlasProvinciales?.[$('mapaAnio')?.value]?.provincias[$('mapaProvincia')?.value] ?? null;
@@ -2069,9 +2125,10 @@ function leerDatosSeleccionados(p) {
 }
 
 function construirPanelFacil(p) {
+  const cfg = fuenteProgramaActual(p);
   $('facilTitulo').textContent = p.nombre;
   $('facilDesc').textContent = p.descripcion;
-  $('facilFuente').textContent = `Fuente: ${p.fuente}`;
+  $('facilFuente').textContent = `Fuente: ${cfg.fuente}`;
   const cont = $('facilCampos');
   cont.innerHTML = '';
   $('presets').innerHTML = '';
@@ -2080,7 +2137,7 @@ function construirPanelFacil(p) {
   $('runBtn').textContent = p.parametro_facil?.tipo === 'nim' ? 'Empezar partido de Nim' : 'Correr en Clementina';
   const botonCarga = $('cargaRapidaBtn');
   botonCarga.hidden = !tieneCintaDePrograma(p);
-  botonCarga.textContent = p.papel_mapa || p.parametro_facil?.tipo === 'elecciones'
+  botonCarga.textContent = cfg.papel_mapa || p.parametro_facil?.tipo === 'elecciones'
     ? 'Acelerar consulta · volver a ×1'
     : 'Acelerar carga · arrancar a ×1';
 
@@ -2091,7 +2148,7 @@ function construirPanelFacil(p) {
     construirControlesMIDI(cont);
   } else if (param?.tipo === 'elecciones' && modo === 'facil') {
     construirConsultaElecciones(cont, p);
-  } else if (p.papel_mapa && modo === 'facil') {
+  } else if (cfg.papel_mapa && modo === 'facil') {
     construirMapaProvincial(cont);
   } else if (param && param.tipo === 'llaves_f') {
     cont.innerHTML = `<label for="inF">${param.etiqueta}</label>
@@ -2145,17 +2202,18 @@ function construirPanelFacil(p) {
 }
 
 function construirPanel1961(p) {
-  $('hojaFuente').textContent = p.fuente;
+  const cfg = fuenteProgramaActual(p);
+  $('hojaFuente').textContent = cfg.fuente;
   const prep = $('controlesPrep1961');
   prep.innerHTML = '';
 
   const esConsultaElectoral = p.parametro_facil?.tipo === 'elecciones';
-  const necCinta = p.carga === 'input_routine' || p.carga === 'tele_input' ||
-    (p.carga === 'autocode' && !!p.datos_defecto && !esConsultaElectoral);
+  const necCinta = cfg.carga === 'input_routine' || cfg.carga === 'tele_input' ||
+    (cfg.carga === 'autocode' && !!cfg.datos_defecto && !esConsultaElectoral);
   if (esConsultaElectoral && modo === '1961') construirConsultaElecciones(prep, p);
-  if (p.papel_mapa && modo === '1961') construirMapaProvincial(prep);
-  if (p.carga === 'midi' && modo === '1961') construirControlesMIDI(prep);
-  if (tieneCintaDePrograma(p) && p.carga !== 'personal') {
+  if (cfg.papel_mapa && !esConsultaElectoral && modo === '1961') construirMapaProvincial(prep);
+  if (cfg.carga === 'midi' && modo === '1961') construirControlesMIDI(prep);
+  if (tieneCintaDePrograma(p) && cfg.carga !== 'personal') {
     const montar = document.createElement('button');
     montar.type = 'button';
     montar.id = 'btnCintaPrograma1961';
@@ -2252,15 +2310,15 @@ function construirPanel1961(p) {
     inp.addEventListener('input', dibujarCintaPrep);
   }
 
-  const generada = tieneCintaDePrograma(p) && p.carga !== 'input_routine' && p.carga !== 'tele_input';
+  const generada = tieneCintaDePrograma(p) && cfg.carga !== 'input_routine' && cfg.carga !== 'tele_input';
   mostrarPasos1961(generada ? [
     'Poné la cinta del programa. Subí la llave INPUT (F) 2 y activá WRITE CURRENT.',
     'Pasá a AUTO y CONTINUOUS y pulsá INITIAL TRANSFER para leer la cinta.',
     usaTamborParaMusica(p) || p.id === 'clementine'
       ? 'En la parada de carga, activá HOOT, elegí ×1 y pulsá PREPULSE.'
       : 'En la parada de carga, ajustá las llaves INPUT para el programa y pulsá PREPULSE.',
-    ...(p.pasos_1961 || []),
-  ] : p.pasos_1961 || []);
+    ...(cfg.pasos_1961 || []),
+  ] : cfg.pasos_1961 || []);
   if (p.carga === 'personal' && modo === '1961') {
     construirControlesProgramaLocal(prep);
     prep.appendChild($('btnCargar1961'));
@@ -2406,7 +2464,7 @@ async function correrFacil(rapida = false) {
       cargaRapida = {
         velocidadAnterior: playSpeed,
         entrada: cintaProgramaMontada.entrada,
-        hastaParada: !!elegido.papel_mapa || param?.tipo === 'elecciones',
+        hastaParada: !!fuenteProgramaActual(elegido).papel_mapa || param?.tipo === 'elecciones',
       };
       setPlaySpeed(0);
     }
@@ -2504,12 +2562,27 @@ $('facilForm').onsubmit = e => {
 
 // ---------------------------------------------------------------- modos y selector
 async function seleccionarPrograma(id, actualizarUrl = true) {
-  if (id === 'mapa_cordoba_1962') id = 'mapas_provinciales';
+  let forzarTabProvincial = false;
+  if (id === 'mapas_provinciales' || id === 'mapa_cordoba_1962') {
+    id = 'elecciones';
+    forzarTabProvincial = true;
+  }
   const portada = id === idProgramaMidi(ID_APERTURE_ANTERIOR)
     ? catalogo.find(p => p.id === idProgramaMidi(ID_PORTADA_APERTURE)) : null;
   const encontrado = portada || catalogo.find(p => p.id === id) || catalogo[0];
   if (!encontrado) return;
-  if (programa !== encontrado) cintaArchivoMontada = cintaProgramaMontada = null;
+  if (programa !== encontrado) {
+    cintaArchivoMontada = cintaProgramaMontada = null;
+    if (forzarTabProvincial) {
+      eleccionesTab = 'provincial';
+    } else if (encontrado.id === 'elecciones' && new URLSearchParams(location.search).has('provincia')) {
+      eleccionesTab = 'provincial';
+    } else {
+      eleccionesTab = 'nacional';
+    }
+  } else if (forzarTabProvincial) {
+    eleccionesTab = 'provincial';
+  }
   programa = encontrado;
   $('ponerCintaArchivo').hidden = usaTamborParaMusica(programa);
   $('ponerProgramaEnLector').hidden = !tieneCintaDePrograma(programa);
@@ -2577,7 +2650,7 @@ function distribuirPapeles() {
     papeles.append($('repeticion'));
   } else {
     $('lector').after($('repeticion'));
-    if (programa?.papel_mapa || programa?.parametro_facil?.tipo === 'elecciones') {
+    if (fuenteProgramaActual()?.papel_mapa || programa?.parametro_facil?.tipo === 'elecciones') {
       $('repeticion').after($('teleimpresor'));
     }
     else papeles.append($('teleimpresor'));
@@ -2909,7 +2982,7 @@ function drawStrip(canvas, filas, pitchCss, longitudinal = false, seguirSalida =
 }
 
 function codigoSalidaActual() {
-  if (programa?.id === 'elecciones' && $('eleccionesAnio')?.value === '1967' && $('eleccionesVista')?.value !== '0') {
+  if (programa?.id === 'elecciones' && !esModoMapaProvincial() && $('eleccionesAnio')?.value === '1967' && $('eleccionesVista')?.value !== '0') {
     return 'longitudinal';
   }
   return programa?.codigo_salida || 'ferranti';
@@ -2975,8 +3048,9 @@ function drawDrum(snap) {
       cat = tinyInfoActual.cats[s] || 'free';
       g.globalAlpha = hasData ? 1 : 0.2;
     } else if (hasData) {
-      const fullIr = programa && (programa.carga === 'escrito' || programa.carga === 'input_routine');
-      const partitura = programa?.carga === 'midi' || programa?.carga === 'escrito_tambor';
+      const cfg = fuenteProgramaActual();
+      const fullIr = cfg && (cfg.carga === 'escrito' || cfg.carga === 'input_routine');
+      const partitura = cfg?.carga === 'midi' || cfg?.carga === 'escrito_tambor';
       cat = !partitura && s < (fullIr ? 62 : 2) ? 'ir' : 'code';
       g.globalAlpha = 1;
     } else {
@@ -3037,12 +3111,14 @@ function limpiarVista() {
   $('tapetot').textContent = '';
   $('punchCount').textContent = '0 filas';
   $('outCodeLbl').textContent = `Cinta de salida (${programa?.codigo_salida || 'ferranti'})`;
-  const elecciones = programa?.parametro_facil?.tipo === 'elecciones';
+  const cfg = fuenteProgramaActual();
+  const mapaProv = !!cfg?.papel_mapa;
+  const elecciones = programa?.parametro_facil?.tipo === 'elecciones' && !mapaProv;
   $('paper').classList.toggle('elecciones', elecciones);
-  $('paper').classList.toggle('mapa-departamental', !!programa?.papel_mapa);
+  $('paper').classList.toggle('mapa-departamental', mapaProv);
   $('paper').classList.remove('mapa-ancho');
   $('paper').classList.toggle('envolver',
-    !elecciones && !programa?.papel_mapa && !usaTamborParaMusica(programa) && programa?.id !== 'autocode_contour');
+    !elecciones && !mapaProv && !usaTamborParaMusica(programa) && programa?.id !== 'autocode_contour');
   $('paper').classList.toggle('musica', usaTamborParaMusica(programa));
   $('paper').classList.toggle('portada-aperture', programa?.id === idProgramaMidi(ID_PORTADA_APERTURE));
   $('paper').innerHTML = '<span class="vacio">La respuesta se imprime acá cuando la máquina perfora la cinta de salida.</span>';
@@ -3150,7 +3226,8 @@ function renderSnapshot(snap) {
 
   const fullText = (autocodeHeader && !esLong ? autocodeHeader + '\n' : '') + decoded;
   const papel = $('paper');
-  papel.classList.toggle('mapa-ancho', !!programa?.papel_mapa && $('mapaProvincia')?.value === 'Buenos Aires');
+  const mapaProv = !!fuenteProgramaActual()?.papel_mapa;
+  papel.classList.toggle('mapa-ancho', mapaProv && $('mapaProvincia')?.value === 'Buenos Aires');
   if (fullText) {
     const posicion = papel.scrollTop;
     const alFinal = papel.scrollHeight - papel.clientHeight - posicion <= 2;
@@ -3162,7 +3239,7 @@ function renderSnapshot(snap) {
       papel.appendChild(cEl);
     }
     papel.scrollTop = alFinal ? papel.scrollHeight : posicion;
-    const muestraMapa = programa?.papel_mapa || ($('eleccionesVista')?.value === '5' && $('eleccionesAnio')?.value !== '1967');
+    const muestraMapa = mapaProv || (!esModoMapaProvincial() && $('eleccionesVista')?.value === '5' && $('eleccionesAnio')?.value !== '1967');
     if (muestraMapa && snap.stopCode === STOP.STOP99 && anterior?.stopCode !== STOP.STOP99) {
       papel.scrollTop = 0;
     }
@@ -3322,7 +3399,8 @@ async function arrancar() {
     const catResp = await fetch(`${ORIGIN}/catalogo.json`);
     const catJson = await catResp.json();
     let lista = catJson.programas || [];
-    const archivoMapas = lista.find(p => p.papel_mapa)?.archivo_catalogo;
+    const progMapas = lista.find(p => p.papel_mapa || p.mapas_provinciales);
+    const archivoMapas = progMapas?.mapas_provinciales?.archivo_catalogo || progMapas?.archivo_catalogo;
     if (archivoMapas) {
       try { atlasProvinciales = JSON.parse(await getFuente(archivoMapas)); }
       catch (e) { console.error(e); }

@@ -265,9 +265,10 @@ fn catalogo_valido_y_programas_verificados() {
 
         let mut wm = WasmMachine::new();
         wm.set_switches(f, 0, 0, 8);
-        if id == "mapas_provinciales" {
-            let src = fs::read_to_string(repo.join(p.get("archivo").unwrap().str())).unwrap();
-            let atlas = fs::read_to_string(repo.join(p.get("archivo_catalogo").unwrap().str())).unwrap();
+        if let Some(mp) = p.get("mapas_provinciales") {
+            let mp = mp.obj();
+            let src = fs::read_to_string(repo.join(mp.get("archivo").unwrap().str())).unwrap();
+            let atlas = fs::read_to_string(repo.join(mp.get("archivo_catalogo").unwrap().str())).unwrap();
             let mut parser = JsonParser { b: atlas.as_bytes(), i: 0 };
             let atlas = parser.parse();
             assert_eq!(atlas.obj().keys().map(String::as_str).collect::<Vec<_>>(), ["1958", "1962", "1965"]);
@@ -284,7 +285,8 @@ fn catalogo_valido_y_programas_verificados() {
                     assert_eq!(tape::decode(&wm.io.output), mapa, "{anio} {provincia}");
                 }
             }
-            continue;
+            wm = WasmMachine::new();
+            wm.set_switches(f, 0, 0, 8);
         }
         match carga {
             "escrito" => {
