@@ -121,6 +121,16 @@ textarea.campo { min-height: 88px; padding: var(--space-xs) var(--space-sm); res
 .ejemplo:disabled { opacity: 0.5; cursor: not-allowed; }
 .aviso { border: var(--rule-hair) solid var(--color-error); border-radius: var(--radius-control); padding: var(--space-xs) var(--space-sm); background: color-mix(in oklab, var(--color-error) 8%, var(--color-paper-3)); font-size: var(--text-sm); }
 .aviso.suave { border-color: var(--color-warn); background: color-mix(in oklab, var(--color-warn) 10%, var(--color-paper-3)); }
+.ayuda-autocode { font-family: var(--font-body); border: var(--rule-hair) solid var(--color-rule); border-radius: var(--radius-control); background: var(--color-paper); font-size: var(--text-xs); color: var(--color-ink-2); }
+.ayuda-autocode summary { cursor: pointer; padding: var(--space-xs) var(--space-sm); font-size: var(--text-sm); font-weight: 550; color: var(--color-ink); list-style-position: inside; }
+.ayuda-autocode summary:hover { color: var(--color-accent); }
+.ayuda-autocode[open] summary { border-bottom: var(--rule-hair) solid var(--color-rule); }
+.ayuda-autocode-cuerpo { padding: var(--space-xs) var(--space-sm); display: flex; flex-direction: column; gap: var(--space-xs); max-height: 280px; overflow: auto; }
+.ayuda-autocode-cuerpo h3 { font-size: var(--text-xs); font-weight: 650; color: var(--color-ink); text-transform: uppercase; letter-spacing: 0.03em; }
+.ayuda-autocode-cuerpo dl { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-3xs) var(--space-xs); align-items: baseline; }
+.ayuda-autocode-cuerpo dt { font-family: var(--font-outlier); color: var(--color-ink); white-space: nowrap; }
+.ayuda-autocode-cuerpo dd { margin: 0; overflow-wrap: anywhere; }
+.ayuda-autocode-cuerpo code { font-family: var(--font-outlier); color: var(--color-ink); }
 #scrub { flex: 1; min-width: 120px; accent-color: var(--color-accent); min-height: 32px; cursor: pointer; }
 .fase { font-size: var(--text-sm); font-weight: 600; color: var(--color-ink); }
 .maquina #repeticion { flex-direction: row; flex-wrap: wrap; align-items: center; gap: var(--space-sm) var(--space-lg); }
@@ -1255,7 +1265,8 @@ function usaTamborParaMusica(p) {
 }
 
 function tieneCintaDePrograma(p) {
-  return ['escrito', 'escrito_tambor', 'autocode', 'input_routine', 'tele_input', 'midi'].includes(p?.carga);
+  return esAutocodeLocal(p) ||
+    ['escrito', 'escrito_tambor', 'autocode', 'input_routine', 'tele_input', 'midi'].includes(p?.carga);
 }
 
 function esParadaDeCarga(snap) {
@@ -1271,7 +1282,10 @@ function unirFilas(primero, segundo) {
 }
 
 async function prepararCintaDePrograma(p) {
-  if (p.carga !== 'midi' && cintaProgramaMontada?.programa === p) return cintaProgramaMontada;
+  const local = esAutocodeLocal(p);
+  const fuenteLocal = local ? programaLocal.fuenteAutocode : undefined;
+  if (p.carga !== 'midi' && cintaProgramaMontada?.programa === p &&
+      (!local || cintaProgramaMontada.fuenteLocal === fuenteLocal)) return cintaProgramaMontada;
   if (p.carga === 'input_routine') {
     const filas = codificarFerranti(p.cinta_programa);
     if (!filas) throw new Error('La cinta de programa tiene caracteres inválidos.');
@@ -1310,12 +1324,16 @@ async function prepararCintaDePrograma(p) {
     return { programa: p, filas: resultado.slice(corte + 1), teleInput: true, pausa: true, vuelta: wasm.wasm_get_cinta_vuelta() };
   }
 
-  let preparacion, codigo, datosTambor, datosAdicionales;
-  if (p.carga === 'escrito_tambor') {
+  const autocode = local || p.carga === 'autocode';
+  let codigo, datosTambor, datosAdicionales;
+  if (local) {
+    if (!fuenteLocal.trim()) throw new Error('Escribí o abrí un programa de Autocode.');
+    codigo = te.encode(fuenteLocal);
+    if (codigo.length > 2 * 1024 * 1024) throw new Error('El código supera 2 MiB.');
+  } else if (p.carga === 'escrito_tambor') {
     [codigo, datosTambor] = await Promise.all([
       leerArchivoMIDI(p.archivos.mer), leerArchivoMIDI(p.archivos.tambor),
     ]);
-    preparacion = wasm.wasm_preparar_cinta_programa;
   } else {
     let src;
     [src, datosAdicionales] = await Promise.all([
@@ -1323,14 +1341,14 @@ async function prepararCintaDePrograma(p) {
       p.archivo_datos ? getFuente(p.archivo_datos) : '',
     ]);
     codigo = te.encode((p.prefijo_autocode || '') + src);
-    preparacion = p.carga === 'autocode' ? wasm.wasm_preparar_cinta_autocode : wasm.wasm_preparar_cinta_programa;
   }
   if (programa !== p) throw new Error('Cambió el programa seleccionado.');
+  const preparacion = autocode ? wasm.wasm_preparar_cinta_autocode : wasm.wasm_preparar_cinta_programa;
   if (!preparacion(writeScratchPar(codigo, datosTambor || new Uint8Array(0)))) throw new Error(readErr());
   const filas = new Uint8Array(mem.buffer, wasm.wasm_result_ptr(), wasm.wasm_result_len()).slice();
   return { programa: p, filas, teleInput: true, pausa: true, vuelta: wasm.wasm_get_cinta_vuelta(),
-    header: p.carga === 'autocode' ? readAutocodeHeader() : '',
-    datos: p.carga === 'autocode' ? readAutocodeData() : '', datosAdicionales };
+    header: autocode ? readAutocodeHeader() : '', datos: autocode ? readAutocodeData() : '',
+    datosAdicionales, fuenteLocal };
 }
 
 function montarCintaDePrograma(cinta, incluirDatos = false, consulta) {
@@ -1345,6 +1363,7 @@ function montarCintaDePrograma(cinta, incluirDatos = false, consulta) {
   if (tinyInfoActual) construirPorDentroTiny(tinyInfoActual);
   else construirPorDentroGenerico();
   colocarCinta({ filas: extra ? unirFilas(cinta.filas, extra) : cinta.filas });
+  actualizarEstadoEditor();
 }
 
 async function ponerCintaDelPrograma() {
@@ -1354,6 +1373,7 @@ async function ponerCintaDelPrograma() {
   const consulta = leerDatosSeleccionados(p);
   if (consulta === null) return;
   try {
+    avisarErrorEditor('');
     setBadge('Preparando cinta de programa…', '');
     const cinta = await prepararCintaDePrograma(p);
     if (programa !== p) return;
@@ -1377,7 +1397,10 @@ async function ponerCintaDelPrograma() {
     renderSnapshot(snap);
     if (!esperando) setBadge('Cinta de programa en el lector', '');
   } catch (e) {
-    if (programa === p) setBadge(e.message, 'error');
+    if (programa === p) {
+      avisarErrorEditor(e.message);
+      setBadge(e.message, 'error');
+    }
   }
 }
 
@@ -1578,22 +1601,52 @@ const PROGRAMA_PROPIO = {
   id: 'programa_propio',
   nombre: 'Programa propio',
   grupo: 'Archivos locales',
-  descripcion: 'Abrí un archivo de código o arrancá desde una cinta de programa.',
+  descripcion: 'Escribí Autocode, abrí un archivo o usá una cinta de programa.',
   fuente: 'Archivos elegidos en este equipo',
   carga: 'personal',
   codigo_salida: 'ferranti',
 };
 
-const programaLocal = { formato: 'escrito', codigo: null, tambor: null };
+const programaLocal = {
+  formato: 'autocode',
+  fuenteAutocode: 'a = 2 + 3\nprint (a) 2, 0\nnewline\nend\n',
+  codigo: null,
+  tambor: null,
+  ayudaAbierta: false,
+};
+
+function esAutocodeLocal(p) {
+  return p === PROGRAMA_PROPIO && programaLocal.formato === 'autocode';
+}
+
+function formatoCintaLocal(formato) {
+  return formato === 'input_routine' || formato === 'tele_input';
+}
+
+function avisarErrorEditor(mensaje) {
+  const aviso = $('errorEditorAutocode');
+  if (!aviso) return;
+  aviso.textContent = mensaje;
+  aviso.hidden = !mensaje;
+}
+
+function actualizarEstadoEditor() {
+  const aviso = $('estadoEditorAutocode');
+  if (!aviso) return;
+  const anterior = cintaProgramaMontada?.programa === PROGRAMA_PROPIO &&
+    cintaProgramaMontada.fuenteLocal !== programaLocal.fuenteAutocode;
+  aviso.textContent = anterior ? 'Editaste el código. Prepará otra cinta para usar la versión nueva.' : '';
+  aviso.hidden = !anterior;
+}
 
 function arrancaPorCinta(p) {
   return tieneCintaDePrograma(p) ||
-    (p?.carga === 'personal' && (programaLocal.formato === 'input_routine' || programaLocal.formato === 'tele_input'));
+    (p === PROGRAMA_PROPIO && formatoCintaLocal(programaLocal.formato));
 }
 
 async function cargarProgramaLocal() {
   const { formato, codigo, tambor } = programaLocal;
-  if (arrancaPorCinta(programa)) {
+  if (formatoCintaLocal(formato)) {
     if (!cintaArchivoMontada) throw new Error('Poné la cinta de programa en el lector.');
     wasm.wasm_reset(formato === 'input_routine' ? 1 : 0);
     return;
@@ -1614,10 +1667,7 @@ async function cargarProgramaLocal() {
       programaLocal.codigo !== codigo || (formato === 'escrito' && programaLocal.tambor !== tambor)) {
     throw new Error('Cambió el programa seleccionado.');
   }
-  if (formato === 'autocode') {
-    if (!wasm.wasm_load_autocode(writeScratchStr(fuente))) throw new Error(readErr());
-    autocodeHeader = readAutocodeHeader();
-  } else if (imagen) {
+  if (imagen) {
     const len = writeScratchPar(te.encode(fuente), imagen);
     if (!wasm.wasm_load_written_drum(len)) throw new Error(readErr());
   } else if (!wasm.wasm_load_written(writeScratchStr(fuente))) {
@@ -1631,13 +1681,59 @@ function construirControlesProgramaLocal(cont) {
   bloque.innerHTML = `
     <label for="formatoProgramaLocal">Formato del programa</label>
     <select id="formatoProgramaLocal" class="campo">
+      <option value="autocode">Mercury Autocode</option>
+      <option value="comic" disabled>COMIC · pendiente</option>
       <option value="escrito">Forma escrita (.mer)</option>
-      <option value="autocode">Mercury Autocode (.mer)</option>
       <option value="input_routine">Cinta de programa (Input Routine)</option>
       <option value="tele_input">Cinta de programa (tele-input binario)</option>
     </select>
+    <div id="campoEditorAutocode" class="campo-grupo">
+      <label for="editorAutocode">Código Autocode</label>
+      <textarea id="editorAutocode" class="campo maquina-escribe" rows="9" wrap="off"
+        autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="ayudaEditorAutocode"></textarea>
+      <p id="ayudaEditorAutocode" class="nota">Si el programa lee datos, ponelos después de una línea con <code>-&gt;</code>.</p>
+      <p id="estadoEditorAutocode" class="nota" role="status" hidden></p>
+      <p id="errorEditorAutocode" class="aviso suave" role="alert" hidden></p>
+      <details id="refAutocode" class="ayuda-autocode">
+        <summary>Referencia rápida de Autocode</summary>
+        <div class="ayuda-autocode-cuerpo">
+          <h3>Variables e índices</h3>
+          <dl>
+            <dt>a..z $</dt><dd>15 especiales en punto flotante (<code>$</code> equivale a <code>π</code>). Primadas: <code>a'..z'</code>.</dd>
+            <dt>x -&gt; n</dt><dd>Reserva <code>x0..xn</code> (hasta 480 largos). Sufijos: <code>x3</code>, <code>xi</code>, <code>x(i+1)</code>.</dd>
+            <dt>i..t</dt><dd>12 índices enteros de 10 bits (<code>-512..511</code>; si pasan, dan la vuelta).</dd>
+          </dl>
+          <h3>Expresiones y equivalencias</h3>
+          <dl>
+            <dt>2mn x</dt><dd>Producto implícito (sin <code>*</code>). A lo sumo un divisor al final (<code>hf/3</code>).</dd>
+            <dt>= / ~</dt><dd><code>=</code> redondea (fuerza un 1); <code>~</code> o <code>»</code> opera sin redondeo.</dd>
+            <dt>? x = ...</dt><dd><code>?</code> al inicio o final imprime el valor asignado en línea nueva.</dd>
+            <dt>ASCII</dt><dd><code>F</code>/<code>X</code> = <code>φ</code>, <code>-&gt;</code> = <code>→</code>, <code>&gt;=</code> = <code>≥</code>, <code>#</code>/<code>!=</code> = <code>≠</code>, <code>//</code> comentario.</dd>
+          </dl>
+          <h3>Funciones (F / φ)</h3>
+          <dl>
+            <dt>1 arg</dt><dd><code>sqrt</code>, <code>sin</code>, <code>cos</code>, <code>tan</code> (<code>|x|&lt;800</code>), <code>exp</code> (<code>≤177</code>), <code>log</code> (<code>&gt;0</code>), <code>mod</code>, <code>int pt</code>, <code>fr pt</code>, <code>sign</code>.</dd>
+            <dt>2 args</dt><dd><code>divide(a,b)</code>, <code>arctan(x,y)</code>, <code>radius(x,y)</code>.</dd>
+            <dt>Otras</dt><dd><code>parity(i)</code>, <code>poly(x) a0, n</code>, <code>i = F max(a0,p,q)</code> / <code>min</code>.</dd>
+          </dl>
+          <h3>Saltos, ciclos y E/S</h3>
+          <dl>
+            <dt>1) .. 127)</dt><dd>Etiquetas. <code>jump N</code>, <code>jump N, a rel b</code> (<code>=</code>, <code>!=</code>, <code>&gt;</code>, <code>&gt;=</code>).</dd>
+            <dt>i = p(q)r</dt><dd>Ciclo hasta <code>repeat</code> (paso negativo <code>p(-q)r</code>). Entra al menos 1 vez.</dd>
+            <dt>read (x)</dt><dd>Lee cinta (o lo que sigue a <code>-&gt;</code>). <code>print (x) m, n</code>, <code>newline</code>, <code>space</code>, <code>hoot</code>, <code>end</code>.</dd>
+          </dl>
+          <h3>Capítulos y avanzado</h3>
+          <dl>
+            <dt>chapter k</dt><dd><code>0..21</code> hasta <code>close</code> (el último debe ser <code>0</code>); <code>variables k</code>, <code>across</code>/<code>down</code>/<code>up</code>, <code>preserve</code>/<code>restore</code>.</dd>
+            <dt>Tambor</dt><dd><code>F6(dir) x0, n</code> lee y <code>F7(dir) x0, n</code> escribe en auxiliar.</dd>
+            <dt>Pares</dt><dd>Complejos <code>(a,b) +|-|*|/ (c,d)</code>, <code>F sqrt/exp/log</code>; <code>double length</code> con <code>((a,b))</code>.</dd>
+            <dt>Otros</dt><dd><code>int step (m)</code> (Runge-Kutta), matrices <code>F8..F28</code>, órdenes de máquina <code>400 (x)</code>, <code>620, 27</code>. Guía completa en <code>docs/MANUAL_AUTOCODE.md</code>.</dd>
+          </dl>
+        </div>
+      </details>
+    </div>
     <div id="campoCodigoLocal" class="campo-grupo">
-      <label for="codigoProgramaLocal">Archivo del programa</label>
+      <label for="codigoProgramaLocal" id="etiquetaCodigoLocal">Archivo del programa</label>
       <input id="codigoProgramaLocal" class="campo" type="file" accept=".mer,.txt">
       <span id="nombreProgramaLocal" class="nota"></span>
     </div>
@@ -1653,21 +1749,34 @@ function construirControlesProgramaLocal(cont) {
   cont.appendChild(bloque);
 
   const formato = $('formatoProgramaLocal');
+  const editor = $('editorAutocode');
+  const refAutocode = $('refAutocode');
+  editor.value = programaLocal.fuenteAutocode;
+  refAutocode.open = programaLocal.ayudaAbierta;
+  refAutocode.ontoggle = () => { programaLocal.ayudaAbierta = refAutocode.open; };
   const actualizar = () => {
-    const porCinta = arrancaPorCinta(PROGRAMA_PROPIO);
+    const porCinta = formatoCintaLocal(programaLocal.formato);
+    const autocode = esAutocodeLocal(PROGRAMA_PROPIO);
+    $('campoEditorAutocode').hidden = !autocode;
     $('campoCodigoLocal').hidden = porCinta;
+    $('etiquetaCodigoLocal').textContent = autocode ? 'Abrir Autocode (.mer o .txt)' : 'Archivo del programa';
     $('campoTamborLocal').hidden = programaLocal.formato !== 'escrito';
-    $('nombreProgramaLocal').textContent = programaLocal.codigo?.name || '';
+    $('nombreProgramaLocal').textContent = autocode ? '' : programaLocal.codigo?.name || '';
     $('nombreTamborLocal').textContent = programaLocal.tambor?.name || '';
+    $('btnCintaLocal').textContent = porCinta ? 'Poner cinta de programa…' : 'Poner cinta de datos…';
     const cargar = $('btnCargar1961');
     if (cargar) {
       cargar.hidden = porCinta;
-      cargar.textContent = programaLocal.formato === 'autocode'
-        ? 'Compilar y cargar programa'
+      cargar.textContent = autocode
+        ? 'Compilar y poner cinta en el lector'
         : programaLocal.tambor ? 'Cargar programa y tambor' : 'Cargar programa en núcleos';
     }
     if (modo === '1961') {
-      const pasos = porCinta
+      const pasos = autocode
+        ? ['Compilá el código y poné la cinta en el lector.',
+          'Subí la llave INPUT (F) 2 y activá WRITE CURRENT. Pasá a AUTO y CONTINUOUS y pulsá INITIAL TRANSFER.',
+          'En la parada de carga, ajustá las llaves INPUT para el programa y pulsá PREPULSE.']
+        : porCinta
         ? ['Poné la cinta de programa en el lector.', programaLocal.formato === 'tele_input'
           ? 'Subí la llave INPUT (F) 2 y activá WRITE CURRENT.'
           : 'Dejá las llaves INPUT (F) en 0 y activá WRITE CURRENT.',
@@ -1678,11 +1787,43 @@ function construirControlesProgramaLocal(cont) {
     }
   };
   formato.value = programaLocal.formato;
-  formato.onchange = () => { programaLocal.formato = formato.value; actualizar(); };
-  $('codigoProgramaLocal').onchange = e => { programaLocal.codigo = e.target.files[0] || null; actualizar(); };
+  formato.onchange = () => {
+    if (formatoCintaLocal(programaLocal.formato) !== formatoCintaLocal(formato.value)) cintaArchivoMontada = null;
+    programaLocal.formato = formato.value;
+    cintaProgramaMontada = null;
+    seleccionarPrograma(PROGRAMA_PROPIO.id, false);
+  };
+  const cambiarFuente = fuente => {
+    programaLocal.fuenteAutocode = fuente;
+    avisarErrorEditor('');
+    actualizarEstadoEditor();
+  };
+  editor.oninput = () => cambiarFuente(editor.value);
+  $('codigoProgramaLocal').onchange = async e => {
+    const archivo = e.target.files[0];
+    if (!esAutocodeLocal(PROGRAMA_PROPIO)) {
+      programaLocal.codigo = archivo || null;
+      actualizar();
+      return;
+    }
+    if (!archivo) return;
+    e.target.value = '';
+    const fuenteAnterior = programaLocal.fuenteAutocode;
+    try {
+      if (!archivo.size || archivo.size > 2 * 1024 * 1024) throw new Error('Elegí un archivo de código de hasta 2 MiB.');
+      const fuente = await leerTextoLocal(archivo);
+      if (!bloque.isConnected || programaLocal.fuenteAutocode !== fuenteAnterior) return;
+      editor.value = fuente;
+      cambiarFuente(fuente);
+      editor.focus();
+    } catch (e) {
+      if (bloque.isConnected) avisarErrorEditor(e.message);
+    }
+  };
   $('tamborProgramaLocal').onchange = e => { programaLocal.tambor = e.target.files[0] || null; actualizar(); };
   $('btnCintaLocal').onclick = () => $('cintaArchivo').click();
   verCintaMontada();
+  actualizarEstadoEditor();
   actualizar();
 }
 
@@ -2008,7 +2149,7 @@ function construirPanel1961(p) {
   if (esConsultaElectoral && modo === '1961') construirConsultaElecciones(prep, p);
   if (p.papel_mapa && modo === '1961') construirMapaProvincial(prep);
   if (p.carga === 'midi' && modo === '1961') construirControlesMIDI(prep);
-  if (tieneCintaDePrograma(p)) {
+  if (tieneCintaDePrograma(p) && p.carga !== 'personal') {
     const montar = document.createElement('button');
     montar.type = 'button';
     montar.id = 'btnCintaPrograma1961';
@@ -2018,13 +2159,17 @@ function construirPanel1961(p) {
     prep.appendChild(montar);
   }
 
-  if (p.carga === 'personal') {
+  if (p.carga === 'personal' && modo === '1961') {
     const b = document.createElement('button');
     b.type = 'button';
     b.id = 'btnCargar1961';
     b.className = 'btn chico principal';
     b.textContent = 'Cargar programa en núcleos';
     b.onclick = async () => {
+      if (esAutocodeLocal(p)) {
+        await ponerCintaDelPrograma();
+        return;
+      }
       try {
         HootAudio.ensure();
         setBadge('Preparando programa…', 'vivo');
@@ -2210,6 +2355,7 @@ async function correrFacil(rapida = false) {
 
   $('runBtn').disabled = $('cargaRapidaBtn').disabled = true;
   try {
+    avisarErrorEditor('');
     setBadge('Preparando programa…', 'vivo');
     const filasNim = programa.id === 'nim'
       ? [0, 1, 2, 3].map(i => Math.max(0, Math.min(10, parseInt($('nimF' + i).value || '0', 10)))) : null;
@@ -2274,6 +2420,7 @@ async function correrFacil(rapida = false) {
   } catch (e) {
     if (programa === elegido && modo === 'facil') {
       terminarCargaRapida();
+      avisarErrorEditor(e.message);
       setBadge(e.message, 'error');
     }
   } finally {
@@ -2390,7 +2537,7 @@ async function seleccionarPrograma(id, actualizarUrl = true) {
   limpiarVista();
   if (wasm) {
     try {
-      if (modo === 'facil' && tieneCintaDePrograma(programa)) {
+      if (modo === 'facil' && programa.carga !== 'personal' && tieneCintaDePrograma(programa)) {
         await ponerCintaDelPrograma();
         return;
       }

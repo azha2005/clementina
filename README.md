@@ -119,13 +119,22 @@ arrancar con el lector vacío y poner la cinta cuando la máquina la pida.
 El deslizador bajo la cinta de salida permite revisar las perforaciones
 anteriores.
 
-En **Programa propio** podés elegir código en forma escrita o Mercury
-Autocode. Para la forma escrita también se puede cargar una imagen
-`.tambor`. La cinta de datos se monta por separado y se conserva al cargar
-el código. Si el programa entero viene grabado en cinta, elegí **Input
-Routine** o **tele-input binario** y usá **INITIAL TRANSFER** en modo 1961.
-En ese modo, elegir un programa del catálogo deja la carga a cargo del
-operador.
+En **Programa propio**, escribí Mercury Autocode en el editor o abrí un
+archivo `.mer` o `.txt`. El texto se conserva al cambiar de modo. Podés
+poner los datos del programa después de una línea con `->` o montar una
+cinta de datos desde un archivo.
+
+* En **Modo fácil**, **Correr en Clementina** compila el texto y se encarga
+  de la carga y el arranque a la velocidad elegida.
+* En **Como en 1961**, **Compilar y poner cinta en el lector** prepara una
+  cinta binaria para *tele-input*. Subí la llave **INPUT 2**, activá
+  **WRITE CURRENT**, pasá a **AUTO** y **CONTINUOUS** y pulsá **INITIAL
+  TRANSFER**. En la parada de carga, pulsá **PREPULSE** para arrancar.
+
+El selector marca **COMIC** como pendiente. Para la **Forma escrita** se
+puede abrir un programa y una imagen `.tambor`. Si ya tenés una cinta de
+programa, elegí **Input Routine** o **tele-input binario** y arrancá con
+**INITIAL TRANSFER**.
 
 En **Equipo**, **Clementina 1966 · 4 tambores** instala 1024 sectores y
 activa las órdenes `65` y `66` de la UBA. Cambiar de equipo reinicia los
@@ -264,6 +273,8 @@ lugar del tambor, sus constantes y las rutinas de apoyo. Todo lo que se
 ejecuta después es código Mercury en el emulador, incluidas la división, la
 impresión y la lectura de números, que están escritas en forma escrita en
 [`crates/mercury-autocode/runtime/`](crates/mercury-autocode/runtime).
+Para escribir programas propios desde cero, ver el
+[manualcito de Mercury Autocode](docs/MANUAL_AUTOCODE.md).
 
 ```powershell
 .\target\release\clementina autocode samples\autocode\contour.mer --max 200000000
