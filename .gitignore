@@ -16,3 +16,11 @@ __pycache__/
 /examples/nombre_ferranti.mer
 /.claude/
 /.hallmark/
+/dist
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 136 80" role="img" aria-label="Clementina">
+  <!-- Los dos visores del pupitre bajo su capota, sobre la chapa. Las trazas
+       son la C y la M en código Ferranti (3 = 00011, 13 = 01101). -->
+  <defs>
+    <filter id="fosforo" x="-20%" y="-80%" width="140%" height="260%">
+      <feGaussianBlur stdDeviation="0.9" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect x="1" y="1" width="134" height="78" rx="9" fill="#a3a8b0"/>
+  <path d="M10 42 V26 A16 16 0 0 1 26 10 H110 A16 16 0 0 1 126 26 V42 Z" fill="#141518"/>
+  <circle cx="38" cy="43" r="24" fill="#05120a" stroke="#141518" stroke-width="2.5"/>
+  <circle cx="98" cy="43" r="24" fill="#05120a" stroke="#141518" stroke-width="2.5"/>
+  <g fill="none" stroke="#93f0b0" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" filter="url(#fosforo)">
+    <path d="M20.0 46 L30.2 46 L35.4 46 L40.6 46 L41.7 46 L41.7 37 L44.7 37 L44.7 46 L45.8 46 L46.9 46 L46.9 37 L49.9 37 L49.9 46 L51.0 46 L56.0 46"/>
+    <path d="M80.0 46 L90.2 46 L91.3 46 L91.3 37 L94.3 37 L94.3 46 L95.4 46 L96.5 46 L96.5 37 L99.5 37 L99.5 46 L100.6 46 L105.8 46 L106.9 46 L106.9 37 L109.9 37 L109.9 46 L111.0 46 L116.0 46"/>
+  </g>
+</svg>

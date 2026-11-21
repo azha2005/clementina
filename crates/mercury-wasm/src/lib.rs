@@ -305,6 +305,16 @@ impl WasmMachine {
         self.m.drum = tambor;
     }
 
+    /// Núcleos y tambor guardados por la consola. Si alguna imagen es
+    /// inválida no cambia nada; si no, la máquina queda como después de OFF.
+    pub fn restaurar_maquina(&mut self, nucleos: &[u8], tambor: &[u8]) -> Result<(), String> {
+        let tambor = tambor_desde_imagen(tambor, self.m.config.drum_sectors)?;
+        self.m.store.cargar_imagen(nucleos)?;
+        self.instalar_tambor(tambor);
+        self.power_off();
+        Ok(())
+    }
+
     pub fn load_written_drum(&mut self, src: &str, datos: &[u8]) -> Result<(), String> {
         let tambor = tambor_desde_imagen(datos, self.m.config.drum_sectors)?;
         self.load_written(src)?;
@@ -721,6 +731,34 @@ pub extern "C" fn wasm_load_drum_image(len: usize) -> u32 {
         let tambor = tambor_desde_imagen(datos, wm.m.config.drum_sectors)?;
         wm.instalar_tambor(tambor);
         Ok(())
+    })
+}
+
+/// Deja la imagen del tambor en el búfer de resultado (`wasm_result_ptr`).
+#[no_mangle]
+pub extern "C" fn wasm_imagen_tambor() -> usize {
+    with_machine(|wm| {
+        wm.result_buf = wm.m.drum.imagen();
+        wm.result_buf.len()
+    })
+}
+
+/// Deja la imagen de los núcleos en el búfer de resultado.
+#[no_mangle]
+pub extern "C" fn wasm_imagen_nucleos() -> usize {
+    with_machine(|wm| {
+        wm.result_buf = wm.m.store.imagen();
+        wm.result_buf.len()
+    })
+}
+
+/// Recupera una máquina guardada: núcleos y tambor seguidos en el búfer de
+/// entrada. Queda como después de OFF, que conserva los dos.
+#[no_mangle]
+pub extern "C" fn wasm_restaurar_maquina(len_nucleos: usize) -> u32 {
+    operacion_scratch(|wm, datos| {
+        let (nucleos, tambor) = dividir_scratch(datos, len_nucleos)?;
+        wm.restaurar_maquina(nucleos, tambor)
     })
 }
 
@@ -1168,6 +1206,28 @@ mod tests {
         *imagen.last_mut().unwrap() = 0;
         assert!(wm.load_written_drum("990 0", &imagen).is_ok());
         assert_eq!(wm.m.drum.sector(1), &[0; 128]);
+    }
+
+    #[test]
+    fn la_maquina_guardada_vuelve_apagada_con_nucleos_y_tambor() {
+        let mut wm = WasmMachine::new();
+        wm.load_written("990 0").unwrap();
+        wm.m.drum.sector_mut(300)[5] = 777;
+        wm.m.store.set_short(1500, 333);
+        let nucleos = wm.m.store.imagen();
+        let tambor = wm.m.drum.imagen();
+
+        let mut otra = WasmMachine::new();
+        otra.reset(true);
+        otra.m.b[1] = 9;
+        assert!(otra.restaurar_maquina(&nucleos, &tambor[..100]).is_err());
+        assert_eq!(otra.m.b[1], 9);
+        otra.restaurar_maquina(&nucleos, &tambor).unwrap();
+        assert_eq!(otra.m.drum.sector(300)[5], 777);
+        assert_eq!(otra.m.store.short(1500), 333);
+        assert_eq!(otra.m.b[1], 0);
+        assert!(!otra.powered);
+        assert_ne!(otra.drum_written[300 / 8] & (1 << (300 % 8)), 0);
     }
 
     #[test]

@@ -32,6 +32,11 @@ para redistribuir el escaneo o el contenido histórico transcripto.
   Rodríguez y De Grande (CEUR-CONICET) conserva CC BY 2.5 Argentina. Los datos
   y fuentes de terceros mantienen las condiciones indicadas en la
   [licencia de datos de 257arg](https://github.com/azha2005/257arg/blob/master/LICENSE-DATA.md).
-- Los modelos y pesos de TINY y las herramientas externas usadas por sus
-  ports conservan sus términos. Los pesos, las imágenes de tambor generadas
-  y las cintas musicales de uso local quedan fuera de la edición pública.
+- TINY 2.1 es de WollyMonjac, bajo licencia MIT. La red se entrenó en parte
+  con datos de mledoze/countries (ODbL 1.0) y Periodic-Table-JSON
+  (CC BY-SA 3.0). Las cintas de TINY se publican en el sitio web con ese
+  aviso, en [`ports/tiny/LICENCIA_TINY.txt`](ports/tiny/LICENCIA_TINY.txt).
+  Los checkpoints no se versionan en el repositorio.
+- Las herramientas externas usadas por los ports conservan sus términos.
+  Las cintas musicales de uso local, como *Still Alive* (letra y música de
+  Jonathan Coulton para Valve), quedan fuera de la edición pública.

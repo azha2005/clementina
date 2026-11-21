@@ -122,6 +122,31 @@ impl Store {
     pub fn as_slice(&self) -> &[u16] {
         &self.shorts[..]
     }
+
+    /// Imagen de los 2048 cortos como u16 little-endian, el mismo formato
+    /// que la imagen de tambor.
+    pub fn imagen(&self) -> Vec<u8> {
+        imagen_de_cortos(&self.shorts[..])
+    }
+
+    /// Carga una imagen hecha con [`Store::imagen`]. Las paridades se
+    /// recalculan. Una imagen inválida deja los núcleos intactos.
+    pub fn cargar_imagen(&mut self, datos: &[u8]) -> Result<(), String> {
+        if datos.len() != SHORTS * 2 {
+            return Err(format!("se esperaban {} bytes para los núcleos, hay {}", SHORTS * 2, datos.len()));
+        }
+        if let Some(i) = datos.chunks_exact(2).position(|p| p[1] > 3) {
+            return Err(format!("valor fuera de 10 bits en el corto {i} de los núcleos"));
+        }
+        for (i, p) in datos.chunks_exact(2).enumerate() {
+            self.set_short(i, u16::from_le_bytes([p[0], p[1]]));
+        }
+        Ok(())
+    }
+}
+
+fn imagen_de_cortos(cortos: &[u16]) -> Vec<u8> {
+    cortos.iter().flat_map(|c| c.to_le_bytes()).collect()
 }
 
 /// Almacén de respaldo: tambores magnéticos divididos en sectores del tamaño de
@@ -135,6 +160,11 @@ pub struct Drum {
 }
 
 impl Drum {
+    /// Imagen de todos los sectores en el formato de [`Drum::cargar_imagen`].
+    pub fn imagen(&self) -> Vec<u8> {
+        self.sectors.iter().flat_map(|s| imagen_de_cortos(s)).collect()
+    }
+
     /// Carga una imagen de cortos de 10 bits guardados como u16 little-endian.
     /// Una imagen inválida deja el tambor intacto.
     pub fn cargar_imagen(&mut self, datos: &[u8]) -> Result<(), String> {
@@ -233,6 +263,32 @@ mod tests {
         assert_eq!(s.short(27), 4);
         assert_eq!(s.medium(12), (1 << 10) | 2);
         assert_eq!(s.medium(13), (3 << 10) | 4);
+    }
+
+    #[test]
+    fn imagenes_de_nucleos_y_tambor_van_y_vuelven() {
+        let mut s = Store::default();
+        s.set_short(0, 1023);
+        s.set_short(2047, 517);
+        let mut otro = Store::default();
+        otro.cargar_imagen(&s.imagen()).unwrap();
+        assert_eq!(otro.as_slice(), s.as_slice());
+        assert_eq!(otro.fallo_paridad(0, SHORTS), None);
+        let mut mala = s.imagen();
+        mala[1] = 4;
+        assert!(otro.cargar_imagen(&mala).is_err());
+        assert!(otro.cargar_imagen(&mala[..10]).is_err());
+
+        let mut d = Drum::new(512);
+        d.sector_mut(0)[0] = 1;
+        d.sector_mut(511)[127] = 1000;
+        let imagen = d.imagen();
+        assert_eq!(imagen.len(), 512 * SHORTS_PER_PAGE * 2);
+        let mut e = Drum::new(512);
+        e.cargar_imagen(&imagen).unwrap();
+        assert_eq!(e.sector(511)[127], 1000);
+        assert_eq!(e.imagen(), imagen);
+        assert_eq!(e.fallo_paridad(511), None);
     }
 
     #[test]

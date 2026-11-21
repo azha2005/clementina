@@ -98,6 +98,47 @@ y CONTINUOUS y pulsá **INITIAL TRANSFER**. La máquina se detiene al terminar
 la carga. Ajustá las llaves para el programa y pulsá **PREPULSE**. Para
 volver a cargar, montá la cinta de nuevo.
 
+Lo que sale de la máquina se puede bajar desde el teleimpresor: la cinta
+perforada (`.bin`, un byte por fila, que vuelve a entrar con **Poner
+cinta…**), el texto impreso y el sonido del parlante (`.wav`, grabado a
+cualquier velocidad). En **Por dentro** se baja la imagen del tambor
+(`.tambor`), que se vuelve a cargar con **Programa propio**. Una cinta se
+puede arrastrar al lector en lugar de elegirla.
+
+En **Como en 1961**, cerrar o recargar la página equivale a pulsar OFF: al
+volver, la máquina está apagada y con los núcleos, el tambor y las llaves
+como quedaron, porque la memoria de ferrita y el tambor no se borran al
+apagar. Se guarda en el navegador y sólo se recupera con el mismo programa y
+el mismo equipo, y el primer montaje de la cinta del programa no la borra.
+Cambiar de programa, de modo o de equipo empieza de cero, igual que
+**Empezar de cero** en la hoja de operación.
+El modo fácil arranca cada programa limpio, como siempre.
+
+### Sitio estático
+
+```powershell
+python tools/armar_web.py
+```
+
+Compila el WASM y arma `dist/` con la página, el catálogo y sólo los
+archivos que el catálogo nombra (nada de las cintas del museo). Si están los
+checkpoints, suma las tres variantes de TINY ya armadas, con su licencia.
+Anda en la raíz o en una subcarpeta de cualquier hosting estático y trae las
+cabeceras para Vercel, Cloudflare Pages, Netlify y GitHub Pages. Los MIDI
+locales, como *Still Alive*, quedan para `servidor.py`. Con
+`--url https://...` la página lleva las etiquetas `og:` y `twitter:` para
+que X y otros muestren `web/tarjeta.png`, que se rehace con
+`python tools/armar_tarjeta.py --url https://...` (captura la consola real
+con Playwright y Chrome). El script no publica nada. El sitio está en
+<https://clementina.pages.dev/> y se actualiza con:
+
+```powershell
+python tools/armar_web.py --url https://clementina.pages.dev/
+npx wrangler pages deploy
+```
+
+(`wrangler.jsonc` apunta al proyecto `clementina` y a `dist/`).
+
 En **Elecciones argentinas** podés elegir el catálogo, el total del país,
 los distritos, una ficha, las diferencias o el mapa de 1958, 1962 y 1965. La
 consola arma la cinta y el programa Autocode perfora el resultado.

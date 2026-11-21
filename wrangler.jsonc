@@ -1,0 +1,7 @@
+{
+  // Sitio estático en Cloudflare Pages: `python tools/armar_web.py --url ...`
+  // y después `npx wrangler pages deploy`.
+  "name": "clementina",
+  "compatibility_date": "2026-11-19",
+  "pages_build_output_dir": "dist"
+}

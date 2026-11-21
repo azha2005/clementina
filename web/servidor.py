@@ -147,6 +147,11 @@ def despachar_ruta_comun(handler, url, qs, tiny_mod=None):
         handler.end_headers()
         return True
 
+    if path in ("/logo.svg", "/tarjeta.png"):
+        tipo = "image/svg+xml" if path.endswith(".svg") else "image/png"
+        enviar_bytes(handler, 200, tipo, (WEB_DIR / path[1:]).read_bytes())
+        return True
+
     if path == "/catalogo.json":
         enviar_bytes(handler, 200, "application/json; charset=utf-8", (WEB_DIR / "catalogo.json").read_bytes())
         return True

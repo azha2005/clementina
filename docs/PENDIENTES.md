@@ -170,9 +170,21 @@ anterior:
   * las palancas, con una sombra que siga la posición arriba o abajo;
   * el borde de la cuña, con un escalón más oscuro.
 * Al terminar, `sloplint` tiene que seguir en 0 FAIL sin eximir la 47c.
+* ✅ **Elegido (21/11/2026): luz cenital.** Tokens `--shadow-1`,
+  `--shadow-2`, `--shadow-palanca`, `--shadow-hundido` y `--borde-cuna` en
+  `web/index.html`. La sombra de las palancas es un `drop-shadow` sobre la
+  palanca ya girada, así que sigue a la tapa arriba o abajo. Falta correr
+  `sloplint`, que no se corrió.
+* **Excepción: los tubos.** Para darles personalidad se admite un
+  resplandor leve del fósforo (3 px), una curvatura suave de la traza y el
+  borde del vidrio más oscuro, aunque la regla general pide no usar
+  brillos. Sin líneas de barrido: los visores trazaban los pulsos, no eran
+  de TV.
 
 ## 5. Otros pendientes
 
+* **Sitio estático.** ✅ `tools/armar_web.py` arma `dist/` y está publicado
+  en <https://clementina.pages.dev/> (Cloudflare Pages).
 * **WASM.** ✅ Resuelto en [`crates/mercury-wasm`](../crates/mercury-wasm) (sin
   dependencias externas, compilado con `cargo build -p mercury-wasm --target wasm32-unknown-unknown --release`).
 * **El *Input Routine* bit a bit.** Del Dago cotejó los sectores 0 y 1

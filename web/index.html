@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Clementina en vivo</title>
 <meta name="description" content="Pupitre interactivo de Clementina, la Ferranti Mercury de la FCEN-UBA, conectado al emulador WebAssembly y al compilador de Mercury Autocode.">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
@@ -73,8 +74,10 @@ canvas { display: block; }
 /* barra superior */
 .barra { border-bottom: var(--rule-hair) solid var(--color-rule); background: var(--color-paper-2); }
 .barra .contenedor { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm) var(--space-lg); padding-block: var(--space-sm); }
+.logo { display: flex; align-items: center; gap: var(--space-sm); min-width: 0; }
+.logo-marca { flex: none; height: 40px; width: auto; }
 .marca { display: flex; flex-direction: column; min-width: 0; }
-.wordmark { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700; font-stretch: 125%; letter-spacing: -0.01em; line-height: 1.1; }
+.wordmark { font-family: var(--font-outlier); font-size: var(--text-2xl); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.1; }
 .pie-marca { font-size: var(--text-sm); color: var(--color-muted); }
 .modos { display: flex; gap: var(--space-2xs); padding: var(--space-3xs); border-radius: var(--radius-control); background: var(--color-paper); border: var(--rule-hair) solid var(--color-rule); }
 .modos button { border: 0; background: transparent; padding: 0 var(--space-md); min-height: 36px; border-radius: calc(var(--radius-control) - 2px); cursor: pointer; color: var(--color-ink-2); font-weight: 550; }
@@ -190,7 +193,7 @@ li[data-estado="mal"] .estado-paso { color: var(--color-error); }
 .cuna { width: 100%; clip-path: polygon(2% 0, 98% 0, 100% 100%, 0 100%); background: var(--color-console-lo); padding: var(--rule-hair) var(--rule-hair) 0; }
 .tablero { display: grid; grid-template-columns: 88px 96px 112px 1fr 112px 140px; grid-template-rows: repeat(3, 76px) 52px; column-gap: var(--space-sm); align-items: center;
   padding: var(--space-md) var(--space-xl) 0; background: var(--color-console); clip-path: polygon(2% 0, 98% 0, 100% 100%, 0 100%); }
-.labio { display: flex; justify-content: center; padding: var(--space-sm) 0; background: var(--color-console-lo); }
+.labio { display: flex; justify-content: center; padding: var(--space-sm) 0; background: color-mix(in oklab, var(--color-console-lo) 82%, var(--color-engrave)); }
 .lecturas { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2xs) var(--space-lg); margin: 0; font-size: var(--text-sm); }
 .lecturas div { display: flex; gap: var(--space-xs); align-items: baseline; }
 .lecturas dt { color: var(--color-muted); }
@@ -300,14 +303,47 @@ li[data-estado="mal"] .estado-paso { color: var(--color-error); }
 
 @media (max-width: 40rem) { :root { --gutter: 16px; --gap-columns: 16px; } .estado { margin-left: 0; align-items: flex-start; text-align: left; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; } }
+
+/* relieve (PENDIENTES §4): luz cenital, profundidad por sombras con
+   desplazamiento y desenfoque, un token por nivel, sin biseles en degradé. */
+:root {
+  --color-sombra-suave: oklch(18% 0.01 250 / 0.2); --color-sombra-honda: oklch(4% 0.01 155 / 0.85);
+  --shadow-1: 0 4px 5px var(--color-sombra-suave);
+  --shadow-2: 0 10px 18px var(--color-sombra-suave);
+  --shadow-palanca: 0 4px 3px var(--color-sombra-suave);
+  --shadow-hundido: inset 0 16px 26px var(--color-sombra-honda);
+  --borde-cuna: 3px;
+}
+.bisel { position: relative; }
+.bisel::after { content: ""; position: absolute; inset: var(--space-3xs); border-radius: 50%; box-shadow: var(--shadow-hundido); pointer-events: none; }
+.tablero-alto, .reloj .caja { box-shadow: var(--shadow-2); }
+.selectores { box-shadow: var(--shadow-1); }
+.boton-cuadrado, .perilla, .boton-cuadrado:disabled:hover { box-shadow: 0 0 0 3px var(--color-metal), var(--shadow-1); }
+.boton-cuadrado:hover, .perilla:hover { box-shadow: 0 0 0 3px var(--color-engrave-hi), var(--shadow-1); }
+.boton-cuadrado:active { box-shadow: 0 0 0 3px var(--color-metal); }
+.apagado { box-shadow: var(--shadow-1); }
+.lampara { box-shadow: 0 0 0 3px var(--color-metal), var(--shadow-1); }
+/* Tubos con personalidad (excepción a la regla de no usar brillos):
+   resplandor del fósforo y vidrio abombado. Sin líneas de barrido: los
+   visores trazaban los pulsos, no eran de televisión. */
+:root { --color-crt-borde: oklch(3% 0.01 155 / 0.7); }
+.bisel::after { background: radial-gradient(circle, transparent 62%, var(--color-crt-borde) 100%); }
+/* La sombra se calcula sobre la palanca ya girada: queda siempre abajo y
+   sigue a la tapa cuando sube o baja. */
+.palanca { filter: drop-shadow(var(--shadow-palanca)); }
+.cuna { padding: var(--borde-cuna) var(--borde-cuna) 0; }
+#lector.soltando { outline: 2px dashed var(--color-head); outline-offset: 3px; }
 </style>
 </head>
 <body>
 <header class="barra">
   <div class="contenedor">
-    <div class="marca">
-      <span class="wordmark">Clementina</span>
-      <span class="pie-marca">Ferranti Mercury del Instituto de Cálculo, FCEN-UBA, de 1961 a 1970</span>
+    <div class="logo">
+      <img class="logo-marca" src="logo.svg" alt="" width="68" height="40">
+      <div class="marca">
+        <span class="wordmark">Clementina</span>
+        <span class="pie-marca">Ferranti Mercury del Instituto de Cálculo, FCEN-UBA, de 1961 a 1970</span>
+      </div>
     </div>
     <div class="modos" role="tablist" aria-label="Modo de operación">
       <button type="button" role="tab" id="tabFacil" aria-selected="true" aria-controls="panelFacil">Modo fácil</button>
@@ -492,6 +528,7 @@ li[data-estado="mal"] .estado-paso { color: var(--color-error); }
       <div id="controlesPrep1961" class="campo-grupo" style="gap:8px"></div>
       <ol id="pasos1961"></ol>
       <p id="avisoHoja" class="aviso suave" hidden></p>
+      <p class="nota memoria-guardada">Al recargar la página, la máquina vuelve apagada y con la misma memoria. <button id="olvidarMaquina" class="btn chico" type="button">Empezar de cero</button></p>
     </section>
 
     <p id="avisoServidor" class="aviso" hidden>No se pudo cargar el módulo WebAssembly <code>mercury_wasm.wasm</code>. Compilalo con <code>cargo build -p mercury-wasm --target wasm32-unknown-unknown --release</code> y abrí <code>python web/servidor.py</code>.</p>
@@ -511,6 +548,11 @@ li[data-estado="mal"] .estado-paso { color: var(--color-error); }
         <canvas id="outTape" height="44" role="img" aria-label="Cinta de salida perforada"></canvas>
       </div>
       <input id="outTapePos" type="range" min="0" max="0" value="0" aria-label="Posición en la cinta de salida" hidden>
+      <div class="fila descargas" role="group" aria-label="Bajar lo que salió de la máquina">
+        <button id="bajarCinta" class="btn chico" type="button" disabled title="Un byte por fila: se puede volver a poner en el lector">Bajar cinta (.bin)</button>
+        <button id="bajarTexto" class="btn chico" type="button" disabled>Bajar lo impreso (.txt)</button>
+        <button id="bajarSonido" class="btn chico" type="button" disabled title="Lo que sonó por el parlante (instrucción 58)">Bajar sonido (.wav)</button>
+      </div>
     </section>
 
     <section id="repeticion" class="tarjeta" aria-labelledby="tRepro">
@@ -544,6 +586,9 @@ li[data-estado="mal"] .estado-paso { color: var(--color-error); }
         <canvas id="drum" height="250" role="img" aria-label="Mapa de los 512 sectores del tambor"></canvas>
         <p class="nota" id="druminfo">Pasá el mouse por un sector.</p>
         <div id="legend" class="leyenda"></div>
+        <div class="fila descargas">
+          <button id="bajarTambor" class="btn chico" type="button" title="Se carga de nuevo con «Programa propio»">Bajar imagen del tambor (.tambor)</button>
+        </div>
       </div>
       <div class="lamina">
         <div class="cabecera"><h3>Núcleos, 32 páginas</h3></div>
@@ -573,7 +618,11 @@ li[data-estado="mal"] .estado-paso { color: var(--color-error); }
 </footer>
 
 <script>
-const ORIGIN = location.protocol.startsWith('http') ? location.origin : 'http://127.0.0.1:7661';
+// Todo se pide relativo a la página: anda con `servidor.py` en la raíz y con
+// la carpeta estática `dist/` en cualquier subcarpeta de un hosting. Abierta
+// como archivo local, busca el servidor en su puerto.
+const BASE = location.protocol.startsWith('http') ? new URL('.', location.href).href : 'http://127.0.0.1:7661/';
+const urlDe = ruta => new URL(String(ruta).replace(/^\/+/, ''), BASE).href;
 
 // Código Ferranti (CS 225 A Apéndice VI, igual a mercury_core::tape).
 const FIGURAS = [null,'1','2','*','4','(',')','7','8','≠','=','-','v',null,' ',',',
@@ -663,9 +712,9 @@ const te = new TextEncoder();
 async function initWasm() {
   let obj;
   try {
-    obj = await WebAssembly.instantiateStreaming(fetch(`${ORIGIN}/mercury_wasm.wasm`));
+    obj = await WebAssembly.instantiateStreaming(fetch(urlDe('mercury_wasm.wasm')));
   } catch {
-    const resp = await fetch(`${ORIGIN}/mercury_wasm.wasm`);
+    const resp = await fetch(urlDe('mercury_wasm.wasm'));
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const bytes = await resp.arrayBuffer();
     obj = await WebAssembly.instantiate(bytes);
@@ -898,21 +947,29 @@ function syncInputCache() {
 
 async function getFuente(arch) {
   if (fuenteCache.has(arch)) return fuenteCache.get(arch);
-  const resp = await fetch(`${ORIGIN}/archivo/${encodeURIComponent(arch).replace(/%2F/g, '/')}`);
-  if (!resp.ok) throw new Error(`No se pudo cargar ${arch}`);
+  const resp = await fetch(urlDe(`archivo/${encodeURIComponent(arch).replace(/%2F/g, '/')}`));
+  // Algunos hostings responden con la portada (200) a lo que no existe.
+  if (!resp.ok || (resp.headers.get('content-type') || '').includes('text/html')) {
+    throw new Error(`No se pudo cargar ${arch}`);
+  }
   const txt = await resp.text();
   fuenteCache.set(arch, txt);
   return txt;
 }
 
+// Con servidor.py TINY se prepara en el momento; en el sitio estático, las
+// variantes ya vienen armadas en tiny/<variante>/.
+let sitioEstatico = false;
+
 async function getTiny(variante) {
+  const v = encodeURIComponent(variante);
   if (!tinyInfoCache.has(variante)) {
-    const r = await fetch(`${ORIGIN}/tiny/info?variante=${encodeURIComponent(variante)}`);
+    const r = await fetch(urlDe(sitioEstatico ? `tiny/${v}/info.json` : `tiny/info?variante=${v}`));
     if (!r.ok) throw new Error('TINY no disponible');
     tinyInfoCache.set(variante, await r.json());
   }
   if (!tinyCintaCache.has(variante)) {
-    const r = await fetch(`${ORIGIN}/tiny/cinta?variante=${encodeURIComponent(variante)}`);
+    const r = await fetch(urlDe(sitioEstatico ? `tiny/${v}/cinta.bin` : `tiny/cinta?variante=${v}`));
     if (!r.ok) throw new Error('No se encontró la cinta binaria de TINY');
     tinyCintaCache.set(variante, new Uint8Array(await r.arrayBuffer()));
   }
@@ -1240,8 +1297,11 @@ function guardarFrame(snap, forzar = false) {
 
 function drenarAudio() {
   const n = wasm.wasm_drain_hoots_len();
-  if (!n || playSpeed === 0 || playSpeed > 8) return;
+  if (!n) return;
   const arr = new Float64Array(mem.buffer, wasm.wasm_drain_hoots_ptr(), n).slice();
+  // Se graba a cualquier velocidad para poder bajar el WAV; a más de ×8 no suena.
+  grabarHoots(arr);
+  if (playSpeed === 0 || playSpeed > 8) return;
   HootAudio.feed(arr, playSpeed);
 }
 
@@ -1387,7 +1447,10 @@ async function ponerCintaDelPrograma() {
     if (programa !== p) return;
     const esperando = wasm.wasm_get_stop_code() === STOP.EXHAUSTED &&
       wasm.wasm_get_input_len() === 0 && !offCortado;
-    if (!esperando) {
+    // Una máquina recuperada conserva la memoria al montar la cinta.
+    const conservar = maquinaRecuperada;
+    maquinaRecuperada = false;
+    if (!esperando && !conservar) {
       terminarCargaRapida();
       runningLive = false;
       HootAudio.stopAll();
@@ -1432,9 +1495,13 @@ function verCintaMontada() {
 
 $('ponerCintaArchivo').onclick = () => $('cintaArchivo').click();
 $('ponerProgramaEnLector').onclick = ponerCintaDelPrograma;
-$('cintaArchivo').onchange = async e => {
+$('cintaArchivo').onchange = e => {
   const archivo = e.target.files[0];
   e.target.value = '';
+  ponerCintaDeArchivo(archivo);
+};
+
+async function ponerCintaDeArchivo(archivo) {
   if (!archivo || !wasm || !programa || usaTamborParaMusica(programa)) return;
   const elegido = programa;
   try {
@@ -1467,7 +1534,7 @@ $('cintaArchivo').onchange = async e => {
   } catch (error) {
     setBadge(error.message, 'error');
   }
-};
+}
 
 function hacerInitialTransfer() {
   if (!wasm) return;
@@ -1848,7 +1915,7 @@ function writeScratchPar(primero, segundo) {
 }
 
 async function leerArchivoMIDI(ruta) {
-  const resp = await fetch(ORIGIN + ruta);
+  const resp = await fetch(urlDe(ruta));
   if (!resp.ok) throw new Error('No se pudo abrir ' + ruta.split('/').pop());
   return new Uint8Array(await resp.arrayBuffer());
 }
@@ -2575,6 +2642,8 @@ async function seleccionarPrograma(id, actualizarUrl = true) {
   autocodeHeader = '';
   tinyInfoActual = null;
   HootAudio.stopAll();
+  borrarGrabacionHoots();
+  maquinaRecuperada = false;
   frames = [];
   curIdx = 0;
   ultimoSnapshot = null;
@@ -2748,12 +2817,36 @@ function fitCanvas(c, cssWidth = null) {
 
 // Visor de rayos catódicos: traza de pulsos hacia arriba (Durán 2018, págs. 35 y 106).
 // 0 = línea de base horizontal; 1 = pulso rectangular hacia arriba (bit más alto a la izquierda).
+// Personalidad de los tubos: `curva` abomba la traza hacia los bordes como
+// el vidrio; `brillo` es el resplandor del fósforo, en px de desenfoque.
+const CRT_ESTILO = { curva: 0.05, brillo: 3 };
+
 function drawCRT(canvas, filas) {
   const [g, W, H, d] = fitCanvas(canvas);
   const cx = W / 2, cy = H / 2;
   g.fillStyle = tok('tube');
   g.fillRect(0, 0, W, H);
   if (!filas.length) return;
+  const estilo = CRT_ESTILO;
+  const R2 = (W / 2) ** 2;
+  // Distorsión de barril: cuanto más lejos del centro, más se aleja.
+  // Se achica en proporción para que las puntas no se salgan del vidrio.
+  const curvar = (x, y) => {
+    const f = (1 + estilo.curva * (((x - cx) ** 2 + (y - cy) ** 2) / R2)) / (1 + estilo.curva * 0.7);
+    return [cx + (x - cx) * f, cy + (y - cy) * f];
+  };
+  // Trazo curvado: cada tramo recto se parte en pedazos y se deforma.
+  const trazo = puntos => {
+    g.beginPath();
+    let [px0, py0] = puntos[0];
+    g.moveTo(...curvar(px0, py0));
+    for (let i = 1; i < puntos.length; i++) {
+      const [x1, y1] = puntos[i];
+      const pasos = Math.max(1, Math.ceil(Math.hypot(x1 - px0, y1 - py0) / (4 * d)));
+      for (let k = 1; k <= pasos; k++) g.lineTo(...curvar(px0 + (x1 - px0) * k / pasos, py0 + (y1 - py0) * k / pasos));
+      px0 = x1; py0 = y1;
+    }
+  };
   const n = filas.length;
   const paso = Math.min(26 * d, (H * 0.72) / n);
   const pulseH = Math.min(10 * d, paso * 0.48);
@@ -2774,43 +2867,41 @@ function drawCRT(canvas, filas) {
 
     g.globalAlpha = 0.72;
     g.fillStyle = tok('phosphor-dim');
-    g.fillText(f.nombre, xStart - 4 * d, yBase - pulseH * 0.15);
+    g.fillText(f.nombre, ...curvar(xStart - 4 * d, yBase - pulseH * 0.15));
 
     // Línea de base tenue de referencia para distinguir los ceros.
     g.globalAlpha = 0.22;
     g.strokeStyle = tok('phosphor-dim');
     g.lineWidth = Math.max(1, 1 * d);
-    g.beginPath();
-    g.moveTo(xStart, yBase);
-    g.lineTo(xStart + total, yBase);
+    trazo([[xStart, yBase], [xStart + total, yBase]]);
     g.stroke();
 
     // Traza continua del haz de electrones.
-    g.globalAlpha = 1;
-    g.strokeStyle = tok('phosphor');
-    g.lineWidth = Math.max(1.2, 1.5 * d);
-    g.beginPath();
+    const puntos = [];
     let x = xStart;
-    g.moveTo(x, yBase);
+    puntos.push([x, yBase]);
     for (let b = ancho - 1; b >= 0; b--) {
       const uno = f.valor !== null && (Math.floor(f.valor / 2 ** b) % 2 === 1);
       if (uno) {
         const m = px * 0.22;
-        g.lineTo(x + m, yBase);
-        g.lineTo(x + m, yPeak);
-        g.lineTo(x + px - m, yPeak);
-        g.lineTo(x + px - m, yBase);
-        g.lineTo(x + px, yBase);
+        puntos.push([x + m, yBase], [x + m, yPeak], [x + px - m, yPeak], [x + px - m, yBase], [x + px, yBase]);
       } else {
-        g.lineTo(x + px, yBase);
+        puntos.push([x + px, yBase]);
       }
       x += px;
       if (b % 10 === 0 && b > 0) {
-        g.lineTo(x + px, yBase);
+        puntos.push([x + px, yBase]);
         x += px;
       }
     }
+    trazo(puntos);
+    g.strokeStyle = tok('phosphor');
+    g.globalAlpha = 1;
+    g.lineWidth = Math.max(1.2, 1.5 * d);
+    g.shadowColor = tok('phosphor');
+    g.shadowBlur = estilo.brillo * d;
     g.stroke();
+    g.shadowBlur = 0;
   });
   g.globalAlpha = 1;
 }
@@ -3187,6 +3278,7 @@ function renderSnapshot(snap) {
     : 'Cinta de salida (Ferranti)';
   $('punchCount').textContent = `${snap.outRows.length} filas`;
   dibujarSalida(snap.outRows);
+  queueMicrotask(actualizarDescargas);
 
   let decoded = '';
   if (code === 'ita2') decoded = decodeIta2(snap.outRows);
@@ -3363,11 +3455,214 @@ function loop(now) {
   requestAnimationFrame(loop);
 }
 
+
+// ---------------------------------------------------------------- descargas
+function bajarArchivo(nombre, datos, tipo) {
+  const url = URL.createObjectURL(new Blob([datos], { type: tipo }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = nombre;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
+function nombreBase() {
+  return (programa?.id || 'clementina').replace(/[^a-z0-9_-]+/gi, '_');
+}
+
+function imagenResultado(fnLen) {
+  const n = fnLen();
+  return new Uint8Array(mem.buffer, wasm.wasm_result_ptr(), n).slice();
+}
+
+// Cada hoot es un impulso al diafragma; la grabación se arma igual que el
+// WAV de `clementina correr --wav` (40 muestras que decaen).
+const hootsGrabados = { partes: [], total: 0, ultimo: -1 };
+const MAX_HOOTS = 4_000_000;
+
+function borrarGrabacionHoots() {
+  hootsGrabados.partes = [];
+  hootsGrabados.total = 0;
+  hootsGrabados.ultimo = -1;
+}
+
+function grabarHoots(arr) {
+  // El reloj de la máquina vuelve a 0 con cada carga: empieza otra grabación.
+  if (arr[0] < hootsGrabados.ultimo) borrarGrabacionHoots();
+  if (hootsGrabados.total + arr.length > MAX_HOOTS) return;
+  hootsGrabados.partes.push(arr);
+  hootsGrabados.total += arr.length;
+  hootsGrabados.ultimo = arr[arr.length - 1];
+}
+
+function wavDeHoots() {
+  const RATE = 44100;
+  const t0 = hootsGrabados.partes[0][0];
+  const margen = 50_000;
+  const muestras = Math.ceil((hootsGrabados.ultimo - t0 + 2 * margen) * RATE / 1e6);
+  const s = new Int32Array(muestras);
+  for (const parte of hootsGrabados.partes) {
+    for (const t of parte) {
+      const i0 = Math.floor((t - t0 + margen) * RATE / 1e6);
+      for (let k = 0; k < 40 && i0 + k < muestras; k++) s[i0 + k] += Math.trunc(12000 * Math.exp(-k / 8));
+    }
+  }
+  const buf = new ArrayBuffer(44 + muestras * 2);
+  const v = new DataView(buf);
+  const txt = (o, t) => { for (let i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); };
+  txt(0, 'RIFF'); v.setUint32(4, 36 + muestras * 2, true); txt(8, 'WAVEfmt ');
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, RATE, true); v.setUint32(28, RATE * 2, true);
+  v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+  txt(36, 'data'); v.setUint32(40, muestras * 2, true);
+  for (let i = 0; i < muestras; i++) v.setInt16(44 + i * 2, Math.max(-32768, Math.min(32767, s[i])), true);
+  return buf;
+}
+
+function filasDeSalida() {
+  return ultimoSnapshot ? Uint8Array.from(ultimoSnapshot.outRows, f => f & 31) : new Uint8Array(0);
+}
+
+function textoImpreso() {
+  const papel = $('paper');
+  return papel.querySelector('.vacio') ? '' : papel.textContent;
+}
+
+function actualizarDescargas() {
+  if (!wasm) return;
+  $('bajarCinta').disabled = filasDeSalida().length === 0;
+  $('bajarTexto').disabled = !textoImpreso();
+  $('bajarSonido').disabled = hootsGrabados.total === 0;
+}
+
+$('bajarCinta').onclick = () => {
+  const filas = filasDeSalida();
+  if (filas.length) bajarArchivo(`${nombreBase()}-salida.bin`, filas, 'application/octet-stream');
+};
+$('bajarTexto').onclick = () => {
+  const t = textoImpreso();
+  if (t) bajarArchivo(`${nombreBase()}-impreso.txt`, t.endsWith('\n') ? t : t + '\n', 'text/plain;charset=utf-8');
+};
+$('bajarSonido').onclick = () => {
+  if (hootsGrabados.total) bajarArchivo(`${nombreBase()}-parlante.wav`, wavDeHoots(), 'audio/wav');
+};
+$('bajarTambor').onclick = () => {
+  if (!wasm) return;
+  const sectores = wasm.wasm_get_drum_sectors();
+  bajarArchivo(`${nombreBase()}-${sectores}.tambor`, imagenResultado(wasm.wasm_imagen_tambor), 'application/octet-stream');
+};
+
+// Cinta arrastrada al lector: el mismo camino que «Poner cinta…». Fuera
+// del lector, soltar un archivo no hace nada (el navegador lo abriría y se
+// perdería la sesión).
+['dragover', 'drop'].forEach(tipo => addEventListener(tipo, e => {
+  if ([...(e.dataTransfer?.types || [])].includes('Files')) e.preventDefault();
+}));
+(() => {
+  const lector = $('lector');
+  const tieneArchivo = e => [...(e.dataTransfer?.types || [])].includes('Files');
+  lector.addEventListener('dragover', e => {
+    if (!tieneArchivo(e)) return;
+    e.preventDefault();
+    lector.classList.add('soltando');
+  });
+  lector.addEventListener('dragleave', e => {
+    if (!lector.contains(e.relatedTarget)) lector.classList.remove('soltando');
+  });
+  lector.addEventListener('drop', e => {
+    if (!tieneArchivo(e)) return;
+    e.preventDefault();
+    lector.classList.remove('soltando');
+    ponerCintaDeArchivo(e.dataTransfer.files[0]);
+  });
+})();
+
+// ---------------------------------------------------------------- la máquina guardada
+// Los núcleos de ferrita y el tambor no pierden lo escrito al apagar. En el
+// modo «Como en 1961», cerrar o recargar la página equivale a OFF: al volver,
+// la máquina está apagada y con la misma memoria. En el modo fácil cada
+// programa arranca limpio, como siempre. La clave lleva prefijo porque un
+// hosting puede compartir el origen entre varios sitios.
+const CLAVE_MAQUINA = 'clementina-fcen:maquina:v1';
+let maquinaRecuperada = false;
+
+function b64DeBytes(bytes) {
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+
+function bytesDeB64(texto) {
+  const bin = atob(texto);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+
+function guardarMaquina() {
+  if (!wasm || !programa || modo !== '1961') return;
+  try {
+    localStorage.setItem(CLAVE_MAQUINA, JSON.stringify({
+      v: 1,
+      programa: programa.id,
+      equipo: $('instalacion').value,
+      sectores: wasm.wasm_get_drum_sectors(),
+      panel,
+      nucleos: b64DeBytes(imagenResultado(wasm.wasm_imagen_nucleos)),
+      tambor: b64DeBytes(imagenResultado(wasm.wasm_imagen_tambor)),
+    }));
+  } catch {}
+}
+
+function leerMaquinaGuardada() {
+  try {
+    const g = JSON.parse(localStorage.getItem(CLAVE_MAQUINA) || 'null');
+    return g && g.v === 1 ? g : null;
+  } catch {
+    return null;
+  }
+}
+
+function olvidarMaquina() {
+  try { localStorage.removeItem(CLAVE_MAQUINA); } catch {}
+}
+
+function recuperarMaquinaAlArrancar() {
+  const g = leerMaquinaGuardada();
+  if (!g || !wasm || modo !== '1961' || !programa || g.programa !== programa.id ||
+      g.equipo !== $('instalacion').value || g.sectores !== wasm.wasm_get_drum_sectors()) return;
+  try {
+    const nucleos = bytesDeB64(g.nucleos);
+    const tambor = bytesDeB64(g.tambor);
+    if (!wasm.wasm_restaurar_maquina(writeScratchPar(nucleos, tambor))) throw new Error();
+  } catch {
+    olvidarMaquina();
+    return;
+  }
+  panel = { ...panel, ...g.panel };
+  syncSwitchesToWasm();
+  pintarPanel();
+  apagarOff();
+  maquinaRecuperada = true;
+  setBadge('Apagada, con núcleos y tambor como los dejaste', '');
+}
+
+$('olvidarMaquina').onclick = () => {
+  olvidarMaquina();
+  if (programa) seleccionarPrograma(programa.id, false);
+};
+addEventListener('pagehide', guardarMaquina);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') guardarMaquina();
+});
+
 // ---------------------------------------------------------------- arranque
 async function arrancar() {
   try {
     await initWasm();
-    const catResp = await fetch(`${ORIGIN}/catalogo.json`);
+    const catResp = await fetch(urlDe('catalogo.json'));
     const catJson = await catResp.json();
     let lista = catJson.programas || [];
     const progMapas = lista.find(p => p.id === 'elecciones' || p.papel_mapa);
@@ -3378,17 +3673,18 @@ async function arrancar() {
     }
 
     // Mostrar variantes TINY opcionales sólo si el servidor informa que existen en este equipo.
+    sitioEstatico = !!catJson.sitio_estatico;
     let tinyDisp = new Set();
     try {
-      const tr = await fetch(`${ORIGIN}/tiny/disponibles`);
+      const tr = await fetch(urlDe(sitioEstatico ? 'tiny/disponibles.json' : 'tiny/disponibles'));
       if (tr.ok) {
         const tdj = await tr.json();
         (tdj.variantes || []).forEach(v => { if (v.disponible) tinyDisp.add(v.id); });
       }
     } catch {}
     lista = lista.filter(p => !p.opcional || tinyDisp.has(p.id));
-    try {
-      const rsp = await fetch(ORIGIN + '/midi/disponibles');
+    if (!catJson.sitio_estatico) try {
+      const rsp = await fetch(urlDe('midi/disponibles'));
       if (rsp.ok) midisLocales = (await rsp.json()).variantes || [];
     } catch {}
     const portada = midisLocales.find(v => v.id === ID_PORTADA_APERTURE && v.archivos.mer && v.archivos.tambor);
@@ -3419,6 +3715,7 @@ async function arrancar() {
     }
     ponerModo(modo, false);
     if (pid) await seleccionarPrograma(pid, true);
+    recuperarMaquinaAlArrancar();
     $('instalacion').disabled = false;
   } catch (e) {
     $('avisoServidor').hidden = false;
